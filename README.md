@@ -33,17 +33,9 @@ $ npm install
 
 ### Environment variables
 
-The application use two environment variable sets: for developing and production.
-Location of these files is:
+You need to create .env file in project root directory. This file should contain the following data:
 ```
-/src/environments
-```
-Before start the application you should create `environment.ts` file in this directory. it should be like this:
-```
-export const environment = {
-  production: false, //prodaction flag
-  apiUrl: 'http://localhost:8080', //backend api url
-};
+API_URL=http://localhost:8080 ;backend api url
 ```
 Environment variables are not used yet.
 
