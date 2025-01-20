@@ -5,7 +5,7 @@
     "start": "ng serve --configuration development",
     "build": "ng build --configuration development",
     "watch": "ng build --watch --configuration development",
-    "prod": "ng build --configuration production",
+    "prod:build": "ng build --configuration production",
     "test": "ng test",
     "test:cov": "ng test --code-coverage"
   },
