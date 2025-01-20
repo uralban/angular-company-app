@@ -35,9 +35,9 @@ $ npm install
 
 You need to create .env file in project root directory. This file should contain the following data:
 ```
-PORT=4200
-API_URL=http://localhost:8080
+API_URL=http://localhost:8080 ;backend api url
 ```
+Environment variables are not used yet.
 
 ### Build and start application
 
