@@ -8,3 +8,6 @@ tmp
 
 .git
 .gitignore
+
+.env
+node_modules

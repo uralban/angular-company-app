@@ -5,7 +5,7 @@ COPY package*.json ./
 FROM base AS prod_build
 RUN npm ci
 COPY . .
-RUN npm run prod
+RUN npm run prod:build
 
 FROM base AS dev
 RUN npm install
