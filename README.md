@@ -35,9 +35,9 @@ $ npm install
 
 You need to create .env file in project root directory. This file should contain the following data:
 ```
+PORT=4200 ;the port of the application is running on
 API_URL=http://localhost:8080 ;backend api url
 ```
-Environment variables are not used yet.
 
 ### Build and start application
 
@@ -63,16 +63,16 @@ For production:
 
 ```bash
 # Create image:
-$ docker build -t meduzzen-front-app-prod-img .
+$ docker build --target prod -t meduzzen-front-app-prod-img .
 
 # Create and run container:
-$ docker run -p 4200:80 -d --rm meduzzen-front-app-prod-img
+$ docker run -p 4200:80 --env-file .env -d --rm meduzzen-front-app-prod-img
 ```
 
 For developing:
 
 ```bash
-$ docker compose --env-file .env up
+$ docker compose --env-file .env up --build
 ```
 
 ### The application will start on
