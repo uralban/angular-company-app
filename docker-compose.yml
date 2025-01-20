@@ -9,3 +9,5 @@ services:
       - ./src:/app/src
     ports:
       - '${PORT}:${PORT}'
+    restart: always
+    command: npm run start -- --host 0.0.0.0
