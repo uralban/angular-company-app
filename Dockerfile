@@ -10,9 +10,10 @@ RUN npm run prod
 FROM base AS dev
 RUN npm install
 COPY . .
+RUN npm install -g nodemon
 ARG PORT
 EXPOSE ${PORT}
-CMD ["npm", "run", "start", "--", "--host", "0.0.0.0"]
+CMD ["nodemon", "-L"]
 
 FROM nginx:stable AS prod
 COPY --from=prod_build /app/dist/browser /usr/share/nginx/html
