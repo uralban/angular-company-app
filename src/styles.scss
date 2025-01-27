@@ -5,4 +5,23 @@
 
 body {
   background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
+  overflow: visible;
 }
+
+.border-invalid {
+  --tw-border-opacity: 1;
+  border-color: rgb(220 38 38 / var(--tw-border-opacity, 1));
+}
+
+ng-select {
+  .ng-select-container {
+    border: none !important;
+  }
+
+  .ng-dropdown-panel {
+    .ng-option-label {
+      text-transform: capitalize;
+    }
+  }
+}
+

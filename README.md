@@ -72,7 +72,7 @@ $ docker run -p 4200:80 --env-file .env -d --rm meduzzen-front-app-prod-img
 For developing:
 
 ```bash
-$ docker compose --env-file .env up --build
+$ docker compose up --build
 ```
 
 ### The application will start on

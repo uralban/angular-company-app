@@ -1,0 +1,61 @@
+<div class="flex items-start about-section-height flex-col p-4">
+  <div class="p-8 bg-white shadow-lg rounded-lg max-w-3xl">
+    <div class="flex flex-col">
+      <h2 class="text-4xl font-bold text-gray-800 text-center">About Us</h2>
+      <p class="text-lg text-gray-500 mt-4 text-center">
+        Welcome to our application! Our mission is to provide exceptional tools that empower users and simplify workflows.
+      </p>
+      <h3 class="text-2xl font-bold text-gray-800 text-start pt-4">Our team:</h3>
+      <div class="flex flex-row justify-between pt-3 space-x-4">
+        <div class="p-4 bg-gray-100 rounded-lg shadow-md min-w-44 flex items-center space-x-4">
+          <div class="w-24 h-24 rounded-full bg-gray-300 overflow-hidden">
+            <img src="./assets/images/face2.png" alt="Admin Photo" class="w-full h-full object-cover">
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-gray-800">Alex S</h3>
+            <p class="text-lg text-gray-500">Admin</p>
+            <p class="text-lg text-gray-500">Email: <a href="mailto:email@gmail.com">{{ 'email@gmail.com' }}</a> </p>
+          </div>
+        </div>
+        <div class="p-4 bg-gray-100 rounded-lg shadow-md min-w-44 flex items-center space-x-4">
+          <div class="w-24 h-24 rounded-full bg-gray-300 overflow-hidden">
+            <img src="./assets/images/face.png" alt="Dev Photo" class="w-full h-full object-cover">
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-gray-800">Alex S</h3>
+            <p class="text-lg text-gray-500">Dev</p>
+            <p class="text-lg text-gray-500">Email: <a href="mailto:email@gmail.com">{{ 'email@gmail.com' }}</a></p>
+          </div>
+        </div>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-800 text-start py-4">Contact us:</h3>
+      <div class="p-4 bg-gray-100 rounded-lg shadow-md min-w-lg">
+        <p class="text-lg text-gray-500 flex items-center">
+          <ng-icon name="matEmail"/><span class="px-1"> Email: </span><a href="mailto:support@gmail.com">{{ 'support@gmail.com' }}</a>
+        </p>
+        <p class="text-lg text-gray-500 flex items-center">
+          <ng-icon name="matPhone" /><span class="px-1"> Phone: </span><a href="tel:+123 456 7890">+123 456 7890</a>
+        </p>
+        <p class="text-lg text-gray-500 flex items-center">
+          <ng-icon name="matLocationOn" /><span class="px-1"> Location: </span><a href="https://maps.app.goo.gl/wQamuU6p2we2kq8J7" target="_blank">Worldwide</a>
+        </p>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-800 text-start py-4">Subscribe to our spam:</h3>
+      <div class="p-4 bg-gray-100 rounded-lg shadow-md">
+        <form class="flex flex-row space-x-4" [formGroup]="subscribeForm" (ngSubmit)="subscribeNewEager()">
+          <input
+            type="text"
+            placeholder="Enter your email"
+            formControlName="email"
+            class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+          <button
+            type="submit"
+            [disabled]="subscribeForm.invalid"
+            class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition">
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

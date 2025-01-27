@@ -1,0 +1,86 @@
+<div class="flex items-center justify-center p-4">
+  <div class="text-center p-8 bg-white shadow-lg rounded-lg max-w-lg w-2/6">
+    <h1 class="text-4xl font-bold text-gray-800 pb-4">Registration</h1>
+    <form class="flex flex-col space-y-4 pt-4" [formGroup]="registrationForm" (ngSubmit)="registration()">
+      <div class="flex flex-col space-y-2 group">
+        <label for="email" class="text-base font-medium text-start text-gray-700 group-hover:text-blue-600 transition">
+          Email:<sup class="text-red-600"><ng-icon name="matStar" /></sup>
+        </label>
+        <input type="text"
+               (input)="onInputChangeEmail($event)"
+               [class.border-invalid]="emailInputInvalidFlag"
+               formControlName="email"
+               class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+               placeholder="Email"
+               id="email">
+      </div>
+      <div class="flex flex-col space-y-2 group">
+        <label for="firstName" class="text-base font-medium text-start text-gray-700 group-hover:text-blue-600 transition">First Name:</label>
+        <input type="text"
+               formControlName="firstName"
+               [class.border-invalid]="registrationForm.get('firstName')?.invalid"
+               class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+               placeholder="First Name"
+               id="firstName">
+      </div>
+      <div class="flex flex-col space-y-2 group">
+        <label for="lastName" class="text-base font-medium text-start text-gray-700 group-hover:text-blue-600 transition">Last Name:</label>
+        <input type="text"
+               formControlName="lastName"
+               [class.border-invalid]="registrationForm.get('lastName')?.invalid"
+               class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+               placeholder="Last Name"
+               id="lastName">
+      </div>
+      <div class="flex flex-col space-y-2 group">
+        <label for="role" class="text-base font-medium text-start text-gray-700 group-hover:text-blue-600 transition">Role:</label>
+        <ng-select class="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                   formControlName="role"
+                   id="role"
+                   [items]="mockRoles"
+                   bindLabel="roleName"
+                   bindValue="id"
+                   [clearable]="false"
+                   [searchable]="false"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [clearOnBackspace]="false"
+                   [hideSelected]="false"
+        ></ng-select>
+      </div>
+      <div class="flex flex-row justify-between space-x-4">
+        <div class="flex flex-col space-y-2 group">
+          <label for="password" class="text-base font-medium text-start text-gray-700 group-hover:text-blue-600 transition">
+            Password:<sup class="text-red-600"><ng-icon name="matStar" /></sup>
+          </label>
+          <input type="password"
+                 formControlName="password"
+                 class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                 placeholder="Password"
+                 id="password">
+        </div>
+        <div class="flex flex-col space-y-2 group">
+          <label for="passwordConfirm" class="text-base font-medium text-start text-gray-700 group-hover:text-blue-600 transition">
+            Confirm Password:<sup class="text-red-600"><ng-icon name="matStar" /></sup>
+          </label>
+          <input type="password"
+                 formControlName="passwordConfirm"
+                 class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                 placeholder="Confirm Password"
+                 id="passwordConfirm">
+        </div>
+      </div>
+      <div class="pt-4 space-x-4">
+        <button
+          type="submit"
+          [disabled]="registrationForm.invalid"
+          class="px-6 py-2 text-white bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition">
+          Complete
+        </button>
+        <a routerLink="/auth" class="ml-4 px-6 py-2 text-white bg-red-500 rounded-lg text-lg font-semibold hover:bg-red-700 transition">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

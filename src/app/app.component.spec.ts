@@ -4,7 +4,7 @@ import { AppComponent } from './app.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {Router} from '@angular/router';
 import {first} from 'rxjs';
-import {AuthComponent} from './pages/auth/auth.component';
+import {AuthComponent} from './domains/auth/auth.component';
 
 describe('AppComponent', () => {
   let router: Router;
