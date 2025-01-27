@@ -37,7 +37,7 @@ export class UsersComponent implements OnInit {
 
   public openSinglePageUser(user: UserDto): void {
     this.userService.singleUserId.next(user.id as string);
-    this.router.navigate(['user-profile']);
+    this.router.navigate(['users/user-profile']);
   }
 
   public onPageChange(event: PageEvent): void {

@@ -45,6 +45,6 @@ export class CompaniesComponent implements OnInit {
 
   public openSinglePageCompany(company: CompanyDto): void {
     this.companyService.singleCompanyId.next(company.id as string);
-    this.router.navigate(['company-profile']);
+    this.router.navigate(['companies/company-profile']);
   }
 }

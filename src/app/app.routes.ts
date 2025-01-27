@@ -19,20 +19,12 @@ export const routes: Routes = [
     loadChildren: () => import('./domains/companies/companies.module').then(m => m.CompaniesModule)
   },
   {
-    path: 'company-profile',
-    loadChildren: () => import('./domains/company-profile/company-profile.module').then(m => m.CompanyProfileModule)
-  },
-  {
     path: 'registration',
     loadChildren: () => import('./domains/registration/registration.module').then(m => m.RegistrationModule)
   },
   {
     path: 'users',
     loadChildren: () => import('./domains/users/users.module').then(m => m.UsersModule)
-  },
-  {
-    path: 'user-profile',
-    loadChildren: () => import('./domains/user-profile/user-profile.module').then(m => m.UserProfileModule)
   },
   {
     path: '**',

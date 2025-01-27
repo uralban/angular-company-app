@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject, takeUntil} from 'rxjs';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CompanyDto} from '../../interfaces/company-dto';
+import {CompanyDto} from '../../../interfaces/company-dto';
 import {ToastrService} from 'ngx-toastr';
-import {CompanyService} from '../../services/company/company.service';
+import {CompanyService} from '../../../services/company/company.service';
 import {Router} from '@angular/router';
 
 @Component({

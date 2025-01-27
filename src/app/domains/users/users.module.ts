@@ -4,18 +4,27 @@ import {UsersComponent} from './users.component';
 import {UsersRoutesModule} from './users.routes';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {SingleUserCartComponent} from "./single-user-cart/single-user-cart.component";
+import {UserProfileComponent} from './user-profile/user-profile.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {NgSelectComponent} from '@ng-select/ng-select';
+import {NgIconsModule} from '@ng-icons/core';
+import {matClear, matStar} from '@ng-icons/material-icons/baseline';
 
 
 
 @NgModule({
   declarations: [
     UsersComponent,
-    SingleUserCartComponent
+    SingleUserCartComponent,
+    UserProfileComponent
   ],
   imports: [
     CommonModule,
     UsersRoutesModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    ReactiveFormsModule,
+    NgSelectComponent,
+    NgIconsModule.withIcons({matStar, matClear}),
   ]
 })
 export class UsersModule { }
