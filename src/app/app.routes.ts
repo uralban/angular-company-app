@@ -8,10 +8,26 @@ export const routes: Routes = [
   },
   {
     path: 'auth',
-    loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthModule)
+    loadChildren: () => import('./domains/auth/auth.module').then(m => m.AuthModule)
+  },
+  {
+    path: 'about',
+    loadChildren: () => import('./domains/about/about.module').then(m => m.AboutModule)
+  },
+  {
+    path: 'companies',
+    loadChildren: () => import('./domains/companies/companies.module').then(m => m.CompaniesModule)
+  },
+  {
+    path: 'registration',
+    loadChildren: () => import('./domains/registration/registration.module').then(m => m.RegistrationModule)
+  },
+  {
+    path: 'users',
+    loadChildren: () => import('./domains/users/users.module').then(m => m.UsersModule)
   },
   {
     path: '**',
-    loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundModule)
+    loadChildren: () => import('./domains/not-found/not-found.module').then(m => m.NotFoundModule)
   },
 ];
