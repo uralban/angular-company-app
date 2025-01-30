@@ -3,11 +3,13 @@ import {RouterLink} from '@angular/router';
 import {UserDto} from '../../interfaces/user-dto';
 import {Subject, takeUntil} from 'rxjs';
 import {AuthService} from '../../services/auth/auth.service';
+import {HealthCheckComponent} from '../../widgets/health-check/health-check.component';
 
 @Component({
   selector: 'app-header',
   imports: [
-    RouterLink
+    RouterLink,
+    HealthCheckComponent
   ],
   templateUrl: './header.component.html'
 })

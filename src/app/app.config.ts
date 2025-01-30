@@ -6,6 +6,7 @@ import {provideAnimations} from '@angular/platform-browser/animations';
 import {provideToastr} from 'ngx-toastr';
 import { provideStore } from '@ngrx/store';
 import {metaReducers, reducers} from './state';
+import {provideHttpClient} from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,6 +26,7 @@ export const appConfig: ApplicationConfig = {
         strictStateImmutability: true,
         strictActionImmutability: true
       }
-    })
+    }),
+    provideHttpClient()
 ]
 };
