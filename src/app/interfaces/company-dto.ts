@@ -1,14 +1,15 @@
 import {DTO} from './dto.interface';
+import {ObjectFiller} from '../helpers/object-filter';
 
 export class CompanyDto implements DTO{
 
   constructor(
-    public id: string,
-    public name: string
+    public id?: string,
+    public name?: string
   ) {}
 
   populateFromDTO(dto: any): void {
-    this.id = dto['id'];
-    this.name = dto['emailLogin'];
+    ObjectFiller.fillPropsFromDTO(this, dto);
   }
+
 }

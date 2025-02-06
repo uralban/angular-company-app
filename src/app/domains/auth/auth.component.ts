@@ -4,6 +4,15 @@ import {UniversalModalComponent} from '../../widgets/universal-modal/universal-m
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import {debounceTime, distinctUntilChanged, Subject, takeUntil} from 'rxjs';
+import {AuthService as Auth0Service} from '@auth0/auth0-angular';
+import {AuthService} from '../../services/auth/auth.service';
+import {LoginLogoutData} from '../../interfaces/login.interface';
+import {Store} from '@ngrx/store';
+import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.service';
+import {UserDto} from '../../interfaces/user-dto';
+import {authUserDataSuccess} from '../../state/core';
+import {Router} from '@angular/router';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-auth',
@@ -21,6 +30,11 @@ export class AuthComponent implements OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private readonly toastrService: ToastrService,
+    public auth0: Auth0Service,
+    private authService: AuthService,
+    private store$: Store,
+    private spinner: PowerSpinnerService,
+    private router: Router
   ) {
     this.loginForm = this.loginFormGroupInit();
     this.inputEmailSubjectSubscribe();
@@ -43,7 +57,7 @@ export class AuthComponent implements OnDestroy {
 
   private inputEmailSubjectSubscribe(): void {
     this.inputEmailSubject.pipe(
-      debounceTime(2000),
+      debounceTime(1000),
       distinctUntilChanged(),
       takeUntil(this.ngDestroy$)
     ).subscribe(value => {
@@ -60,8 +74,18 @@ export class AuthComponent implements OnDestroy {
   }
 
   public loginByEmail(): void {
-    this.loginForm.reset();
-    this.toastrService.success('Welcome, user');
+    const loginData: LoginLogoutData = {
+      email: this.loginForm.get('email')?.value.trim(),
+      password: this.loginForm.get('password')?.value,
+    };
+    this.authService.loginByEmail(loginData).then((): Promise<UserDto> => {
+      return this.authService.getMeData();
+    }).then((userMe: UserDto): void => {
+      this.store$.dispatch(authUserDataSuccess({authUserData: userMe}));
+      localStorage.setItem('login', new Date().getTime().toString());
+      this.loginForm.reset();
+      this.router.navigateByUrl('/welcome')
+    }).finally(() => this.spinner.hide());
   }
 
   public testModalOpen(): void {
@@ -78,6 +102,15 @@ export class AuthComponent implements OnDestroy {
         return;
       }
       this.toastrService.warning('You press \'Cancel\'');
+    });
+  }
+
+  public auth0Login(): void {
+    this.auth0.loginWithRedirect({
+      authorizationParams: {
+        audience: environment.audience,
+        responseType: 'token id_token'
+      }
     });
   }
 }

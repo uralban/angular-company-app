@@ -1,33 +1,30 @@
-import {Injectable} from '@angular/core';
-import { switchMap, throwError, catchError, of } from "rxjs";
-import * as  GlobalLoaderActions from "./core.actions";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import {inject, Injectable} from '@angular/core';
+import {switchMap, catchError, of, from, map, filter} from "rxjs";
+import {Actions, createEffect, ofType, ROOT_EFFECTS_INIT} from "@ngrx/effects";
 import {UserDto} from '../../interfaces/user-dto';
+import {AuthService} from '../../services/auth/auth.service';
+import * as CoreActions from './core.actions';
 
 @Injectable()
 export class CoreEffects {
-  constructor(
-    private actions$: Actions<any>
-  ) {}
+  private actions$: Actions<any> = inject(Actions);
+  private authService: AuthService = inject(AuthService);
 
-  public authUserDataClear$ = createEffect(() => this.actions$.pipe(
-    ofType(GlobalLoaderActions.authUserDataClear.type),
-    switchMap(() => {
-      return of(null)
-    }),
-    catchError(error => {
-      return throwError(error);
-    })
-  ), {dispatch: false});
-
-  public authUserDataSuccess$ = createEffect(() => this.actions$.pipe(
-    ofType(GlobalLoaderActions.authUserDataSuccess.type),
-    switchMap((action:{authUserData: UserDto}) => {
-      return of(action)
-    }),
-    catchError(error => {
-      return throwError(error);
-    })
-  ), {dispatch: false});
-
+  public initLoadUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ROOT_EFFECTS_INIT),
+      filter((): boolean => {
+        const lastLoginTimestamp: string | null = localStorage.getItem('login');
+        if (!lastLoginTimestamp) return false;
+        return Number(lastLoginTimestamp) + 604800000 > new Date().getTime();
+      }),
+      switchMap(() =>
+        from(this.authService.getMeData()).pipe(
+          map((userMe: UserDto) => CoreActions.authUserDataSuccess({authUserData: userMe}),
+          catchError(() => of(CoreActions.authUserDataClear()))
+          )
+        )
+      )
+    )
+  );
 }

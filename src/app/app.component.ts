@@ -2,16 +2,15 @@ import {Component} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {HeaderComponent} from './core/header/header.component';
 import {FooterComponent} from './core/footer/footer.component';
-import {Store} from '@ngrx/store';
-import {authUserDataSuccess} from './state/core';
-import {UserDto} from './interfaces/user-dto';
+import {PowerSpinnerModule} from './widgets/power-spinner/power-spinner.module';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    PowerSpinnerModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -19,7 +18,5 @@ import {UserDto} from './interfaces/user-dto';
 export class AppComponent {
   public title: string = 'Angular';
 
-  constructor(private store$: Store) {
-    this.store$.dispatch(authUserDataSuccess({authUserData: new UserDto('1', 'test','firstName','lastName')}));
-  }
+  constructor() {}
 }

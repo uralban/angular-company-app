@@ -1,4 +1,5 @@
 import {DTO} from './dto.interface';
+import {ObjectFiller} from '../helpers/object-filter';
 
 export class PaginationMetaDto implements DTO{
 
@@ -12,11 +13,6 @@ export class PaginationMetaDto implements DTO{
   ) {}
 
   populateFromDTO(dto: any): void {
-    this.page = dto['page'];
-    this.take = dto['take'];
-    this.itemCount = dto['itemCount'];
-    this.pageCount = dto['pageCount'];
-    this.hasPreviousPage = dto['hasPreviousPage'];
-    this.hasNextPage = dto['hasNextPage'];
+    ObjectFiller.fillPropsFromDTO(this, dto);
   }
 }

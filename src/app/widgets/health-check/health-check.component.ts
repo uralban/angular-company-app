@@ -21,7 +21,6 @@ export class HealthCheckComponent implements OnInit {
 
   public ngOnInit() {
     this.healthCheckService.getHealthCheckData().then(data => {
-      console.log(data);
       this.status = data?.status_code;
     });
   }

@@ -12,13 +12,12 @@ export class HttpService {
   protected getOne<T extends DTO>(
     url: string,
     dtoType: new () => T,
-    params?: { [param: string]: string }): Observable<T | undefined> {
+    params?: { [param: string]: string }): Observable<T> {
 
     return this.httpClient.get(url, {params: params}).pipe(
-      map((data: any) => {
-        let entity: T | undefined;
+      map((data: any): T => {
+        let entity: T = new dtoType();
         if (data) {
-          entity = new dtoType();
           entity.populateFromDTO(data);
         }
         return entity;
@@ -52,6 +51,19 @@ export class HttpService {
     return this.httpClient.post(url, payload, {params: urlParams});
   }
 
+  protected postForResponseStatus(
+    url: string,
+    payload?: any,
+    params?: { [param: string]: string }
+  ): Observable<any> {
+    return this.httpClient.post(url, payload, {params: params, observe: 'response'}).pipe(
+      map(response => {
+          return response.status;
+        }
+      )
+    );
+  }
+
   protected put(
     url: string,
     urlParams?: { [param: string]: string },
@@ -66,6 +78,15 @@ export class HttpService {
     payload?: any): Observable<any> {
 
     return this.httpClient.delete(url, {params: urlParams});
+  }
+
+  protected getOneForSimpleTypeResults<T>(
+    url: string,
+    params?: { [param: string]: string }): Observable<T> {
+
+    return this.httpClient.get(url, {params: params}).pipe(
+      map((data: any) => data)
+    );
   }
 
 

@@ -37,7 +37,7 @@
         <ng-select class="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
                    formControlName="role"
                    id="role"
-                   [items]="mockRoles"
+                   [items]="roleList"
                    bindLabel="roleName"
                    bindValue="id"
                    [clearable]="false"
@@ -73,7 +73,7 @@
       <div class="pt-4 space-x-4">
         <button
           type="submit"
-          [disabled]="registrationForm.invalid"
+          [disabled]="registrationForm.invalid || emailInputInvalidFlag || emailExistFlag"
           class="px-6 py-2 text-white bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition">
           Complete
         </button>
