@@ -106,11 +106,6 @@ export class AuthComponent implements OnDestroy {
   }
 
   public auth0Login(): void {
-    this.auth0.loginWithRedirect({
-      authorizationParams: {
-        audience: environment.audience,
-        responseType: 'token id_token'
-      }
-    });
+    this.auth0.loginWithRedirect();
   }
 }

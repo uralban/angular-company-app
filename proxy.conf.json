@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://localhost:8080",
+    "target": "http://backLoadBalancer-1712154683.eu-north-1.elb.amazonaws.com:8080",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

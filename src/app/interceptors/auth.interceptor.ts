@@ -32,7 +32,7 @@ export class AuthInterceptor implements HttpInterceptor {
                 if (idToken) {
                   headers['x-id-token'] = idToken;
                 }
-                return next.handle( request.clone({ setHeaders: headers }));
+                return next.handle(request.clone({ setHeaders: headers }));
               })
             )
           ),

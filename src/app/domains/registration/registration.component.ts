@@ -99,14 +99,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       this.toastrService.error('The \'password\' and \'confirm password\' fields don\'t match.');
       return;
     }
-    const newUserData: CreateUserInterface = {
-      emailLogin: this.registrationForm.get('email')?.value.trim(),
-      password: this.registrationForm.get('password')?.value,
-      roleId: this.registrationForm.get('role')?.value
-    }
-    if (this.registrationForm.get('firstName')?.value) newUserData.firstName = this.registrationForm.get('firstName')?.value;
-    if (this.registrationForm.get('lastName')?.value) newUserData.lastName = this.registrationForm.get('lastName')?.value;
-    this.registrationService.saveNewUser(newUserData).then(() => {
+    this.registrationService.saveNewUser(this.registrationForm.value).then(() => {
       this.toastrService.success('You created an account, well done!');
       this.router.navigate(['/auth']);
     });

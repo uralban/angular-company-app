@@ -51,8 +51,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public logout(): void {
     this.auth0.isAuthenticated$.pipe(takeUntil(this.ngDestroy$)).subscribe((isAuth) => {
       this.store$.dispatch(authUserDataClear());
-      localStorage.removeItem('login');
       if (isAuth) {
+        localStorage.removeItem('login');
         this.auth0.logout({
           logoutParams: {
             returnTo: `${window.location.origin}/welcome`
@@ -62,6 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }
       this.spinner.show();
       this.authService.logout().then(() => {
+        localStorage.removeItem('login');
         this.router.navigateByUrl('/welcome').then(() => {
           window.location.reload();
         });
