@@ -4,7 +4,6 @@ import {ToastrService} from 'ngx-toastr';
 import {debounceTime, distinctUntilChanged, Subject, takeUntil} from 'rxjs';
 import {RoleDto} from '../../interfaces/role-dto';
 import {RegistrationService} from '../../services/registration/registration.service';
-import {CreateUserInterface} from '../../interfaces/create-user.interface';
 import {Router} from '@angular/router';
 
 @Component({
@@ -49,18 +48,18 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   private setDefaultUserRole(): void {
-    this.registrationForm.get('role')?.setValue(this.roleList.find(role => role.roleName === 'user')?.id);
+    this.registrationForm.get('roleId')?.setValue(this.roleList.find(role => role.roleName === 'user')?.id);
   }
 
   public registrationFormInit(): FormGroup {
     return this.formBuilder.group({
-      email: [undefined, Validators.compose([
+      emailLogin: [undefined, Validators.compose([
         Validators.required,
         Validators.email
       ])],
       firstName: [undefined, Validators.pattern(/^([A-Za-z])+$/)],
       lastName: [undefined, Validators.pattern(/^([A-Za-z])+$/)],
-      role: [{value: undefined, disabled: true}, Validators.required],
+      roleId: [{value: undefined, disabled: true}, Validators.required],
       password: [undefined, Validators.required],
       passwordConfirm: [undefined, Validators.required],
     });
@@ -76,11 +75,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         this.emailInputInvalidFlag = false;
         return;
       }
-      if (this.registrationForm.get('email')?.invalid) {
+      if (this.registrationForm.get('emailLogin')?.invalid) {
         this.emailInputInvalidFlag = true;
         return;
       }
-      this.registrationService.getEmailExistStatus(this.registrationForm.get('email')?.value)
+      this.registrationService.getEmailExistStatus(this.registrationForm.get('emailLogin')?.value)
         .then((emailExist: string): void => {
           if (emailExist === 'emailExist') {
             this.emailInputInvalidFlag = true;
@@ -90,7 +89,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           this.emailExistFlag = false;
           this.emailInputInvalidFlag = false;
         })
-      this.emailInputInvalidFlag = !!this.registrationForm.get('email')?.invalid;
+      this.emailInputInvalidFlag = !!this.registrationForm.get('emailLogin')?.invalid;
     });
   }
 
@@ -106,7 +105,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   public onInputChangeEmail(event: Event): void {
-    if (this.registrationForm.get('email')?.value === '') {
+    if (this.registrationForm.get('emailLogin')?.value === '') {
       this.emailInputInvalidFlag = false;
       return;
     }

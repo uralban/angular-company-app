@@ -16,5 +16,6 @@ CMD ["npm", "run", "watch"]
 
 FROM nginx:stable AS prod
 COPY --from=prod_build /app/dist/browser /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

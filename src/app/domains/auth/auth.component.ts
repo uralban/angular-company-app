@@ -74,11 +74,8 @@ export class AuthComponent implements OnDestroy {
   }
 
   public loginByEmail(): void {
-    const loginData: LoginLogoutData = {
-      email: this.loginForm.get('email')?.value.trim(),
-      password: this.loginForm.get('password')?.value,
-    };
-    this.authService.loginByEmail(loginData).then((): Promise<UserDto> => {
+    this.spinner.show();
+    this.authService.loginByEmail(this.loginForm.value).then((): Promise<UserDto> => {
       return this.authService.getMeData();
     }).then((userMe: UserDto): void => {
       this.store$.dispatch(authUserDataSuccess({authUserData: userMe}));

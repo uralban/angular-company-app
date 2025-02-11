@@ -9,7 +9,7 @@
         <input type="text"
                (input)="onInputChangeEmail($event)"
                [class.border-invalid]="emailInputInvalidFlag"
-               formControlName="email"
+               formControlName="emailLogin"
                class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
                placeholder="Email"
                id="email">
@@ -35,7 +35,7 @@
       <div class="flex flex-col space-y-2 group">
         <label for="role" class="text-base font-medium text-start text-gray-700 group-hover:text-blue-600 transition">Role:</label>
         <ng-select class="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-                   formControlName="role"
+                   formControlName="roleId"
                    id="role"
                    [items]="roleList"
                    bindLabel="roleName"

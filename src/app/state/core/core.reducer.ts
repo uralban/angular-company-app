@@ -8,12 +8,14 @@ const CoreReducer = createReducer(
     return {
       ...state,
       authUserData: null,
+      loaded: true,
     }
   }),
   on(GlobalLoaderActions.authUserDataSuccess, (state, {authUserData}) => {
     return {
       ...state,
       authUserData,
+      loaded: true,
     };
   }),
 );

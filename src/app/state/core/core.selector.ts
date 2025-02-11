@@ -9,3 +9,8 @@ export const selectAuthUser = createSelector(
   selectGlobalLoader,
   (state: CoreState) => state.authUserData,
 );
+
+export const selectIsAuthLoaded = createSelector(
+  selectGlobalLoader,
+  (state: CoreState) => state.loaded,
+);

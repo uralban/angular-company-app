@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {map, Observable, of, take} from 'rxjs';
+import {combineLatest, filter, map, Observable, of, take} from 'rxjs';
 import {Store} from '@ngrx/store';
-import {selectAuthUser} from '../state/core';
+import {selectAuthUser, selectIsAuthLoaded} from '../state/core';
 
 @Injectable({
   providedIn: 'root'
@@ -20,17 +20,21 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot,
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const url: string = state.url;
-    return this.store$.select(selectAuthUser).pipe(
+    return combineLatest([
+      this.store$.select(selectAuthUser),
+      this.store$.select(selectIsAuthLoaded)
+    ]).pipe(
+      filter(([user, loaded]) => loaded),
       take(1),
-      map((user): boolean | UrlTree => {
+      map(([user]): boolean | UrlTree => {
         const isAuthenticated: boolean = !!user;
         if (isAuthenticated && (url === '/auth' || url === '/registration')) {
-          return false;
+          return this.router.createUrlTree(['/']);
         }
-        if (!isAuthenticated && (url === '/auth' || url === '/registration')) {
-          return true;
+        if (!isAuthenticated && url !== '/auth' && url !== '/registration') {
+          return this.router.createUrlTree(['/auth']);
         }
-        return isAuthenticated;
+        return true;
       })
     );
   }

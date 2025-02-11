@@ -92,8 +92,7 @@ $ npm run test:cov
 
 You can see the coverage report in `/coverage` directory after generate.
 
-### I deployed my Angular application on an AWS EC2 instance by setting up a CI/CD pipeline that automatically builds and deploys the project whenever changes are pushed to the GitHub repository, ensuring seamless updates to the cloud server.
+### You can see the deployed project on:
 ```bash
-# to access use this:
-$ http://51.21.71.228
+  https://www.mental-help.com.ua
 ```
