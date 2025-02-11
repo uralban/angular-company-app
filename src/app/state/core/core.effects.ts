@@ -1,33 +1,39 @@
-import {Injectable} from '@angular/core';
-import { switchMap, throwError, catchError, of } from "rxjs";
-import * as  GlobalLoaderActions from "./core.actions";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import {inject, Injectable} from '@angular/core';
+import {switchMap, catchError, of, from, map, filter, tap} from "rxjs";
+import {Actions, createEffect, ofType, ROOT_EFFECTS_INIT} from "@ngrx/effects";
 import {UserDto} from '../../interfaces/user-dto';
+import {AuthService} from '../../services/auth/auth.service';
+import * as CoreActions from './core.actions';
+import {authUserDataClear} from './core.actions';
+import {Store} from '@ngrx/store';
 
 @Injectable()
 export class CoreEffects {
-  constructor(
-    private actions$: Actions<any>
-  ) {}
+  private actions$: Actions<any> = inject(Actions);
+  private authService: AuthService = inject(AuthService);
+  private store$: Store = inject(Store);
 
-  public authUserDataClear$ = createEffect(() => this.actions$.pipe(
-    ofType(GlobalLoaderActions.authUserDataClear.type),
-    switchMap(() => {
-      return of(null)
-    }),
-    catchError(error => {
-      return throwError(error);
-    })
-  ), {dispatch: false});
-
-  public authUserDataSuccess$ = createEffect(() => this.actions$.pipe(
-    ofType(GlobalLoaderActions.authUserDataSuccess.type),
-    switchMap((action:{authUserData: UserDto}) => {
-      return of(action)
-    }),
-    catchError(error => {
-      return throwError(error);
-    })
-  ), {dispatch: false});
-
+  public initLoadUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ROOT_EFFECTS_INIT),
+      filter((): boolean => {
+        const lastLoginTimestamp: string | null = localStorage.getItem('login');
+        if (!lastLoginTimestamp) {
+          this.store$.dispatch(authUserDataClear());
+          return false;
+        }
+        if (!(Number(lastLoginTimestamp) + 604800000 > new Date().getTime())) {
+          this.store$.dispatch(authUserDataClear());
+          return false;
+        }
+        return true;
+      }),
+      switchMap(() =>
+        from(this.authService.getMeData()).pipe(
+          map((userMe: UserDto) => CoreActions.authUserDataSuccess({authUserData: userMe})),
+          catchError(() => of(CoreActions.authUserDataClear()))
+        )
+      )
+    )
+  );
 }

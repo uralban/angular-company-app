@@ -1,14 +1,15 @@
 import { Routes } from '@angular/router';
+import {AuthGuard} from './guards/auth.guard';
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'auth',
-    pathMatch: 'full',
+    path: 'welcome',
+    loadChildren: () => import('./domains/welcome/welcome.module').then(m => m.WelcomeModule)
   },
   {
     path: 'auth',
-    loadChildren: () => import('./domains/auth/auth.module').then(m => m.AuthModule)
+    loadChildren: () => import('./domains/auth/auth.module').then(m => m.AuthModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'about',
@@ -16,15 +17,23 @@ export const routes: Routes = [
   },
   {
     path: 'companies',
-    loadChildren: () => import('./domains/companies/companies.module').then(m => m.CompaniesModule)
+    loadChildren: () => import('./domains/companies/companies.module').then(m => m.CompaniesModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'registration',
-    loadChildren: () => import('./domains/registration/registration.module').then(m => m.RegistrationModule)
+    loadChildren: () => import('./domains/registration/registration.module').then(m => m.RegistrationModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'users',
-    loadChildren: () => import('./domains/users/users.module').then(m => m.UsersModule)
+    loadChildren: () => import('./domains/users/users.module').then(m => m.UsersModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: '',
+    redirectTo: 'welcome',
+    pathMatch: 'full',
   },
   {
     path: '**',

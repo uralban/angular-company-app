@@ -10,6 +10,6 @@ services:
     volumes:
       - ./src:/app/src
     ports:
-      - '${PORT}:${PORT}'
+      - '${NG_APP_APP_PORT}:${NG_APP_APP_PORT}'
     restart: always
     command: npm run start -- --host 0.0.0.0

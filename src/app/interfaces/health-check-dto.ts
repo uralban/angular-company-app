@@ -1,16 +1,15 @@
 import {DTO} from './dto.interface';
+import {ObjectFiller} from '../helpers/object-filter';
 
-export class HealthCheckDto implements DTO{
+export class HealthCheckDto<T> implements DTO{
 
   constructor(
     public status_code?: number,
-    public detail?: string,
+    public detail?: T,
     public result?: string
   ) {}
 
   populateFromDTO(dto: any): void {
-    this.status_code = dto['status_code'];
-    this.detail = dto['detail'];
-    this.result = dto['result'];
+    ObjectFiller.fillPropsFromDTO(this, dto);
   }
 }

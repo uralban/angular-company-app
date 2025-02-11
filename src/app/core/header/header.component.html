@@ -7,14 +7,22 @@
     </div>
     <nav>
       <ul class="flex space-x-4 uppercase">
-        <li class="p-3"><a routerLink="/users" class="hover:underline">Users</a></li>
-        <li class="p-3"><a routerLink="/companies" class="hover:underline">Companies</a></li>
+        <li class="p-3"><a routerLink="/welcome" class="hover:underline">Welcome</a></li>
+        <li class="p-3" *ngIf="userName"><a routerLink="/users" class="hover:underline">Users</a></li>
+        <li class="p-3" *ngIf="userName"><a routerLink="/companies" class="hover:underline">Companies</a></li>
         <li class="p-3"><a routerLink="/about" class="hover:underline">About</a></li>
       </ul>
     </nav>
   </div>
   <div class="flex flex-row items-center px-4">
     <health-check></health-check>
-    <p class="ps-8">Current user: <span class="text-orange-600 font-bold">{{ userName }}</span></p>
+  </div>
+  <div class="flex flex-row items-center px-4">
+    <p class="ps-8 space-x-3" *ngIf="userName">
+      <span class="text-orange-600 font-bold">{{ userName }}</span>
+      <button (click)="logout()" class="px-3 py-1 text-white bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
+        Logout
+      </button>
+    </p>
   </div>
 </header>

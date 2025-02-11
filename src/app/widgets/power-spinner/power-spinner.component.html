@@ -1,0 +1,8 @@
+<div class="power-spinner-background power-spinner"
+     *ngIf="isOpened"
+     [class.power-spinner-overlay]="fullScreen"
+     [class.power-spinner-block-scoped]="!fullScreen" >
+  <div class="center-place">
+    <ng-content></ng-content>
+  </div>
+</div>

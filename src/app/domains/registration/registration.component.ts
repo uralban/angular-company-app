@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import {debounceTime, distinctUntilChanged, Subject, takeUntil} from 'rxjs';
 import {RoleDto} from '../../interfaces/role-dto';
+import {RegistrationService} from '../../services/registration/registration.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -15,22 +17,22 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   private inputEmailSubject: Subject<string> = new Subject<string>();
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
   public emailInputInvalidFlag: boolean = false;
+  public emailExistFlag: boolean = true;
 
-  public mockRoles: RoleDto[] = [
-    new RoleDto('1', 'admin'),
-    new RoleDto('2', 'user'),
-  ];
+  public roleList: RoleDto[] = [];
 
   constructor(
     public formBuilder: FormBuilder,
     private readonly toastrService: ToastrService,
+    private registrationService: RegistrationService,
+    private router: Router
   ) {
     this.registrationForm = this.registrationFormInit();
     this.inputEmailSubjectSubscribe();
   }
 
-  public ngOnInit() {
-    this.registrationForm.get('role')?.setValue(this.mockRoles.find(role => role.roleName === 'user')?.id);
+  public ngOnInit(): void {
+    this.getRoles();
   }
 
   public ngOnDestroy(): void {
@@ -38,15 +40,26 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.ngDestroy$.complete();
   }
 
+  private getRoles(): void {
+    this.registrationService.getRoles().then((roles: RoleDto[]): void => {
+      this.roleList = roles;
+      this.setDefaultUserRole();
+    });
+  }
+
+  private setDefaultUserRole(): void {
+    this.registrationForm.get('roleId')?.setValue(this.roleList.find(role => role.roleName === 'user')?.id);
+  }
+
   public registrationFormInit(): FormGroup {
     return this.formBuilder.group({
-      email: [undefined, Validators.compose([
+      emailLogin: [undefined, Validators.compose([
         Validators.required,
         Validators.email
       ])],
       firstName: [undefined, Validators.pattern(/^([A-Za-z])+$/)],
       lastName: [undefined, Validators.pattern(/^([A-Za-z])+$/)],
-      role: [undefined, Validators.required],
+      roleId: [{value: undefined, disabled: true}, Validators.required],
       password: [undefined, Validators.required],
       passwordConfirm: [undefined, Validators.required],
     });
@@ -58,24 +71,45 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.ngDestroy$)
     ).subscribe(value => {
-      this.emailInputInvalidFlag = value.length ? !!this.registrationForm.get('email')?.invalid : false;
+      if (!value.length) {
+        this.emailInputInvalidFlag = false;
+        return;
+      }
+      if (this.registrationForm.get('emailLogin')?.invalid) {
+        this.emailInputInvalidFlag = true;
+        return;
+      }
+      this.registrationService.getEmailExistStatus(this.registrationForm.get('emailLogin')?.value)
+        .then((emailExist: string): void => {
+          if (emailExist === 'emailExist') {
+            this.emailInputInvalidFlag = true;
+            this.toastrService.error('This email is already in use');
+            return;
+          }
+          this.emailExistFlag = false;
+          this.emailInputInvalidFlag = false;
+        })
+      this.emailInputInvalidFlag = !!this.registrationForm.get('emailLogin')?.invalid;
     });
   }
 
   public registration(): void {
     if (this.registrationForm.get('password')?.value !== this.registrationForm.get('passwordConfirm')?.value) {
-      this.toastrService.error('The password and confirm password fields don\'t match.');
+      this.toastrService.error('The \'password\' and \'confirm password\' fields don\'t match.');
       return;
     }
-    this.registrationForm.reset();
-    this.toastrService.success('You created an account, well done!');
+    this.registrationService.saveNewUser(this.registrationForm.value).then(() => {
+      this.toastrService.success('You created an account, well done!');
+      this.router.navigate(['/auth']);
+    });
   }
 
   public onInputChangeEmail(event: Event): void {
-    if (this.registrationForm.get('email')?.value === '') {
+    if (this.registrationForm.get('emailLogin')?.value === '') {
       this.emailInputInvalidFlag = false;
       return;
     }
+    this.emailExistFlag = true;
     this.inputEmailSubject.next((event.target as HTMLInputElement).value);
   }
 }

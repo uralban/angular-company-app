@@ -1,5 +1,6 @@
 import {DTO} from './dto.interface';
 import {PaginationMetaDto} from './pagination-meta-dto';
+import {ObjectFiller} from '../helpers/object-filter';
 
 export class PaginationDto<T> implements DTO{
 
@@ -9,7 +10,6 @@ export class PaginationDto<T> implements DTO{
   ) {}
 
   populateFromDTO(dto: any): void {
-    this.data = dto['data'];
-    this.meta = dto['meta'];
+    ObjectFiller.fillPropsFromDTO(this, dto);
   }
 }
