@@ -1,54 +1,81 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UserDto} from '../../interfaces/user-dto';
 import {Router} from '@angular/router';
 import {UserService} from '../../services/user/user.service';
 import {PaginationMetaDto} from '../../interfaces/pagination-meta-dto';
 import {PageEvent} from '@angular/material/paginator';
+import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.service';
+import {PaginationDto} from '../../interfaces/pagination-dto';
+import {Store} from '@ngrx/store';
+import {usersListDataSuccess} from '../../state/users-list';
+import {Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-users',
   standalone: false,
   templateUrl: './users.component.html'
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
 
-  public mockUsers: UserDto[] = [
-    new UserDto('1', 'example@gmail.com', 'John1', 'Doe'),
-    new UserDto('2', 'example@gmail.com', 'John2', 'Doe'),
-    new UserDto('3', 'example@gmail.com', 'John3', 'Doe'),
-    new UserDto('4', 'example@gmail.com', 'John4', 'Doe'),
-    new UserDto('5', 'example@gmail.com', 'John5', 'Doe'),
-    new UserDto('6', 'example@gmail.com', 'John6', 'Doe'),
-    new UserDto('7', 'example@gmail.com', 'John7', 'Doe'),
-    new UserDto('8', 'example@gmail.com', 'John8', 'Doe'),
-  ];
-  public mockPaginationMeta: PaginationMetaDto = new PaginationMetaDto(1,3,this.mockUsers.length, 3, false, true);
+  public paginationMeta: PaginationMetaDto = new PaginationMetaDto(1,3);
   public paginatedUserList: UserDto[] = [];
+  private readonly ngDestroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private router: Router,
     private userService: UserService,
+    private spinner: PowerSpinnerService,
+    private store$: Store
   ) {
   }
 
   public ngOnInit(): void {
-    this.updatePaginateUsersList();
+    this.getUsersListStoreSubscribe();
+    this.needReloadUsersListDataSubscribe();
+  }
+
+  public ngOnDestroy(): void {
+    this.ngDestroy$.next();
+    this.ngDestroy$.complete();
   }
 
   public openSinglePageUser(user: UserDto): void {
-    this.userService.singleUserId.next(user.id as string);
+    this.userService.singleUserId$.next(user.id as string);
     this.router.navigate(['users/user-profile']);
   }
 
   public onPageChange(event: PageEvent): void {
-    this.mockPaginationMeta.page = event.pageIndex + 1;
-    this.mockPaginationMeta.take = event.pageSize;
-    this.updatePaginateUsersList();
+      this.paginationMeta.page = event.pageIndex + 1;
+      this.paginationMeta.take = event.pageSize;
+      this.updatePaginateUsersList();
   }
 
-  public updatePaginateUsersList(): void {
-    const startIndex: number = (this.mockPaginationMeta.page - 1) * this.mockPaginationMeta.take;
-    const endIndex: number = startIndex + this.mockPaginationMeta.take;
-    this.paginatedUserList = this.mockUsers.slice(startIndex, endIndex);
+  private updatePaginateUsersList(): void {
+    this.spinner.show();
+    this.userService.getAllUser({
+      page: this.paginationMeta.page,
+      take: this.paginationMeta.take,
+    }).then((paginationDto: PaginationDto<UserDto>): void => {
+      this.store$.dispatch(usersListDataSuccess({usersListData: paginationDto}));
+      this.userService.needReloadUsersListData$.next(false);
+    }).finally(() => this.spinner.hide());
   }
+
+  private getUsersListStoreSubscribe(): void {
+    this.userService.storedUsersListData$.pipe(takeUntil(this.ngDestroy$)).subscribe(usersListData => {
+      if (usersListData) {
+        this.paginatedUserList = usersListData.data;
+        this.paginationMeta.itemCount = usersListData.meta.itemCount;
+        this.paginationMeta.take = usersListData.meta.take;
+        this.paginationMeta.page = usersListData.meta.page;
+      }
+    });
+  }
+
+  private needReloadUsersListDataSubscribe(): void {
+    this.userService.needReloadUsersListData$.pipe(takeUntil(this.ngDestroy$)).subscribe((flag: boolean): void => {
+      if (flag) this.updatePaginateUsersList();
+    });
+  }
+
 }

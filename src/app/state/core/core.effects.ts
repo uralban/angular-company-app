@@ -23,6 +23,7 @@ export class CoreEffects {
           return false;
         }
         if (!(Number(lastLoginTimestamp) + 604800000 > new Date().getTime())) {
+          localStorage.clear();
           this.store$.dispatch(authUserDataClear());
           return false;
         }

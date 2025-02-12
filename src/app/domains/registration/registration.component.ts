@@ -5,6 +5,10 @@ import {debounceTime, distinctUntilChanged, Subject, takeUntil} from 'rxjs';
 import {RoleDto} from '../../interfaces/role-dto';
 import {RegistrationService} from '../../services/registration/registration.service';
 import {Router} from '@angular/router';
+import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.service';
+import {RoleService} from '../../services/role/role.service';
+import {Store} from '@ngrx/store';
+import {rolesListSuccess} from '../../state/roles-list';
 
 @Component({
   selector: 'app-registration',
@@ -18,21 +22,23 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
   public emailInputInvalidFlag: boolean = false;
   public emailExistFlag: boolean = true;
-
   public roleList: RoleDto[] = [];
 
   constructor(
     public formBuilder: FormBuilder,
     private readonly toastrService: ToastrService,
     private registrationService: RegistrationService,
-    private router: Router
+    private roleService: RoleService,
+    private router: Router,
+    private store$: Store,
+    private spinner: PowerSpinnerService
   ) {
     this.registrationForm = this.registrationFormInit();
     this.inputEmailSubjectSubscribe();
   }
 
   public ngOnInit(): void {
-    this.getRoles();
+    this.getRolesListStoreSubscribe();
   }
 
   public ngOnDestroy(): void {
@@ -40,11 +46,22 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.ngDestroy$.complete();
   }
 
-  private getRoles(): void {
-    this.registrationService.getRoles().then((roles: RoleDto[]): void => {
-      this.roleList = roles;
-      this.setDefaultUserRole();
+  private getRolesListStoreSubscribe(): void {
+    this.roleService.storedRolesListData$.pipe(takeUntil(this.ngDestroy$)).subscribe(rolesList => {
+      if (rolesList) {
+        this.roleList = rolesList;
+        this.setDefaultUserRole();
+      } else {
+        this.getRoles();
+      }
     });
+  }
+
+  private getRoles(): void {
+    this.spinner.show();
+    this.roleService.getRoles().then((roles: RoleDto[]): void => {
+      this.store$.dispatch(rolesListSuccess({rolesList: roles}));
+    }).finally(() => this.spinner.hide());
   }
 
   private setDefaultUserRole(): void {
@@ -79,6 +96,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         this.emailInputInvalidFlag = true;
         return;
       }
+      this.registrationForm.get('emailLogin')?.disable();
       this.registrationService.getEmailExistStatus(this.registrationForm.get('emailLogin')?.value)
         .then((emailExist: string): void => {
           if (emailExist === 'emailExist') {
@@ -88,7 +106,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           }
           this.emailExistFlag = false;
           this.emailInputInvalidFlag = false;
-        })
+        }).finally(() => this.registrationForm.get('emailLogin')?.enable());
       this.emailInputInvalidFlag = !!this.registrationForm.get('emailLogin')?.invalid;
     });
   }
@@ -98,10 +116,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       this.toastrService.error('The \'password\' and \'confirm password\' fields don\'t match.');
       return;
     }
+    this.spinner.show();
     this.registrationService.saveNewUser(this.registrationForm.value).then(() => {
       this.toastrService.success('You created an account, well done!');
       this.router.navigate(['/auth']);
-    });
+    }).finally(() => this.spinner.hide());
   }
 
   public onInputChangeEmail(event: Event): void {
