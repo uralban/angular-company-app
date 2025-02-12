@@ -60,7 +60,7 @@
                  formControlName="emailLogin"
                  placeholder="Email"
                  [class.border-invalid]="editUserForm.get('email')?.invalid"
-                 class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                 class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 disabled:bg-gray-100 focus:ring-blue-500">
         </div>
         <div class="flex flex-col space-y-2" [class.group]="isEditing">
           <label for="role" class="block text-gray-600 text-sm font-medium group-hover:text-blue-600 transition">Role</label>
@@ -114,7 +114,8 @@
           </div>
           <div class="flex justify-end">
             <button *ngIf="!isEditing"
-                    class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+                    [disabled]="editDisabled"
+                    class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition"
                     (click)="toggleEdit()">
               Edit
             </button>
@@ -126,7 +127,7 @@
             </button>
             <button *ngIf="isEditing"
                     class="ml-4 px-6 py-2 text-white bg-red-500 rounded-lg text-lg font-semibold hover:bg-red-700 transition"
-                    (click)="toggleEdit()">
+                    (click)="cancelEdit()">
               Cancel
             </button>
           </div>

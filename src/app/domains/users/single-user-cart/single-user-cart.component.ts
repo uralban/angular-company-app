@@ -30,11 +30,10 @@ export class SingleUserCartComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.authService.user$.pipe(takeUntil(this.ngDestroy$)).subscribe((user: UserDto | null): void => {
       if (user) {
-        this.deleteIsDisabled = user.id === this.user.id;
+        this.deleteIsDisabled = user.id !== this.user.id;
       }
     });
   }
-
 
   public ngOnDestroy(): void {
     this.ngDestroy$.next();
@@ -65,6 +64,7 @@ export class SingleUserCartComponent implements OnInit, OnDestroy {
     this.userService.deleteUserById(userId).then(result => {
       this.userService.needReloadUsersListData$.next(true);
       this.toastrService.success(result.message);
+      this.authService.needLogoutUser$.next(true);
     }).finally(() => this.spinner.hide());
   }
 }

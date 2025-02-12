@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {UserDto} from '../../interfaces/user-dto';
-import {lastValueFrom, Observable} from 'rxjs';
+import {lastValueFrom, Observable, Subject} from 'rxjs';
 import {select, Store} from '@ngrx/store';
 import {selectAuthUser} from '../../state/core';
 import {HttpService} from '../http.service';
@@ -18,6 +18,7 @@ export class AuthService extends HttpService {
   private readonly URL_ME: string;
 
   public user$: Observable<UserDto | null>;
+  public needLogoutUser$: Subject<boolean> = new Subject();
 
   constructor(
     private readonly store$: Store,

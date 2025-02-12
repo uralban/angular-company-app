@@ -12,6 +12,7 @@ import {rolesListSuccess} from '../../../state/roles-list';
 import {Store} from '@ngrx/store';
 import {currentUserSuccess} from '../../../state/current-user';
 import {User} from '../../../interfaces/user.interface';
+import {AuthService} from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -23,10 +24,12 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
   public isEditing: boolean = false;
   public user: UserDto | null = null;
+  private storedUser: UserDto| null = null;
   public editUserForm: FormGroup;
   public roleList: RoleDto[] = [];
   public selectedFile: File | null = null;
   public avatarPreviewUrl: string | ArrayBuffer | null = null;
+  public editDisabled: boolean = true;
 
   constructor(
     private router: Router,
@@ -36,11 +39,13 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     private roleService: RoleService,
     private store$: Store,
     private readonly toastrService: ToastrService,
+    private  authService: AuthService,
   ) {
     this.editUserForm = this.editUserFormInit();
   }
 
   public ngOnInit(): void {
+    this.userSubscribe();
     this.getRolesListStoreSubscribe();
     this.checkUserIdAndUpdateCurrentUserStore();
   }
@@ -61,6 +66,12 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     });
   }
 
+  private userSubscribe(): void {
+    this.authService.user$.pipe(takeUntil(this.ngDestroy$)).subscribe((user: UserDto | null) => {
+      this.storedUser = user;
+    });
+  }
+
   private getRoles(): void {
     this.spinner.show();
     this.roleService.getRoles().then((roles: RoleDto[]): void => {
@@ -74,6 +85,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     if (this.user?.lastName) this.editUserForm.get('lastName')?.setValue(this.user.lastName);
     if (this.user?.avatarUrl) this.avatarPreviewUrl = this.user.avatarUrl;
     this.editUserForm.get('role')?.setValue(this.roleList.find(role => role.id === this.user?.role?.id)?.id);
+    this.editDisabled = this.user?.id !== this.storedUser?.id;
   }
 
   private checkUserIdAndUpdateCurrentUserStore(): void {
@@ -113,13 +125,13 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   public editUserFormInit(): FormGroup {
     return this.formBuilder.group({
-      emailLogin: [undefined, Validators.compose([
+      emailLogin: [{value: undefined, disabled: true}, Validators.compose([
         Validators.required,
         Validators.email
       ])],
       firstName: [undefined, Validators.pattern(/^([A-Za-z])+$/)],
       lastName: [undefined, Validators.pattern(/^([A-Za-z])+$/)],
-      role: [undefined, Validators.required],
+      role: [{value: undefined, disabled: true}, Validators.required],
       password: [undefined, Validators.required],
       passwordConfirm: [undefined, Validators.required]
     })
@@ -127,6 +139,11 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   public toggleEdit(): void {
     this.isEditing = !this.isEditing;
+  }
+
+  public cancelEdit(): void {
+    this.isEditing = false;
+    this.setDefaultValues();
   }
 
   public onFileSelected(event: Event): void {

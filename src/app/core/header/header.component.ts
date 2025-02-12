@@ -36,6 +36,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 
   public ngOnInit(): void {
+    this.userSubscribe();
+    this.needLogoutSubscribe();
+  }
+
+  public ngOnDestroy(): void {
+    this.ngDestroy$.next();
+    this.ngDestroy$.complete();
+  }
+
+  private userSubscribe(): void {
     this.authService.user$.pipe(takeUntil(this.ngDestroy$)).subscribe((user: UserDto | null) => {
       if (user) {
         this.userName = user.firstName + ' ' + user.lastName;
@@ -43,9 +53,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
-  public ngOnDestroy(): void {
-    this.ngDestroy$.next();
-    this.ngDestroy$.complete();
+  public needLogoutSubscribe(): void {
+    this.authService.needLogoutUser$.pipe(takeUntil(this.ngDestroy$)).subscribe(result => {
+      if (result) {
+        this.authService.needLogoutUser$.next(false);
+        this.logout();
+      }
+    });
   }
 
   public logout(): void {
