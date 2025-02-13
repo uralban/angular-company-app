@@ -9,6 +9,22 @@ export class HttpService {
   ) {
   }
 
+  protected getDataWithPagination<T extends DTO>(
+    url: string,
+    dtoFactory: (data: any) => T,
+    params?: { [param: string]: string }): Observable<T> {
+
+    return this.httpClient.get(url, {params: params}).pipe(
+      map((data: any): T => {
+        let entity: T = dtoFactory(data);
+        if (data) {
+          entity.populateFromDTO(data);
+        }
+        return entity;
+      })
+    );
+  }
+
   protected getOne<T extends DTO>(
     url: string,
     dtoType: new () => T,
@@ -64,12 +80,21 @@ export class HttpService {
     );
   }
 
-  protected put(
+  protected patch<T extends DTO>(
     url: string,
+    dtoType: new () => T,
     urlParams?: { [param: string]: string },
-    payload?: any): Observable<any> {
+    payload?: any): Observable<T> {
 
-    return this.httpClient.put(url, payload, {params: urlParams});
+    return this.httpClient.patch(url, payload, {params: urlParams}).pipe(
+      map((data: any): T => {
+        let entity: T = new dtoType();
+        if (data) {
+          entity.populateFromDTO(data);
+        }
+        return entity;
+      })
+    );
   }
 
   protected delete(

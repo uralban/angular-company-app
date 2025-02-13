@@ -6,8 +6,9 @@
       </div>
     </div>
     <div class="pt-8">
-      <mat-paginator [length]="mockPaginationMeta.itemCount"
-                     [pageSize]="mockPaginationMeta.take"
+      <mat-paginator [length]="paginationMeta?.itemCount"
+                     [pageSize]="paginationMeta?.take"
+                     [pageIndex]="paginationMeta.page - 1"
                      [pageSizeOptions]="[3, 6, 9]"
                      (page)="onPageChange($event)"
                      aria-label="Select page">

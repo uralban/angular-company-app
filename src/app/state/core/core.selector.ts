@@ -3,14 +3,14 @@ import {CoreState} from './core.state';
 
 export const coreDataFeatureKey = 'coreData';
 
-export const selectGlobalLoader = createFeatureSelector<CoreState>(coreDataFeatureKey);
+export const selectCoreStore = createFeatureSelector<CoreState>(coreDataFeatureKey);
 
 export const selectAuthUser = createSelector(
-  selectGlobalLoader,
+  selectCoreStore,
   (state: CoreState) => state.authUserData,
 );
 
 export const selectIsAuthLoaded = createSelector(
-  selectGlobalLoader,
+  selectCoreStore,
   (state: CoreState) => state.loaded,
 );

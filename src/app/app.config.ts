@@ -13,8 +13,14 @@ import {AuthInterceptor} from './interceptors/auth.interceptor';
 import {environment} from '../environments/environment';
 import {provideEffects} from '@ngrx/effects';
 import {CoreEffects} from './state/core/core.effects';
-import {reducer} from './state/core/core.reducer';
+import {coreReducerFn} from './state/core/core.reducer';
 import {coreDataFeatureKey} from './state/core';
+import {usersListDataFeatureKey} from './state/users-list';
+import {usersListReducerFn} from './state/users-list/users-list.reducer';
+import {currentUserFeatureKey} from './state/current-user';
+import {currentUserReducerFn} from './state/current-user/current-user.reducer';
+import {rolesListFeatureKey} from './state/roles-list/roles-list.selector';
+import {rolesListReducerFn} from './state/roles-list';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -38,7 +44,10 @@ export const appConfig: ApplicationConfig = {
         strictActionImmutability: true
       }
     }),
-    provideState(coreDataFeatureKey, reducer),
+    provideState(coreDataFeatureKey, coreReducerFn),
+    provideState(usersListDataFeatureKey, usersListReducerFn),
+    provideState(currentUserFeatureKey, currentUserReducerFn),
+    provideState(rolesListFeatureKey, rolesListReducerFn),
     provideEffects(
       CoreEffects
     ),

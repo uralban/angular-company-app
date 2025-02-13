@@ -1,8 +1,17 @@
-<div class="p-4 bg-gray-100 rounded-lg shadow-md min-w-44 flex items-center space-x-4 hover:bg-gray-200 hover:shadow-lg hover:cursor-pointer transition duration-300">
-  <div class="w-24 h-24 rounded-full bg-gray-300 overflow-hidden hover:scale-105 transform transition duration-300">
-    <img src="./assets/images/face2.png" alt="User Photo" class="w-full h-full object-cover">
+<div class="p-4 bg-gray-100 rounded-lg shadow-md min-w-44 flex justify-between items-start hover:bg-gray-200 hover:shadow-lg hover:cursor-pointer transition duration-300">
+  <div class="flex items-center flex-row justify-start space-x-4">
+    <div class="w-24 h-24 rounded-full bg-gray-300 overflow-hidden hover:scale-105 transform transition duration-300">
+      <img [src]=user.avatarUrl alt="User Photo" class="w-full h-full object-cover">
+    </div>
+    <div>
+      <p class="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition">{{user.firstName + ' ' + user.lastName}}</p>
+    </div>
   </div>
-  <div>
-    <p class="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition">{{user.firstName + ' ' + user.lastName}}</p>
+  <div class="">
+    <button [disabled]="deleteIsDisabled"
+            (click)="deleteUserConfirm($event)"
+            class="text-red-500 hover:text-red-700 transition text-2xl disabled:text-gray-300 disabled:cursor-not-allowed">
+      <ng-icon name="matClear" />
+    </button>
   </div>
 </div>

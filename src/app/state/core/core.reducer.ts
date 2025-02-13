@@ -20,6 +20,6 @@ const CoreReducer = createReducer(
   }),
 );
 
-export function reducer(state: CoreState | undefined, action: Action) {
+export function coreReducerFn(state: CoreState | undefined, action: Action) {
   return CoreReducer(state, action);
 }

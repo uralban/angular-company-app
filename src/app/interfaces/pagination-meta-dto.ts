@@ -6,10 +6,10 @@ export class PaginationMetaDto implements DTO{
   constructor(
     public page: number,
     public take: number,
-    public itemCount: number,
-    public pageCount: number,
-    public hasPreviousPage: boolean,
-    public hasNextPage: boolean
+    public itemCount?: number,
+    public pageCount?: number,
+    public hasPreviousPage?: boolean,
+    public hasNextPage?: boolean
   ) {}
 
   populateFromDTO(dto: any): void {
