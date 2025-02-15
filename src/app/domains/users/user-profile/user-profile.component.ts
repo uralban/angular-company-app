@@ -13,6 +13,7 @@ import {Store} from '@ngrx/store';
 import {currentUserSuccess} from '../../../state/current-user';
 import {User} from '../../../interfaces/user.interface';
 import {AuthService} from '../../../services/auth/auth.service';
+import {authUserDataSuccess} from '../../../state/core';
 
 @Component({
   selector: 'app-user-profile',
@@ -132,8 +133,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       firstName: [undefined, Validators.pattern(/^([A-Za-z])+$/)],
       lastName: [undefined, Validators.pattern(/^([A-Za-z])+$/)],
       role: [{value: undefined, disabled: true}, Validators.required],
-      password: [undefined, Validators.required],
-      passwordConfirm: [undefined, Validators.required]
+      password: [undefined],
+      passwordConfirm: [undefined]
     })
   }
 
@@ -160,16 +161,15 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   public saveChanges(): void {
-    if (this.editUserForm.get('password')?.value !== this.editUserForm.get('passwordConfirm')?.value) {
+    if (this.editUserForm.get('password')?.value && (this.editUserForm.get('password')?.value !== this.editUserForm.get('passwordConfirm')?.value)) {
       this.toastrService.error('The \'password\' and \'confirm password\' fields don\'t match.');
       return;
     }
+    const newUserData: User = {};
     const formData = new FormData();
-    const newUserData: User = {
-      password: this.editUserForm.get('password')?.value
-    }
-    if (this.editUserForm.get('firstName')?.value !== this.user?.firstName) newUserData.firstName = this.editUserForm.get('firstName')?.value;
-    if (this.editUserForm.get('lastName')?.value !== this.user?.lastName) newUserData.lastName = this.editUserForm.get('lastName')?.value;
+    if (this.editUserForm.get('password')?.value) newUserData.password = this.editUserForm.get('password')?.value;
+    if (this.editUserForm.get('firstName')?.value !== this.user?.firstName) newUserData.firstName = this.editUserForm.get('firstName')?.value || '';
+    if (this.editUserForm.get('lastName')?.value !== this.user?.lastName) newUserData.lastName = this.editUserForm.get('lastName')?.value || '';
     if (this.editUserForm.get('emailLogin')?.value !== this.user?.emailLogin) newUserData.emailLogin = this.editUserForm.get('emailLogin')?.value;
     if (this.editUserForm.get('role')?.value !== this.user?.role?.id) newUserData.role = this.roleList.find(role => role.id === this.editUserForm.get('role')?.value);
     if (!this.avatarPreviewUrl) newUserData.avatarUrl = '';
@@ -179,9 +179,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     }
 
     this.spinner.show();
-    this.userService.updateUser(this.user?.id as string, formData).then(result => {
+    this.userService.updateUser(formData).then(user => {
       this.userService.needReloadUsersListData$.next(true);
-      this.store$.dispatch(currentUserSuccess({user: result}))
+      this.store$.dispatch(currentUserSuccess({user: user}));
+      this.store$.dispatch(authUserDataSuccess({authUserData: user}));
       this.toastrService.success('The user was successfully updated.');
       this.editUserForm.get('passwordConfirm')?.setValue(undefined);
       this.editUserForm.get('password')?.setValue(undefined);

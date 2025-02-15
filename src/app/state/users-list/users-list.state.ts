@@ -1,7 +1,8 @@
-import {UsersListDataInterface} from '../../interfaces/users-list-data.interface';
+import {PaginatedListDataInterface} from '../../interfaces/paginated-list-data.interface';
+import {UserDto} from '../../interfaces/user-dto';
 
 export interface UsersListState {
-  usersListData: UsersListDataInterface | null;
+  usersListData: PaginatedListDataInterface<UserDto> | null;
 }
 
 export const initialState: UsersListState = {

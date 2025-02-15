@@ -59,6 +59,15 @@ export class HttpService {
     );
   }
 
+  protected getAllForSimpleTypeResults<T>(
+    url: string,
+    params?: { [param: string]: string }): Observable<T[]> {
+
+    return this.httpClient.get(url, {params: params}).pipe(
+      map((dataArray: any) => dataArray)
+    );
+  }
+
   protected post(
     url: string,
     urlParams?: { [param: string]: string },
@@ -80,7 +89,7 @@ export class HttpService {
     );
   }
 
-  protected patch<T extends DTO>(
+  protected patchForResult<T extends DTO>(
     url: string,
     dtoType: new () => T,
     urlParams?: { [param: string]: string },
@@ -95,6 +104,13 @@ export class HttpService {
         return entity;
       })
     );
+  }
+
+  protected patch(
+    url: string,
+    urlParams?: { [param: string]: string },
+    payload?: any): Observable<any> {
+    return this.httpClient.patch(url, payload, {params: urlParams});
   }
 
   protected delete(

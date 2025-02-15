@@ -1,9 +1,10 @@
 import {createAction, props} from '@ngrx/store';
-import {UsersListDataInterface} from '../../interfaces/users-list-data.interface';
+import {PaginatedListDataInterface} from '../../interfaces/paginated-list-data.interface';
+import {UserDto} from '../../interfaces/user-dto';
 
 export const usersListDataSuccess = createAction(
   "[Users List State] Users list data success",
-  props<{usersListData: UsersListDataInterface}>()
+  props<{usersListData: PaginatedListDataInterface<UserDto>}>()
 );
 
 export const usersListDataClear = createAction(

@@ -9,6 +9,7 @@ import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.ser
 import {RoleService} from '../../services/role/role.service';
 import {Store} from '@ngrx/store';
 import {rolesListSuccess} from '../../state/roles-list';
+import {CreateUserInterface} from '../../interfaces/create-user.interface';
 
 @Component({
   selector: 'app-registration',
@@ -117,7 +118,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       return;
     }
     this.spinner.show();
-    this.registrationService.saveNewUser(this.registrationForm.value).then(() => {
+    const newUserData: CreateUserInterface = {
+      ...this.registrationForm.value,
+      roleId: this.registrationForm.get('roleId')?.value,
+    }
+    this.registrationService.saveNewUser(newUserData).then(() => {
       this.toastrService.success('You created an account, well done!');
       this.router.navigate(['/auth']);
     }).finally(() => this.spinner.hide());

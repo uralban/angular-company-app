@@ -7,7 +7,7 @@ const RolesListReducer = createReducer(
   on(RolesListActions.rolesListClear, (state, {}) => {
     return {
       ...state,
-      user: null,
+      rolesList: null,
     }
   }),
   on(RolesListActions.rolesListSuccess, (state, {rolesList}) => {

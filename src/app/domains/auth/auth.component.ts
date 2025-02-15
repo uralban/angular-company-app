@@ -21,7 +21,6 @@ import {environment} from '../../../environments/environment';
 })
 export class AuthComponent implements OnDestroy {
 
-  private readonly dialog: MatDialog = inject(MatDialog);
   public loginForm: FormGroup;
   private inputEmailSubject: Subject<string> = new Subject<string>();
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
@@ -83,23 +82,6 @@ export class AuthComponent implements OnDestroy {
       this.loginForm.reset();
       this.router.navigateByUrl('/welcome')
     }).finally(() => this.spinner.hide());
-  }
-
-  public testModalOpen(): void {
-    const dialogRef = this.dialog.open(UniversalModalComponent, {
-      data: {
-        title: 'Modal title',
-        message: 'Modal test pass!'
-      },
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.toastrService.success('You press \'Confirm\'');
-        return;
-      }
-      this.toastrService.warning('You press \'Cancel\'');
-    });
   }
 
   public auth0Login(): void {

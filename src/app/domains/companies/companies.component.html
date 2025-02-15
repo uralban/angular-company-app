@@ -1,4 +1,14 @@
-<div class="p-4">
+<div class="p-4 space-y-4">
+  <div class="p-8 bg-white shadow-lg rounded-lg max-w-7xl mx-auto space-x-4">
+    <button class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+            (click)="creteNewCompany()">
+      Create new company
+    </button>
+    <button class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+            (click)="changeVisibilityForAllCompanies()">
+      Change visible status to all
+    </button>
+  </div>
   <div class="p-8 bg-white shadow-lg rounded-lg max-w-7xl mx-auto">
     <div class="grid grid-cols-3 gap-4">
       <div *ngFor="let company of paginatedCompanyList" (click)="openSinglePageCompany(company)">
@@ -6,8 +16,9 @@
       </div>
     </div>
     <div class="pt-8">
-      <mat-paginator [length]="mockPaginationMeta.itemCount"
-                     [pageSize]="mockPaginationMeta.take"
+      <mat-paginator [length]="paginationMeta?.itemCount"
+                     [pageSize]="paginationMeta?.take"
+                     [pageIndex]="paginationMeta.page - 1"
                      [pageSizeOptions]="[3, 6, 9]"
                      (page)="onPageChange($event)"
                      aria-label="Select page">

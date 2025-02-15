@@ -9,6 +9,7 @@ import {AuthService as Auth0Service} from '@auth0/auth0-angular';
 import {Store} from '@ngrx/store';
 import {authUserDataClear} from '../../state/core';
 import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.service';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -23,6 +24,7 @@ import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.ser
 export class HeaderComponent implements OnInit, OnDestroy {
 
   public userName: string | undefined;
+  public avatarUrl: string = '';
 
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
 
@@ -48,7 +50,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private userSubscribe(): void {
     this.authService.user$.pipe(takeUntil(this.ngDestroy$)).subscribe((user: UserDto | null) => {
       if (user) {
-        this.userName = user.firstName + ' ' + user.lastName;
+        this.userName = this.setUserName(user);
+        this.avatarUrl = user.avatarUrl || environment.defaultUserAvatar;
       }
     });
   }
@@ -82,6 +85,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
         });
       }).finally(() => this.spinner.hide());
     });
+  }
+
+  private setUserName(user: UserDto): string {
+    if (!user.firstName && !user.lastName) {
+      return user.emailLogin || '';
+    } else if (user.firstName && user.lastName) {
+      return user.firstName + ' ' + user.lastName;
+    } else {
+      return user.firstName ? user.firstName : user.lastName || '';
+    }
   }
 
 }
