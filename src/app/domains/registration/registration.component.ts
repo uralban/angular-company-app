@@ -1,72 +1,39 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import {debounceTime, distinctUntilChanged, Subject, takeUntil} from 'rxjs';
-import {RoleDto} from '../../interfaces/role-dto';
 import {RegistrationService} from '../../services/registration/registration.service';
 import {Router} from '@angular/router';
 import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.service';
-import {RoleService} from '../../services/role/role.service';
-import {Store} from '@ngrx/store';
-import {rolesListSuccess} from '../../state/roles-list';
-import {CreateUserInterface} from '../../interfaces/create-user.interface';
+import {CreateUserInterface} from '../../interfaces/user/create-user.interface';
 
 @Component({
   selector: 'app-registration',
   standalone: false,
   templateUrl: './registration.component.html'
 })
-export class RegistrationComponent implements OnInit, OnDestroy {
+export class RegistrationComponent implements OnDestroy {
 
   public registrationForm: FormGroup;
   private inputEmailSubject: Subject<string> = new Subject<string>();
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
   public emailInputInvalidFlag: boolean = false;
   public emailExistFlag: boolean = true;
-  public roleList: RoleDto[] = [];
 
   constructor(
     public formBuilder: FormBuilder,
     private readonly toastrService: ToastrService,
     private registrationService: RegistrationService,
-    private roleService: RoleService,
     private router: Router,
-    private store$: Store,
     private spinner: PowerSpinnerService
   ) {
     this.registrationForm = this.registrationFormInit();
     this.inputEmailSubjectSubscribe();
   }
 
-  public ngOnInit(): void {
-    this.getRolesListStoreSubscribe();
-  }
-
   public ngOnDestroy(): void {
     this.ngDestroy$.next();
     this.ngDestroy$.complete();
-  }
-
-  private getRolesListStoreSubscribe(): void {
-    this.roleService.storedRolesListData$.pipe(takeUntil(this.ngDestroy$)).subscribe(rolesList => {
-      if (rolesList) {
-        this.roleList = rolesList;
-        this.setDefaultUserRole();
-      } else {
-        this.getRoles();
-      }
-    });
-  }
-
-  private getRoles(): void {
-    this.spinner.show();
-    this.roleService.getRoles().then((roles: RoleDto[]): void => {
-      this.store$.dispatch(rolesListSuccess({rolesList: roles}));
-    }).finally(() => this.spinner.hide());
-  }
-
-  private setDefaultUserRole(): void {
-    this.registrationForm.get('roleId')?.setValue(this.roleList.find(role => role.roleName === 'user')?.id);
   }
 
   public registrationFormInit(): FormGroup {
@@ -77,7 +44,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       ])],
       firstName: [undefined, Validators.pattern(/^([A-Za-z])+$/)],
       lastName: [undefined, Validators.pattern(/^([A-Za-z])+$/)],
-      roleId: [{value: undefined, disabled: true}, Validators.required],
       password: [undefined, Validators.required],
       passwordConfirm: [undefined, Validators.required],
     });
@@ -119,9 +85,10 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     }
     this.spinner.show();
     const newUserData: CreateUserInterface = {
-      ...this.registrationForm.value,
-      roleId: this.registrationForm.get('roleId')?.value,
+      ...this.registrationForm.value
     }
+    if (!newUserData.firstName) delete newUserData.firstName;
+    if (!newUserData.lastName) delete newUserData.lastName;
     this.registrationService.saveNewUser(newUserData).then(() => {
       this.toastrService.success('You created an account, well done!');
       this.router.navigate(['/auth']);

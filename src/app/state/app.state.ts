@@ -5,6 +5,8 @@ import {RolesListState} from './roles-list';
 import {VisibilityListState} from './visibility-list';
 import {CompanyListState} from './company-list';
 import {CurrentCompanyState} from './current-company';
+import {InvitationListState} from './invitation-list';
+import {RequestListState} from './request-list';
 
 export interface State {
   coreData: CoreState;
@@ -12,6 +14,8 @@ export interface State {
   user: CurrentUserState,
   rolesList: RolesListState,
   visibilityList: VisibilityListState,
-  companyList: CompanyListState,
+  companyListData: CompanyListState,
   company: CurrentCompanyState,
+  invitationListData: InvitationListState,
+  requestListData: RequestListState,
 }

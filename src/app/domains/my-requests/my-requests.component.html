@@ -1,0 +1,19 @@
+<div class="p-4">
+  <div class="p-8 bg-white shadow-lg rounded-lg max-w-7xl mx-auto">
+    <div class="grid grid-cols-3 gap-4">
+      <div *ngFor="let request of paginatedRequestList">
+        <my-request-cart [request]="request"></my-request-cart>
+      </div>
+      <p *ngIf="!paginatedRequestList.length">No requests</p>
+    </div>
+    <div class="pt-8">
+      <mat-paginator [length]="paginationMeta?.itemCount"
+                     [pageSize]="paginationMeta?.take"
+                     [pageIndex]="paginationMeta.page - 1"
+                     [pageSizeOptions]="[3, 6, 9]"
+                     (page)="onPageChange($event)"
+                     aria-label="Select page">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

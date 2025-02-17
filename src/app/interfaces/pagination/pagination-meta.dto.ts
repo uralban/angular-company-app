@@ -1,5 +1,5 @@
-import {DTO} from './dto.interface';
-import {ObjectFiller} from '../helpers/object-filter';
+import {DTO} from '../dto.interface';
+import {ObjectFiller} from '../../helpers/object-filter';
 
 export class PaginationMetaDto implements DTO{
 

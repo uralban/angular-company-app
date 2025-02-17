@@ -1,13 +1,13 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {CompanyDto} from '../../interfaces/company-dto';
-import {PaginationMetaDto} from '../../interfaces/pagination-meta-dto';
+import {CompanyDto} from '../../interfaces/company/company.dto';
+import {PaginationMetaDto} from '../../interfaces/pagination/pagination-meta.dto';
 import {Router} from '@angular/router';
 import {CompanyService} from '../../services/company/company.service';
 import {PageEvent} from '@angular/material/paginator';
 import {Subject, takeUntil} from 'rxjs';
 import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.service';
 import {Store} from '@ngrx/store';
-import {PaginationDto} from '../../interfaces/pagination-dto';
+import {PaginationDto} from '../../interfaces/pagination/pagination.dto';
 import {companyListDataSuccess} from '../../state/company-list';
 import {CreateCompanyModalComponent} from './create-company-modal/create-company-modal.component';
 import {MatDialog} from '@angular/material/dialog';

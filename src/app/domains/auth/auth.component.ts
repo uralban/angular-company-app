@@ -9,7 +9,7 @@ import {AuthService} from '../../services/auth/auth.service';
 import {LoginLogoutData} from '../../interfaces/login.interface';
 import {Store} from '@ngrx/store';
 import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.service';
-import {UserDto} from '../../interfaces/user-dto';
+import {UserDto} from '../../interfaces/user/user.dto';
 import {authUserDataSuccess} from '../../state/core';
 import {Router} from '@angular/router';
 import {environment} from '../../../environments/environment';

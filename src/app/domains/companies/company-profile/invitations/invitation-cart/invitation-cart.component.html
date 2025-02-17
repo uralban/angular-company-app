@@ -1,0 +1,19 @@
+<div class="p-4 bg-gray-100 rounded-lg shadow-md flex items-start justify-between space-x-2">
+  <div class="flex items-center flex-row justify-start space-x-4">
+    <div class="w-9 h-9 rounded-full bg-gray-300 overflow-hidden hover:scale-105 transform transition duration-300">
+      <img [src]=avatarUrl alt="User avatar" class="w-full h-full object-cover">
+    </div>
+    <div>
+      <p class="text-sm font-bold break-all text-gray-800 group-hover:text-blue-600 transition">{{ getUserName() }}</p>
+    </div>
+  </div>
+  <div class="">
+    <button mat-button [matMenuTriggerFor]="menu"><ng-icon name="matEdit"/></button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item
+              (click)="declineInvite()">
+        Decline invite
+      </button>
+    </mat-menu>
+  </div>
+</div>

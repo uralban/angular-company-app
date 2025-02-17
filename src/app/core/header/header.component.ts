@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
-import {UserDto} from '../../interfaces/user-dto';
+import {UserDto} from '../../interfaces/user/user.dto';
 import {Subject, takeUntil} from 'rxjs';
 import {AuthService} from '../../services/auth/auth.service';
 import {HealthCheckComponent} from '../../widgets/health-check/health-check.component';

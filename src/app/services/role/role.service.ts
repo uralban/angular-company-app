@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpService} from '../http.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {RoleDto} from '../../interfaces/role-dto';
+import {RoleDto} from '../../interfaces/role/role.dto';
 import {lastValueFrom, Observable} from 'rxjs';
 import {select, Store} from '@ngrx/store';
 import {selectRolesListData} from '../../state/roles-list/roles-list.selector';

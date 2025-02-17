@@ -89,6 +89,23 @@ export class HttpService {
     );
   }
 
+  protected postForResult<T extends DTO>(
+    url: string,
+    dtoType: new () => T,
+    urlParams?: { [param: string]: string },
+    payload?: any): Observable<T> {
+
+    return this.httpClient.post(url, payload, {params: urlParams}).pipe(
+      map((data: any): T => {
+        let entity: T = new dtoType();
+        if (data) {
+          entity.populateFromDTO(data);
+        }
+        return entity;
+      })
+    );
+  }
+
   protected patchForResult<T extends DTO>(
     url: string,
     dtoType: new () => T,
@@ -111,6 +128,23 @@ export class HttpService {
     urlParams?: { [param: string]: string },
     payload?: any): Observable<any> {
     return this.httpClient.patch(url, payload, {params: urlParams});
+  }
+
+  protected deleteForResult<T extends DTO>(
+    url: string,
+    dtoType: new () => T,
+    urlParams?: { [param: string]: string },
+    payload?: any): Observable<T> {
+
+    return this.httpClient.delete(url, {params: urlParams}).pipe(
+      map((data: any): T => {
+        let entity: T = new dtoType();
+        if (data) {
+          entity.populateFromDTO(data);
+        }
+        return entity;
+      })
+    );
   }
 
   protected delete(

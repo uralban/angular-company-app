@@ -1,5 +1,5 @@
 import {createAction, props} from '@ngrx/store';
-import {RoleDto} from '../../interfaces/role-dto';
+import {RoleDto} from '../../interfaces/role/role.dto';
 
 export const rolesListSuccess = createAction(
   "[Roles List State] Roles list data success",

@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {UserDto} from '../../interfaces/user-dto';
+import {UserDto} from '../../interfaces/user/user.dto';
 import {Router} from '@angular/router';
 import {UserService} from '../../services/user/user.service';
-import {PaginationMetaDto} from '../../interfaces/pagination-meta-dto';
+import {PaginationMetaDto} from '../../interfaces/pagination/pagination-meta.dto';
 import {PageEvent} from '@angular/material/paginator';
 import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.service';
-import {PaginationDto} from '../../interfaces/pagination-dto';
+import {PaginationDto} from '../../interfaces/pagination/pagination.dto';
 import {Store} from '@ngrx/store';
 import {usersListDataSuccess} from '../../state/users-list';
 import {Subject, takeUntil} from 'rxjs';
@@ -17,7 +17,7 @@ import {Subject, takeUntil} from 'rxjs';
 })
 export class UsersComponent implements OnInit, OnDestroy {
 
-  public paginationMeta: PaginationMetaDto = new PaginationMetaDto(1,3);
+  public paginationMeta: PaginationMetaDto = new PaginationMetaDto(1, 3);
   public paginatedUserList: UserDto[] = [];
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
 
@@ -45,9 +45,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   public onPageChange(event: PageEvent): void {
-      this.paginationMeta.page = event.pageIndex + 1;
-      this.paginationMeta.take = event.pageSize;
-      this.updatePaginateUsersList();
+    this.paginationMeta.page = event.pageIndex + 1;
+    this.paginationMeta.take = event.pageSize;
+    this.updatePaginateUsersList();
   }
 
   private updatePaginateUsersList(): void {

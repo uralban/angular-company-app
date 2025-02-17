@@ -3,7 +3,7 @@ import {AuthService as Auth0Service} from '@auth0/auth0-angular';
 import {AuthService} from '../../services/auth/auth.service';
 import {Store} from '@ngrx/store';
 import {authUserDataSuccess} from '../../state/core';
-import {UserDto} from '../../interfaces/user-dto';
+import {UserDto} from '../../interfaces/user/user.dto';
 import {Subject, takeUntil} from 'rxjs';
 import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.service';
 

@@ -31,6 +31,16 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'my-invitations',
+    loadChildren: () => import('./domains/my-invitations/my-invitations.module').then(m => m.MyInvitationsModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'my-requests',
+    loadChildren: () => import('./domains/my-requests/my-requests.module').then(m => m.MyRequestsModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: '',
     redirectTo: 'welcome',
     pathMatch: 'full',
