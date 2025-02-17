@@ -21,20 +21,12 @@ export class AuthInterceptor implements HttpInterceptor {
           return next.handle(reqClone);
         }
         return this.auth.getAccessTokenSilently().pipe(
-          mergeMap((accessToken: string): Observable<HttpEvent<any>> =>
-            this.auth.idTokenClaims$.pipe(
-              take(1),
-              mergeMap(idTokenClaims => {
-                const idToken: string | undefined = idTokenClaims?.__raw;
-                const headers: Record<string, string> = {
-                  Authorization: `Bearer ${accessToken}`
-                };
-                if (idToken) {
-                  headers['x-id-token'] = idToken;
-                }
-                return next.handle(request.clone({ setHeaders: headers }));
-              })
-            )
+          mergeMap((accessToken: string): Observable<HttpEvent<any>> => {
+            const headers: Record<string, string> = {
+              Authorization: `Bearer ${accessToken}`,
+            };
+            return next.handle(request.clone({ setHeaders: headers }));
+            }
           ),
           catchError((): Observable<HttpEvent<any>> => next.handle(request))
         );

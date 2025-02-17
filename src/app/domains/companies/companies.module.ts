@@ -8,7 +8,10 @@ import {CompanyProfileComponent} from './company-profile/company-profile.compone
 import {NgIconsModule} from '@ng-icons/core';
 import {matClear, matStar} from '@ng-icons/material-icons/baseline';
 import {NgSelectComponent} from '@ng-select/ng-select';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { CreateCompanyModalComponent } from './create-company-modal/create-company-modal.component';
+import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogModule} from '@angular/material/dialog';
+import { ChangeVisibilityForAllCompaniesModalComponent } from './change-visibility-for-all-companies-modal/change-visibility-for-all-companies-modal.component';
 
 
 
@@ -16,7 +19,9 @@ import {ReactiveFormsModule} from '@angular/forms';
   declarations: [
     CompaniesComponent,
     SingleCompanyCartComponent,
-    CompanyProfileComponent
+    CompanyProfileComponent,
+    CreateCompanyModalComponent,
+    ChangeVisibilityForAllCompaniesModalComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +29,12 @@ import {ReactiveFormsModule} from '@angular/forms';
     MatPaginator,
     NgIconsModule.withIcons({matStar, matClear}),
     NgSelectComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogModule,
+    FormsModule
   ]
 })
 export class CompaniesModule { }

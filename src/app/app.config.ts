@@ -21,6 +21,12 @@ import {currentUserFeatureKey} from './state/current-user';
 import {currentUserReducerFn} from './state/current-user/current-user.reducer';
 import {rolesListFeatureKey} from './state/roles-list/roles-list.selector';
 import {rolesListReducerFn} from './state/roles-list';
+import {visibilityReducerFn} from './state/visibility-list';
+import {visibilityListFeatureKey} from './state/visibility-list/visibility-list.selector';
+import {companyListFeatureKey} from './state/company-list/company-list.selector';
+import {companyListReducerFn} from './state/company-list';
+import {currentCompanyFeatureKey} from './state/current-company';
+import {currentCompanyReducerFn} from './state/current-company/current-company.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -48,6 +54,9 @@ export const appConfig: ApplicationConfig = {
     provideState(usersListDataFeatureKey, usersListReducerFn),
     provideState(currentUserFeatureKey, currentUserReducerFn),
     provideState(rolesListFeatureKey, rolesListReducerFn),
+    provideState(visibilityListFeatureKey, visibilityReducerFn),
+    provideState(companyListFeatureKey, companyListReducerFn),
+    provideState(currentCompanyFeatureKey, currentCompanyReducerFn),
     provideEffects(
       CoreEffects
     ),

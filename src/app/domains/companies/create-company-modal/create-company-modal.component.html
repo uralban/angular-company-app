@@ -1,0 +1,85 @@
+<h3 class="flex items-center p-4 text-md font-bold text-gray-800 border-b border-gray-400">
+  {{data.title}}
+</h3>
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="createCompanyForm">
+    <div class="bg-white shadow-lg rounded-lg p-8 flex space-x-8 max-w-4xl mx-auto">
+      <div class="flex flex-col items-center space-y-4 w-1/3">
+        <div class="relative">
+          <button *ngIf="logoPreviewUrl"
+                  (click)="deleteLogo()"
+                  class="text-red-500 hover:text-red-700 transition absolute top-0 right-0 z-10">
+            <ng-icon name="matClear" />
+          </button>
+          <label for="avatarInput" class="avatar-label">
+            <div class="w-32 h-32 rounded-full  bg-gray-200 overflow-hidden" *ngIf="logoPreviewUrl; else uploadPlaceholder">
+              <img [src]="logoPreviewUrl" alt="Avatar Preview">
+            </div>
+            <ng-template #uploadPlaceholder>
+              <div class="w-32 h-32 p-2 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-sm text-gray-500">
+                <span class="text-center">Click to upload logo</span>
+              </div>
+            </ng-template>
+          </label>
+          <input id="avatarInput" type="file" (change)="onFileSelected($event)" accept="image/png, image/jpeg" hidden>
+        </div>
+      </div>
+      <div class="flex-grow flex flex-col space-y-4">
+        <div class="flex flex-col space-y-2">
+          <label for="companyName" class="block text-gray-600 text-sm font-medium group-hover:text-blue-600 transition">
+            Company Name<sup class="text-red-600"><ng-icon name="matStar" /></sup>
+          </label>
+          <input type="text"
+                 id="companyName"
+                 formControlName="companyName"
+                 (input)="onInputChangeCompanyName($event)"
+                 placeholder="Company name"
+                 [class.border-invalid]="companyNameInputInvalidFlag"
+                 class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="flex flex-col space-y-2">
+          <label for="companyDescription" class="block text-gray-600 text-sm font-medium group-hover:text-blue-600 transition">
+            Description
+          </label>
+          <textarea type="text"
+                    rows="3"
+                    id="companyDescription"
+                    formControlName="companyDescription"
+                    placeholder="Company Description"
+                    [class.border-invalid]="createCompanyForm.get('companyDescription')?.invalid"
+                    class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 disabled:bg-gray-100 focus:ring-blue-500">
+          </textarea>
+        </div>
+        <div class="flex flex-col space-y-2">
+          <label for="visibility" class="block text-gray-600 text-sm font-medium group-hover:text-blue-600 transition">
+            Visibility<sup class="text-red-600"><ng-icon name="matStar" /></sup>
+          </label>
+          <ng-select class="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                     formControlName="visibility"
+                     id="visibility"
+                     [items]="visibilityList"
+                     appendTo="body"
+                     [clearable]="false"
+                     [searchable]="false"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [clearOnBackspace]="false"
+                     [hideSelected]="false"
+          ></ng-select>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button (click)="saveCompany()"
+          [disabled]="createCompanyForm.invalid"
+          cdkFocusInitial
+          class="px-4 py-1 text-white bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition">
+    Create
+  </button>
+  <button mat-dialog-close
+          class="ml-4 px-4 py-1 text-white bg-red-500 rounded-lg text-lg font-semibold hover:bg-red-700 transition">
+    Cancel
+  </button>
+</mat-dialog-actions>

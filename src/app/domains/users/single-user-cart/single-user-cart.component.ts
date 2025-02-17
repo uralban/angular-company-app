@@ -7,6 +7,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {UniversalModalComponent} from '../../../widgets/universal-modal/universal-modal.component';
 import {Subject, takeUntil} from 'rxjs';
 import {AuthService} from '../../../services/auth/auth.service';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'single-user-cart',
@@ -19,6 +20,7 @@ export class SingleUserCartComponent implements OnInit, OnDestroy {
   private readonly dialog: MatDialog = inject(MatDialog);
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
   public deleteIsDisabled: boolean = false;
+  public avatarUrl: string = '';
 
   constructor(
     private userService: UserService,
@@ -28,6 +30,7 @@ export class SingleUserCartComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
+    this.avatarUrl = this.user.avatarUrl ? this.user.avatarUrl : environment.defaultUserAvatar;
     this.authService.user$.pipe(takeUntil(this.ngDestroy$)).subscribe((user: UserDto | null): void => {
       if (user) {
         this.deleteIsDisabled = user.id !== this.user.id;
@@ -54,17 +57,27 @@ export class SingleUserCartComponent implements OnInit, OnDestroy {
     });
     dialogRef.afterClosed().pipe(takeUntil(this.ngDestroy$)).subscribe(result => {
       if (result) {
-        if (this.user.id) this.deleteUserById(this.user.id);
+        this.deleteUser();
       }
     });
   }
 
-  private deleteUserById(userId: string): void {
+  private deleteUser(): void {
     this.spinner.show();
-    this.userService.deleteUserById(userId).then(result => {
+    this.userService.deleteUser().then(result => {
       this.userService.needReloadUsersListData$.next(true);
       this.toastrService.success(result.message);
       this.authService.needLogoutUser$.next(true);
     }).finally(() => this.spinner.hide());
+  }
+
+  public setUserName(): string {
+    if (!this.user.firstName && !this.user.lastName) {
+      return this.user.emailLogin || '';
+    } else if (this.user.firstName && this.user.lastName) {
+      return this.user.firstName + ' ' + this.user.lastName;
+    } else {
+      return this.user.firstName ? this.user.firstName : this.user.lastName || '';
+    }
   }
 }

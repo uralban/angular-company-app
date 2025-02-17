@@ -17,8 +17,11 @@
   <div class="flex flex-row items-center px-4">
     <health-check></health-check>
   </div>
-  <div class="flex flex-row items-center px-4">
-    <p class="ps-8 space-x-3" *ngIf="userName">
+  <div class="flex flex-row items-center px-4 space-x-3">
+    <div *ngIf="avatarUrl.length" class="w-9 h-9 rounded-full bg-gray-300 overflow-hidden">
+      <img [src]=avatarUrl alt="User avatar" class="w-full h-full object-cover">
+    </div>
+    <p class="space-x-3" *ngIf="userName">
       <span class="text-orange-600 font-bold">{{ userName }}</span>
       <button (click)="logout()" class="px-3 py-1 text-white bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
         Logout
