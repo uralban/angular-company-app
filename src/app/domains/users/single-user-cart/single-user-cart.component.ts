@@ -1,5 +1,5 @@
 import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
-import {UserDto} from '../../../interfaces/user-dto';
+import {UserDto} from '../../../interfaces/user/user.dto';
 import {PowerSpinnerService} from '../../../widgets/power-spinner/power-spinner.service';
 import {UserService} from '../../../services/user/user.service';
 import {ToastrService} from 'ngx-toastr';
@@ -27,7 +27,8 @@ export class SingleUserCartComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private spinner: PowerSpinnerService,
     private readonly toastrService: ToastrService,
-  ) {}
+  ) {
+  }
 
   public ngOnInit(): void {
     this.avatarUrl = this.user.avatarUrl ? this.user.avatarUrl : environment.defaultUserAvatar;

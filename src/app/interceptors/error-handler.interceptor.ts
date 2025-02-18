@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {ToastrService} from 'ngx-toastr';
 import {catchError, Observable, throwError} from 'rxjs';
-import {ErrorDTO} from '../interfaces/error-dto';
+import {ErrorDto} from '../interfaces/error.dto';
 
 @Injectable()
 export class ErrorHandlerInterceptor implements HttpInterceptor {
@@ -26,7 +26,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     );
   }
 
-  private showErrorToast(errorDTO: ErrorDTO): void {
+  private showErrorToast(errorDTO: ErrorDto): void {
     if (errorDTO.result) {
       this.toastrService.error(errorDTO.result);
     } else {

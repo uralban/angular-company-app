@@ -1,8 +1,8 @@
 import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
-import {CompanyDto} from '../../../interfaces/company-dto';
+import {CompanyDto} from '../../../interfaces/company/company.dto';
 import {environment} from '../../../../environments/environment';
 import {Subject, takeUntil} from 'rxjs';
-import {UserDto} from '../../../interfaces/user-dto';
+import {UserDto} from '../../../interfaces/user/user.dto';
 import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../../../services/auth/auth.service';
 import {PowerSpinnerService} from '../../../widgets/power-spinner/power-spinner.service';
@@ -35,7 +35,7 @@ export class SingleCompanyCartComponent implements OnInit, OnDestroy {
     this.logoUrl = this.company.logoUrl ? this.company.logoUrl : environment.defaultCompanyLogo;
     this.authService.user$.pipe(takeUntil(this.ngDestroy$)).subscribe((user: UserDto | null): void => {
       if (user) {
-        this.deleteIsDisabled = this.company.user?.emailLogin !== user.emailLogin;
+        this.deleteIsDisabled = this.company.owner?.emailLogin !== user.emailLogin;
       }
     });
   }

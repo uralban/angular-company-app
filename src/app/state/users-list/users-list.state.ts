@@ -1,5 +1,5 @@
-import {PaginatedListDataInterface} from '../../interfaces/paginated-list-data.interface';
-import {UserDto} from '../../interfaces/user-dto';
+import {PaginatedListDataInterface} from '../../interfaces/pagination/paginated-list-data.interface';
+import {UserDto} from '../../interfaces/user/user.dto';
 
 export interface UsersListState {
   usersListData: PaginatedListDataInterface<UserDto> | null;

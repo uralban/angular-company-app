@@ -1,6 +1,5 @@
-import {DTO} from './dto.interface';
-import {ObjectFiller} from '../helpers/object-filter';
-import {RoleDto} from './role-dto';
+import {DTO} from '../dto.interface';
+import {ObjectFiller} from '../../helpers/object-filter';
 
 export class UserDto implements DTO {
 
@@ -9,8 +8,8 @@ export class UserDto implements DTO {
     public emailLogin?: string,
     public firstName?: string,
     public lastName?: string,
-    public role?: RoleDto,
     public avatarUrl?: string,
+    public _userName?: string,
   ) {}
 
   populateFromDTO(dto: any): void {

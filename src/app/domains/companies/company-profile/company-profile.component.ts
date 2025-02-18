@@ -1,16 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {filter, Subject, take, takeUntil} from 'rxjs';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CompanyDto} from '../../../interfaces/company-dto';
+import {CompanyDto} from '../../../interfaces/company/company.dto';
 import {ToastrService} from 'ngx-toastr';
 import {CompanyService} from '../../../services/company/company.service';
 import {Router} from '@angular/router';
 import {PowerSpinnerService} from '../../../widgets/power-spinner/power-spinner.service';
 import {Store} from '@ngrx/store';
 import {AuthService} from '../../../services/auth/auth.service';
-import {UserDto} from '../../../interfaces/user-dto';
+import {UserDto} from '../../../interfaces/user/user.dto';
 import {visibilityListSuccess} from '../../../state/visibility-list';
-import {Company} from '../../../interfaces/company.interface';
+import {Company} from '../../../interfaces/company/company.interface';
 import {currentCompanySuccess} from '../../../state/current-company';
 
 @Component({
@@ -23,12 +23,14 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
   public isEditing: boolean = false;
   public company: CompanyDto | null = null;
-  private storedUser: UserDto| null = null;
+  protected storedUser: UserDto | null = null;
   public editCompanyForm: FormGroup;
   public visibilityList: string[] = [];
   public selectedFile: File | null = null;
   public logoPreviewUrl: string | ArrayBuffer | null = null;
   public editDisabled: boolean = true;
+  public isAdmin: boolean = false;
+  public currentCompanyId: string = '';
 
   constructor(
     private router: Router,
@@ -37,7 +39,7 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
     private spinner: PowerSpinnerService,
     private readonly toastrService: ToastrService,
     private store$: Store,
-    private  authService: AuthService,
+    private authService: AuthService,
   ) {
     this.editCompanyForm = this.editCompanyFormInit();
   }
@@ -46,6 +48,7 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
     this.userSubscribe();
     this.getVisibilityListStoreSubscribe();
     this.checkCompanyIdAndUpdateCurrentCompanyStore();
+    this.needReloadCurrentCompanySubscribe();
   }
 
   public ngOnDestroy(): void {
@@ -58,9 +61,9 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
     return this.formBuilder.group({
       companyName: [undefined, Validators.compose([
         Validators.required,
-        Validators.pattern(/^([A-Za-z])+$/)
+        Validators.pattern(/^([A-Za-z0-9\s])+$/)
       ])],
-      companyDescription: [undefined, Validators.pattern(/^([A-Za-z\s])+$/)],
+      companyDescription: [undefined, Validators.pattern(/^([A-Za-z0-9\s])+$/)],
       visibility: [undefined, Validators.required],
     })
   }
@@ -93,7 +96,7 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
     if (this.company?.companyDescription) this.editCompanyForm.get('companyDescription')?.setValue(this.company.companyDescription);
     if (this.company?.logoUrl) this.logoPreviewUrl = this.company.logoUrl;
     this.editCompanyForm.get('visibility')?.setValue(this.visibilityList.find(visibility => visibility === this.company?.visibility));
-    this.editDisabled = this.company?.user?.emailLogin !== this.storedUser?.emailLogin;
+    this.editDisabled = this.company?.owner?.emailLogin !== this.storedUser?.emailLogin;
   }
 
   private checkCompanyIdAndUpdateCurrentCompanyStore(): void {
@@ -101,6 +104,7 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
       if (!id) {
         this.router.navigate(['/companies']);
       } else {
+        this.currentCompanyId = id;
         this.companyService.storedVisibilityListData$.pipe(
           filter(visibilityList => !!(visibilityList && visibilityList.length > 0)),
           take(1)
@@ -117,6 +121,10 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
     ).subscribe(company => {
       if (company && company.id === id) {
         this.company = company;
+        const currentUserRole: string | undefined = this.company.members?.find(member => member?.user?.id === this.storedUser?.id)?.role?.roleName;
+        if (currentUserRole) {
+          this.isAdmin = currentUserRole === 'owner' || currentUserRole === 'admin';
+        }
         this.setDefaultValues();
       } else {
         this.getCompanyById(id);
@@ -128,6 +136,7 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
     this.spinner.show();
     this.companyService.getCompanyById(id).then(company => {
       this.store$.dispatch(currentCompanySuccess({company: company}));
+      this.companyService.needReloadCurrentCompanyData$.next(false);
     }).finally(() => this.spinner.hide());
   }
 
@@ -138,6 +147,12 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
   public cancelEdit(): void {
     this.isEditing = false;
     this.setDefaultValues();
+  }
+
+  private needReloadCurrentCompanySubscribe(): void {
+    this.companyService.needReloadCurrentCompanyData$.pipe(takeUntil(this.ngDestroy$)).subscribe((flag: boolean): void => {
+      if (flag) this.getCompanyById(this.currentCompanyId);
+    });
   }
 
   public onFileSelected(event: Event): void {

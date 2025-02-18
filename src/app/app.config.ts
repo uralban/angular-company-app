@@ -27,6 +27,10 @@ import {companyListFeatureKey} from './state/company-list/company-list.selector'
 import {companyListReducerFn} from './state/company-list';
 import {currentCompanyFeatureKey} from './state/current-company';
 import {currentCompanyReducerFn} from './state/current-company/current-company.reducer';
+import {invitationListFeatureKey} from './state/invitation-list/invitation-list.selector';
+import {invitationListReducerFn} from './state/invitation-list';
+import {requestListFeatureKey} from './state/request-list/request-list.selector';
+import {requestListReducerFn} from './state/request-list';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -57,6 +61,8 @@ export const appConfig: ApplicationConfig = {
     provideState(visibilityListFeatureKey, visibilityReducerFn),
     provideState(companyListFeatureKey, companyListReducerFn),
     provideState(currentCompanyFeatureKey, currentCompanyReducerFn),
+    provideState(invitationListFeatureKey, invitationListReducerFn),
+    provideState(requestListFeatureKey, requestListReducerFn),
     provideEffects(
       CoreEffects
     ),

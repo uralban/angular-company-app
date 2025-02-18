@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {UserDto} from '../../interfaces/user-dto';
+import {UserDto} from '../../interfaces/user/user.dto';
 import {lastValueFrom, Observable, Subject} from 'rxjs';
 import {select, Store} from '@ngrx/store';
 import {selectAuthUser} from '../../state/core';

@@ -1,4 +1,4 @@
-import {CompanyDto} from '../../interfaces/company-dto';
+import {CompanyDto} from '../../interfaces/company/company.dto';
 
 export interface CurrentCompanyState {
   company: CompanyDto | null;

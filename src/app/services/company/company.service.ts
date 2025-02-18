@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, lastValueFrom, Observable} from 'rxjs';
-import {PaginatedListDataInterface} from '../../interfaces/paginated-list-data.interface';
-import {CompanyDto} from '../../interfaces/company-dto';
+import {PaginatedListDataInterface} from '../../interfaces/pagination/paginated-list-data.interface';
+import {CompanyDto} from '../../interfaces/company/company.dto';
 import {environment} from '../../../environments/environment';
 import {select, Store} from '@ngrx/store';
 import {selectCompanyListData} from '../../state/company-list/company-list.selector';
 import {HttpService} from '../http.service';
 import {HttpClient} from '@angular/common/http';
-import {PaginationRequestInterface} from '../../interfaces/pagination-request.interface';
-import {PaginationDto} from '../../interfaces/pagination-dto';
-import {ResultMessage} from '../../interfaces/delete-result-message.interface';
+import {PaginationRequestInterface} from '../../interfaces/pagination/pagination-request.interface';
+import {PaginationDto} from '../../interfaces/pagination/pagination.dto';
 import {selectVisibilityListData} from '../../state/visibility-list/visibility-list.selector';
 import {selectCurrentCompanyData} from '../../state/current-company';
+import {ResultMessageDto} from '../../interfaces/result-message.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,7 @@ export class CompanyService extends HttpService {
   public storedCompanyListData$: Observable<PaginatedListDataInterface<CompanyDto> | null>;
   public storedCurrentCompanyData$: Observable<CompanyDto | null>;
   public needReloadCompanyListData$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public needReloadCurrentCompanyData$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   public storedVisibilityListData$: Observable<string[] | null>;
 
   constructor(
@@ -47,8 +48,8 @@ export class CompanyService extends HttpService {
       JSON.parse(JSON.stringify(paginationRequest))));
   }
 
-  public async deleteCompanyById(companyId: string): Promise<ResultMessage> {
-    return lastValueFrom(super.delete(this.URL_COMPANY + '/' + companyId, {}));
+  public async deleteCompanyById(companyId: string): Promise<ResultMessageDto> {
+    return lastValueFrom(super.deleteForResult(this.URL_COMPANY + '/' + companyId, ResultMessageDto));
   }
 
   public async getCompanyById(companyId: string): Promise<CompanyDto> {
@@ -67,8 +68,8 @@ export class CompanyService extends HttpService {
     return lastValueFrom(super.postForResponseStatus(this.URL_COMPANY, formData, {}));
   }
 
-  public async updateVisibilityForAllCompanies(visibility: string): Promise<ResultMessage> {
-    return lastValueFrom(super.patch(this.URL_COMPANY, {}, {'visibility': visibility}));
+  public async updateVisibilityForAllCompanies(visibility: string): Promise<ResultMessageDto> {
+    return lastValueFrom(super.patchForResult(this.URL_COMPANY, ResultMessageDto, {}, {'visibility': visibility}));
   }
 
 }

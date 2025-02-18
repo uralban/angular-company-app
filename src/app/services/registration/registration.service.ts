@@ -3,8 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {HttpService} from '../http.service';
 import {lastValueFrom} from 'rxjs';
-import {RoleDto} from '../../interfaces/role-dto';
-import {CreateUserInterface} from '../../interfaces/create-user.interface';
+import {CreateUserInterface} from '../../interfaces/user/create-user.interface';
 
 @Injectable({
   providedIn: 'root'

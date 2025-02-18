@@ -1,4 +1,4 @@
-import {UserDto} from '../../interfaces/user-dto';
+import {UserDto} from '../../interfaces/user/user.dto';
 
 export interface CoreState {
   authUserData: UserDto | null;

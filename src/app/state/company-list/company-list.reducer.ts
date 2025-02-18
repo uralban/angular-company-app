@@ -7,7 +7,7 @@ const CompanyListDataReducer = createReducer(
   on(CompanyListDataActions.companyListDataClear, (state, {}) => {
     return {
       ...state,
-      usersListData: null,
+      companyListData: null,
     }
   }),
   on(CompanyListDataActions.companyListDataSuccess, (state, {companyListData}) => {

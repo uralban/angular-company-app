@@ -1,7 +1,7 @@
 import {DTO} from './dto.interface';
 import {ObjectFiller} from '../helpers/object-filter';
 
-export class ErrorDTO implements DTO{
+export class ErrorDto implements DTO{
 
   constructor(
     public status_code?: number,

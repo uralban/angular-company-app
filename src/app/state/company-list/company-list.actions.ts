@@ -1,6 +1,6 @@
 import {createAction, props} from '@ngrx/store';
-import {PaginatedListDataInterface} from '../../interfaces/paginated-list-data.interface';
-import {CompanyDto} from '../../interfaces/company-dto';
+import {PaginatedListDataInterface} from '../../interfaces/pagination/paginated-list-data.interface';
+import {CompanyDto} from '../../interfaces/company/company.dto';
 
 export const companyListDataSuccess = createAction(
   "[Company List State] Company list data success",

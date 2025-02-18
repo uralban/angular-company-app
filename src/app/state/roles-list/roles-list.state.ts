@@ -1,4 +1,4 @@
-import {RoleDto} from '../../interfaces/role-dto';
+import {RoleDto} from '../../interfaces/role/role.dto';
 
 export interface RolesListState {
   rolesList: RoleDto[] | null;

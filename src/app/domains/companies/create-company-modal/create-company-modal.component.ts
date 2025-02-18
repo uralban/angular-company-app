@@ -8,7 +8,7 @@ import {Store} from '@ngrx/store';
 import {debounceTime, distinctUntilChanged, Subject, takeUntil} from 'rxjs';
 import {visibilityListSuccess} from '../../../state/visibility-list';
 import {ToastrService} from 'ngx-toastr';
-import {Company} from '../../../interfaces/company.interface';
+import {Company} from '../../../interfaces/company/company.interface';
 
 @Component({
   selector: 'app-create-company-modal',
