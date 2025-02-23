@@ -31,6 +31,8 @@ import {invitationListFeatureKey} from './state/invitation-list/invitation-list.
 import {invitationListReducerFn} from './state/invitation-list';
 import {requestListFeatureKey} from './state/request-list/request-list.selector';
 import {requestListReducerFn} from './state/request-list';
+import {quizListReducerFn} from './state/quiz-list';
+import {quizListFeatureKey} from './state/quiz-list/quiz-list.selector';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -63,6 +65,7 @@ export const appConfig: ApplicationConfig = {
     provideState(currentCompanyFeatureKey, currentCompanyReducerFn),
     provideState(invitationListFeatureKey, invitationListReducerFn),
     provideState(requestListFeatureKey, requestListReducerFn),
+    provideState(quizListFeatureKey, quizListReducerFn),
     provideEffects(
       CoreEffects
     ),

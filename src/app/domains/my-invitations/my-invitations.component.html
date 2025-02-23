@@ -1,10 +1,12 @@
 <div class="p-4">
   <div class="p-8 bg-white shadow-lg rounded-lg max-w-7xl mx-auto">
     <div class="grid grid-cols-3 gap-4">
-      <div *ngFor="let invite of paginatedInvitationList">
+      @for (invite of paginatedInvitationList; track $index) {
         <my-invitation-cart [invite]="invite"></my-invitation-cart>
-      </div>
-      <p *ngIf="!paginatedInvitationList.length">No Invites</p>
+      }
+      @if (!paginatedInvitationList.length) {
+        <p>No Invites</p>
+      }
     </div>
     <div class="pt-8">
       <mat-paginator [length]="paginationMeta?.itemCount"

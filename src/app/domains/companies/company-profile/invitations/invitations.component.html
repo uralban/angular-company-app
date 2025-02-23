@@ -2,7 +2,7 @@
   <h6 class="font-bold">Invitations</h6>
   <button (click)="createNewInvite()"
           class="w-full px-3 py-1 text-white bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">Create invite</button>
-  <div *ngFor="let invite of invites">
+  @for (invite of invites; track $index) {
     <invitation-cart [invite]="invite"></invitation-cart>
-  </div>
+  }
 </div>

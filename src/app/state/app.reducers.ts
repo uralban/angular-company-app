@@ -9,6 +9,7 @@ import * as CompanyReducer from "./company-list/company-list.reducer";
 import * as CurrentCompanyReducer from "./current-company/current-company.reducer";
 import * as InvitationReducer from "./invitation-list/invitation-list.reducer";
 import * as RequestReducer from "./request-list/request-list.reducer";
+import * as QuizReducer from "./quiz-list/quiz-list.reducer";
 
 export const reducers: ActionReducerMap<State> = {
   coreData: CoreReducer.coreReducerFn,
@@ -20,6 +21,7 @@ export const reducers: ActionReducerMap<State> = {
   company: CurrentCompanyReducer.currentCompanyReducerFn,
   invitationListData: InvitationReducer.invitationListReducerFn,
   requestListData: RequestReducer.requestListReducerFn,
+  quizListData: QuizReducer.quizListReducerFn,
 };
 
 export const metaReducers: MetaReducer<State>[] = [];

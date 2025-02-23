@@ -3,23 +3,30 @@
   <div class="bg-white shadow-lg rounded-lg p-8 flex space-x-8 max-w-4xl mx-auto">
       <div class="flex flex-col items-center space-y-4 w-1/3">
         <div class="relative">
-          <button *ngIf="isEditing && avatarPreviewUrl"
-                  (click)="deleteAvatar()"
-                  class="text-red-500 hover:text-red-700 transition absolute top-0 right-0 z-10">
-            <ng-icon name="matClear" />
-          </button>
+          @if (isEditing && avatarPreviewUrl) {
+            <button (click)="deleteAvatar()"
+                    class="text-red-500 hover:text-red-700 transition absolute top-0 right-0 z-10">
+              <ng-icon name="matClear" />
+            </button>
+          }
           <label for="avatarInput" class="avatar-label">
-            <div class="w-32 h-32 rounded-full  bg-gray-200 overflow-hidden" *ngIf="avatarPreviewUrl; else uploadPlaceholder">
-              <img [src]="avatarPreviewUrl" alt="Avatar Preview">
-            </div>
-            <ng-template #uploadPlaceholder>
-              <div class="w-32 h-32 p-2 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-sm text-gray-500">
-                <span *ngIf="isEditing">Click to Upload</span>
-                <span *ngIf="!isEditing">No avatar</span>
+            @if (avatarPreviewUrl) {
+              <div class="w-32 h-32 rounded-full  bg-gray-200 overflow-hidden">
+                <img [src]="avatarPreviewUrl" alt="Avatar Preview">
               </div>
-            </ng-template>
+            } @else {
+              <div class="w-32 h-32 p-2 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-sm text-gray-500">
+                @if (isEditing) {
+                  <span>Click to Upload</span>
+                } @else {
+                  <span>No avatar</span>
+                }
+              </div>
+            }
           </label>
-          <input *ngIf="isEditing" id="avatarInput" type="file" (change)="onFileSelected($event)" accept="image/png, image/jpeg" hidden>
+          @if (isEditing) {
+            <input id="avatarInput" type="file" (change)="onFileSelected($event)" accept="image/png, image/jpeg" hidden>
+          }
         </div>
       </div>
       <div class="flex-grow flex flex-col space-y-4">
@@ -27,91 +34,103 @@
           <label for="firstName" class="block text-gray-600 text-sm font-medium group-hover:text-blue-600 transition">
             First Name
           </label>
-          <p *ngIf="!isEditing" class="text-lg font-semibold">{{ user?.firstName }}</p>
-          <input *ngIf="isEditing"
-                 type="text"
-                 id="firstName"
-                 formControlName="firstName"
-                 placeholder="First Name"
-                 [class.border-invalid]="editUserForm.get('firstName')?.invalid"
-                 class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          @if (!isEditing) {
+            <p class="text-lg font-semibold">{{ user?.firstName }}</p>
+          } @else {
+            <input type="text"
+                   id="firstName"
+                   formControlName="firstName"
+                   placeholder="First Name"
+                   [class.border-invalid]="editUserForm.get('firstName')?.invalid"
+                   class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          }
         </div>
         <div class="flex flex-col space-y-2" [class.group]="isEditing">
           <label for="lastName" class="block text-gray-600 text-sm font-medium1 group-hover:text-blue-600 transition">
             Last Name
           </label>
-          <p *ngIf="!isEditing" class="text-lg font-semibold">{{ user?.lastName }}</p>
-          <input *ngIf="isEditing"
-                 type="text"
-                 id="lastName"
-                 formControlName="lastName"
-                 placeholder="Last Name"
-                 [class.border-invalid]="editUserForm.get('lastName')?.invalid"
-                 class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          @if (!isEditing) {
+            <p class="text-lg font-semibold">{{ user?.lastName }}</p>
+          } @else {
+            <input type="text"
+                   id="lastName"
+                   formControlName="lastName"
+                   placeholder="Last Name"
+                   [class.border-invalid]="editUserForm.get('lastName')?.invalid"
+                   class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          }
         </div>
         <div class="flex flex-col space-y-2" [class.group]="isEditing">
           <label for="email" class="block text-gray-600 text-sm font-medium group-hover:text-blue-600 transition">
-            Email <sup *ngIf="isEditing" class="text-red-600"><ng-icon name="matStar" /></sup>
+            Email
+            @if (isEditing) {
+              <sup class="text-red-600"><ng-icon name="matStar" /></sup>
+            }
           </label>
-          <p *ngIf="!isEditing" class="text-lg font-semibold">{{ user?.emailLogin }}</p>
-          <input *ngIf="isEditing"
-                 type="text"
-                 id="email"
-                 formControlName="emailLogin"
-                 placeholder="Email"
-                 [class.border-invalid]="editUserForm.get('email')?.invalid"
-                 class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 disabled:bg-gray-100 focus:ring-blue-500">
+          @if (!isEditing) {
+            <p class="text-lg font-semibold">{{ user?.emailLogin }}</p>
+          } @else {
+            <input type="text"
+                   id="email"
+                   formControlName="emailLogin"
+                   placeholder="Email"
+                   [class.border-invalid]="editUserForm.get('email')?.invalid"
+                   class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 disabled:bg-gray-100 focus:ring-blue-500">
+          }
         </div>
-        <div class="flex flex-row justify-between space-x-4" *ngIf="isEditing">
-          <div class="flex flex-col space-y-2 group w-full">
-            <label for="password" class="text-sm font-medium text-start text-gray-700 group-hover:text-blue-600 transition">
-              Password:<sup class="text-red-600"></sup>
-            </label>
-            <input type="password"
-                   formControlName="password"
-                   [class.border-invalid]="editUserForm.get('password')?.invalid"
-                   class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-                   placeholder="Password"
-                   id="password">
+        @if (isEditing) {
+          <div class="flex flex-row justify-between space-x-4">
+            <div class="flex flex-col space-y-2 group w-full">
+              <label for="password" class="text-sm font-medium text-start text-gray-700 group-hover:text-blue-600 transition">
+                Password:<sup class="text-red-600"></sup>
+              </label>
+              <input type="password"
+                     formControlName="password"
+                     [class.border-invalid]="editUserForm.get('password')?.invalid"
+                     class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                     placeholder="Password"
+                     id="password">
+            </div>
+            <div class="flex flex-col space-y-2 group w-full">
+              <label for="passwordConfirm" class="text-sm font-medium text-start text-gray-700 group-hover:text-blue-600 transition">
+                Confirm Password:<sup class="text-red-600"></sup>
+              </label>
+              <input type="password"
+                     formControlName="passwordConfirm"
+                     [class.border-invalid]="editUserForm.get('passwordConfirm')?.invalid"
+                     class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                     placeholder="Confirm Password"
+                     id="passwordConfirm">
+            </div>
           </div>
-          <div class="flex flex-col space-y-2 group w-full">
-            <label for="passwordConfirm" class="text-sm font-medium text-start text-gray-700 group-hover:text-blue-600 transition">
-              Confirm Password:<sup class="text-red-600"></sup>
-            </label>
-            <input type="password"
-                   formControlName="passwordConfirm"
-                   [class.border-invalid]="editUserForm.get('passwordConfirm')?.invalid"
-                   class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-                   placeholder="Confirm Password"
-                   id="passwordConfirm">
-          </div>
-        </div>
+        }
         <div class="mt-auto flex justify-between">
           <div class="">
-            <a *ngIf="!isEditing"
-               class="px-6 py-2 text-white bg-red-500 rounded-lg text-lg font-semibold hover:bg-red-700 transition"
-               routerLink="/users">
-              Back
-            </a>
+            @if (!isEditing) {
+              <a class="px-6 py-2 text-white bg-red-500 rounded-lg text-lg font-semibold hover:bg-red-700 transition"
+                 routerLink="/users">
+                Back
+              </a>
+            }
           </div>
           <div class="flex justify-end">
-            <button *ngIf="!isEditing"
-                    [disabled]="editDisabled"
-                    class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition"
-                    (click)="toggleEdit()">
-              Edit
-            </button>
-            <button *ngIf="isEditing"
-                    class="px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:bg-green-300 disabled:cursor-not-allowed transition"
-                    [disabled]="editUserForm.invalid"
-                    (click)="saveChanges()">
-              Save
-            </button>
-            <button *ngIf="isEditing"
-                    class="ml-4 px-6 py-2 text-white bg-red-500 rounded-lg text-lg font-semibold hover:bg-red-700 transition"
-                    (click)="cancelEdit()">
-              Cancel
-            </button>
+            @if (!isEditing) {
+              <button [disabled]="editDisabled"
+                      class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition"
+                      (click)="toggleEdit()">
+                Edit
+              </button>
+            } @else {
+              <button class="px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:bg-green-300 disabled:cursor-not-allowed transition"
+                      [disabled]="editUserForm.invalid"
+                      (click)="saveChanges()">
+                Save
+              </button>
+              <button class="ml-4 px-6 py-2 text-white bg-red-500 rounded-lg text-lg font-semibold hover:bg-red-700 transition"
+                      (click)="cancelEdit()">
+                Cancel
+              </button>
+            }
           </div>
         </div>
       </div>

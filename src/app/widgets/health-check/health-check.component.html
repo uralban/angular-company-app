@@ -1,3 +1,5 @@
-<div class="flex flex-row items-center" *ngIf="status">
-  Healthcheck status: <span class="text-orange-700 font-bold ps-2">{{ status }}</span>
-</div>
+@if (status) {
+  <div class="flex flex-row items-center">
+    Healthcheck status: <span class="text-orange-700 font-bold ps-2">{{ status }}</span>
+  </div>
+}

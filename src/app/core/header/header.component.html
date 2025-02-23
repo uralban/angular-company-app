@@ -8,10 +8,12 @@
     <nav>
       <ul class="flex space-x-4 uppercase">
         <li class="p-3"><a routerLink="/welcome" class="hover:underline">Welcome</a></li>
-        <li class="p-3" *ngIf="userName"><a routerLink="/users" class="hover:underline">Users</a></li>
-        <li class="p-3" *ngIf="userName"><a routerLink="/companies" class="hover:underline">Companies</a></li>
-        <li class="p-3" *ngIf="userName"><a routerLink="/my-invitations" class="hover:underline">My Invites</a></li>
-        <li class="p-3" *ngIf="userName"><a routerLink="/my-requests" class="hover:underline">My Requests</a></li>
+        @if(userName) {
+          <li class="p-3"><a routerLink="/users" class="hover:underline">Users</a></li>
+          <li class="p-3"><a routerLink="/companies" class="hover:underline">Companies</a></li>
+          <li class="p-3"><a routerLink="/my-invitations" class="hover:underline">My Invites</a></li>
+          <li class="p-3"><a routerLink="/my-requests" class="hover:underline">My Requests</a></li>
+        }
         <li class="p-3"><a routerLink="/about" class="hover:underline">About</a></li>
       </ul>
     </nav>
@@ -20,14 +22,18 @@
     <health-check></health-check>
   </div>
   <div class="flex flex-row items-center px-4 space-x-3">
-    <div *ngIf="avatarUrl.length" class="w-9 h-9 rounded-full bg-gray-300 overflow-hidden">
-      <img [src]=avatarUrl alt="User avatar" class="w-full h-full object-cover">
-    </div>
-    <p class="space-x-3" *ngIf="userName">
-      <span class="text-orange-600 font-bold">{{ userName }}</span>
-      <button (click)="logout()" class="px-3 py-1 text-white bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
-        Logout
-      </button>
-    </p>
+    @if (avatarUrl.length) {
+      <div class="w-9 h-9 rounded-full bg-gray-300 overflow-hidden">
+        <img [src]=avatarUrl alt="User avatar" class="w-full h-full object-cover">
+      </div>
+    }
+    @if (userName) {
+      <p class="space-x-3">
+        <span class="text-orange-600 font-bold">{{ userName }}</span>
+        <button (click)="logout()" class="px-3 py-1 text-white bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
+          Logout
+        </button>
+      </p>
+    }
   </div>
 </header>

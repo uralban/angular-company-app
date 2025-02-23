@@ -1,9 +1,11 @@
 <div class="p-4">
   <div class="p-8 bg-white shadow-lg rounded-lg max-w-7xl mx-auto">
     <div class="grid grid-cols-3 gap-4">
-      <div *ngFor="let user of paginatedUserList" (click)="openSinglePageUser(user)">
-        <single-user-cart [user]="user"></single-user-cart>
-      </div>
+      @for (user of paginatedUserList; track $index) {
+        <div (click)="openSinglePageUser(user)">
+          <single-user-cart [user]="user"></single-user-cart>
+        </div>
+      }
     </div>
     <div class="pt-8">
       <mat-paginator [length]="paginationMeta?.itemCount"

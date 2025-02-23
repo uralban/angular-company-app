@@ -8,23 +8,29 @@
       <p class="text-sm font-bold break-all text-gray-600 capitalize">{{ member.role?.roleName }}</p>
     </div>
   </div>
-  <div class="" *ngIf="!disableActions && member.role?.roleName !== 'owner' && storedUser?.id !== member.user?.id">
-    <button mat-button [matMenuTriggerFor]="menu"><ng-icon name="matEdit"/></button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item
-              *ngIf="member.role?.roleName === 'member'"
-              (click)="createAdmin()">
-        Create Admin
-      </button>
-      <button mat-menu-item
-              *ngIf="member.role?.roleName === 'admin'"
-              (click)="createMember()">
-        Create member
-      </button>
-      <button mat-menu-item
-              (click)="removeMember()">
-        Remove
-      </button>
-    </mat-menu>
-  </div>
+  @if (!disableActions && member.role?.roleName !== 'owner' && storedUser?.id !== member.user?.id) {
+    <div class="">
+      <button mat-button [matMenuTriggerFor]="menu"><ng-icon name="matEdit"/></button>
+      <mat-menu #menu="matMenu">
+        @switch (member.role?.roleName) {
+          @case ('member') {
+            <button mat-menu-item
+                    (click)="createAdmin()">
+              Create Admin
+            </button>
+          }
+          @case ('admin') {
+            <button mat-menu-item
+                    (click)="createMember()">
+              Create member
+            </button>
+          }
+        }
+        <button mat-menu-item
+                (click)="removeMember()">
+          Remove
+        </button>
+      </mat-menu>
+    </div>
+  }
 </div>

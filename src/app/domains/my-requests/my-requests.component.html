@@ -1,10 +1,12 @@
 <div class="p-4">
   <div class="p-8 bg-white shadow-lg rounded-lg max-w-7xl mx-auto">
     <div class="grid grid-cols-3 gap-4">
-      <div *ngFor="let request of paginatedRequestList">
+      @for (request of paginatedRequestList; track $index) {
         <my-request-cart [request]="request"></my-request-cart>
-      </div>
-      <p *ngIf="!paginatedRequestList.length">No requests</p>
+      }
+      @if (!paginatedRequestList.length) {
+        <p>No requests</p>
+      }
     </div>
     <div class="pt-8">
       <mat-paginator [length]="paginationMeta?.itemCount"

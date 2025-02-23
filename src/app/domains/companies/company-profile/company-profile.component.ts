@@ -12,6 +12,7 @@ import {UserDto} from '../../../interfaces/user/user.dto';
 import {visibilityListSuccess} from '../../../state/visibility-list';
 import {Company} from '../../../interfaces/company/company.interface';
 import {currentCompanySuccess} from '../../../state/current-company';
+import {QuizService} from '../../../services/quiz/quiz.service';
 
 @Component({
   selector: 'app-company-profile',
@@ -30,6 +31,7 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
   public logoPreviewUrl: string | ArrayBuffer | null = null;
   public editDisabled: boolean = true;
   public isAdmin: boolean = false;
+  public isMember: boolean = false;
   public currentCompanyId: string = '';
 
   constructor(
@@ -40,6 +42,7 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
     private readonly toastrService: ToastrService,
     private store$: Store,
     private authService: AuthService,
+    private quizService: QuizService,
   ) {
     this.editCompanyForm = this.editCompanyFormInit();
   }
@@ -124,6 +127,7 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
         const currentUserRole: string | undefined = this.company.members?.find(member => member?.user?.id === this.storedUser?.id)?.role?.roleName;
         if (currentUserRole) {
           this.isAdmin = currentUserRole === 'owner' || currentUserRole === 'admin';
+          this.isMember = true;
         }
         this.setDefaultValues();
       } else {
@@ -137,6 +141,7 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
     this.companyService.getCompanyById(id).then(company => {
       this.store$.dispatch(currentCompanySuccess({company: company}));
       this.companyService.needReloadCurrentCompanyData$.next(false);
+      this.quizService.needReloadQuizListData$.next(true);
     }).finally(() => this.spinner.hide());
   }
 
@@ -151,7 +156,10 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
 
   private needReloadCurrentCompanySubscribe(): void {
     this.companyService.needReloadCurrentCompanyData$.pipe(takeUntil(this.ngDestroy$)).subscribe((flag: boolean): void => {
-      if (flag) this.getCompanyById(this.currentCompanyId);
+      if (flag) {
+        this.quizService.needReloadQuizListData$.next(true);
+        this.getCompanyById(this.currentCompanyId);
+      }
     });
   }
 
@@ -192,6 +200,19 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
     this.logoPreviewUrl = null;
     this.selectedFile = null;
   }
+
+  // private updatePaginateQuizzesList(): void {
+  //   if (this.company?.id) {
+  //     this.spinner.show();
+  //     this.quizService.getAllQuizzes(this.company?.id, {
+  //       page: this.paginationMeta.page,
+  //       take: this.paginationMeta.take,
+  //     }).then((paginationDto: PaginationDto<QuizDto>): void => {
+  //       this.store$.dispatch(quizListDataSuccess({quizListData: paginationDto}));
+  //       this.quizService.needReloadQuizListData$.next(false);
+  //     }).finally(() => this.spinner.hide());
+  //   }
+  // }
 
 
 }
