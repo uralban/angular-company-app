@@ -200,19 +200,4 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
     this.logoPreviewUrl = null;
     this.selectedFile = null;
   }
-
-  // private updatePaginateQuizzesList(): void {
-  //   if (this.company?.id) {
-  //     this.spinner.show();
-  //     this.quizService.getAllQuizzes(this.company?.id, {
-  //       page: this.paginationMeta.page,
-  //       take: this.paginationMeta.take,
-  //     }).then((paginationDto: PaginationDto<QuizDto>): void => {
-  //       this.store$.dispatch(quizListDataSuccess({quizListData: paginationDto}));
-  //       this.quizService.needReloadQuizListData$.next(false);
-  //     }).finally(() => this.spinner.hide());
-  //   }
-  // }
-
-
 }
