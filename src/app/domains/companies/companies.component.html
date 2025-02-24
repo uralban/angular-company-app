@@ -11,10 +11,14 @@
   </div>
   <div class="p-8 bg-white shadow-lg rounded-lg max-w-7xl mx-auto">
     <div class="grid grid-cols-3 gap-4">
-      <div *ngFor="let company of paginatedCompanyList" (click)="openSinglePageCompany(company)">
-        <single-company-cart [company]="company"></single-company-cart>
-      </div>
-      <p *ngIf="!paginatedCompanyList.length">No companies</p>
+      @for (company of paginatedCompanyList; track $index) {
+        <div (click)="openSinglePageCompany(company)">
+          <single-company-cart [company]="company"></single-company-cart>
+        </div>
+      }
+      @if(!paginatedCompanyList.length) {
+        <p>No companies</p>
+      }
     </div>
     <div class="pt-8">
       <mat-paginator [length]="paginationMeta?.itemCount"

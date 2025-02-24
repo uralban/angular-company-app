@@ -6,7 +6,7 @@ import {SingleCompanyCartComponent} from './single-company-cart/single-company-c
 import {MatPaginator} from '@angular/material/paginator';
 import {CompanyProfileComponent} from './company-profile/company-profile.component';
 import {NgIconsModule} from '@ng-icons/core';
-import {matClear, matEdit, matStar} from '@ng-icons/material-icons/baseline';
+import {matClear, matEdit, matPlus, matRestoreFromTrash, matStar} from '@ng-icons/material-icons/baseline';
 import {NgSelectComponent} from '@ng-select/ng-select';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CreateCompanyModalComponent} from './create-company-modal/create-company-modal.component';
@@ -22,7 +22,12 @@ import {RequestCartComponent} from './company-profile/requests/request-cart/requ
 import {InvitationCartComponent} from './company-profile/invitations/invitation-cart/invitation-cart.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
-import { CreateInvitationModalComponent } from './company-profile/invitations/create-invitation-modal/create-invitation-modal.component';
+import {
+  CreateInvitationModalComponent
+} from './company-profile/invitations/create-invitation-modal/create-invitation-modal.component';
+import {QuizzesComponent} from './company-profile/quizzes/quizzes.component';
+import {QuizModalComponent} from './company-profile/quizzes/quiz-modal/quiz-modal.component';
+import {SingleQuizCartComponent} from './company-profile/quizzes/single-quiz-cart/single-quiz-cart.component';
 
 
 @NgModule({
@@ -38,13 +43,16 @@ import { CreateInvitationModalComponent } from './company-profile/invitations/cr
     MemberCartComponent,
     RequestCartComponent,
     InvitationCartComponent,
-    CreateInvitationModalComponent
+    CreateInvitationModalComponent,
+    QuizzesComponent,
+    QuizModalComponent,
+    SingleQuizCartComponent
   ],
   imports: [
     CommonModule,
     CompaniesRoutesModule,
     MatPaginator,
-    NgIconsModule.withIcons({matStar, matClear, matEdit}),
+    NgIconsModule.withIcons({matStar, matClear, matEdit, matPlus, matRestoreFromTrash}),
     NgSelectComponent,
     ReactiveFormsModule,
     MatDialogActions,
