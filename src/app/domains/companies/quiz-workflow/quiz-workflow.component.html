@@ -8,7 +8,9 @@
     </div>
     <div class="grid grid-cols-3 gap-4">
       @for (question of quiz?.questions; track $index) {
-        <single-question [question]="question" (answersChange)="answersChangeHandler($event)"></single-question>
+        <div class="border p-2 rounded-xl">
+          <single-question [question]="question" (answersChange)="answersChangeHandler($event)"></single-question>
+        </div>
       }
     </div>
     <div class="flex justify-end space-x-4">
