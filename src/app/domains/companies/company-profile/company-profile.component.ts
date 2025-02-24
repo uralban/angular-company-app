@@ -57,6 +57,7 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.ngDestroy$.next();
     this.ngDestroy$.complete();
+    this.companyService.singleCompanyId.next(undefined);
   }
 
   public editCompanyFormInit(): FormGroup {

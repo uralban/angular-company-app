@@ -20,40 +20,7 @@ export class QuizModalComponent implements OnInit {
 
   public quizForm: FormGroup;
 
-  public questionsList: QuestionInterface[] = [
-    {
-      _questionId: 1,
-      content: '',
-      answerOptions: [
-        {
-          _answerId: 1,
-          content: '',
-          isCorrect: false,
-        },
-        {
-          _answerId: 2,
-          content: '',
-          isCorrect: false,
-        }
-      ]
-    },
-    {
-      _questionId: 2,
-      content: '',
-      answerOptions: [
-        {
-          _answerId: 1,
-          content: '',
-          isCorrect: false,
-        },
-        {
-          _answerId: 2,
-          content: '',
-          isCorrect: false,
-        }
-      ]
-    }
-  ];
+  public questionsList: QuestionInterface[] = [];
 
   constructor(
     public formBuilder: FormBuilder,
@@ -74,27 +41,14 @@ export class QuizModalComponent implements OnInit {
         if (quiz.frequencyInDays) this.quizForm.get('frequencyInDays')?.setValue(quiz.frequencyInDays);
         if (quiz.questions?.length) {
           quiz.questions.forEach((question, index) => {
-            if (index > 1) {
-              this.addQuestion(question);
-            } else {
-              const questionInternalId: number = index + 1;
-              const currentQuestion: QuestionInterface | undefined = this.questionsList.find(ques => ques._questionId === questionInternalId);
-              if (currentQuestion) {
-                this.quizForm.get('questionContent_' + questionInternalId)?.setValue(question.content);
-                question.answerOptions?.forEach((answer, index) => {
-                  if (index > 1) {
-                    this.addAnswer(currentQuestion, answer);
-                  } else {
-                    const answerInternalId: number = index + 1;
-                    this.quizForm.get('answerContent_' + questionInternalId + '_' + answerInternalId)?.setValue(answer.content);
-                    if (answer.isCorrect) this.quizForm.get('correctAnswer_' + questionInternalId)?.setValue(answerInternalId);
-                  }
-                });
-              }
-            }
+            this.addQuestion(question);
           });
         }
       }).finally(() => this.spinner.hide());
+    } else {
+      for ( let i: number = 1; i < 3; i++) {
+        this.addQuestion();
+      }
     }
   }
 
@@ -110,32 +64,6 @@ export class QuizModalComponent implements OnInit {
         Validators.min(1),
         Validators.pattern(/^([0-9])+$/)
       ])],
-      questionContent_1: [undefined, Validators.compose([
-        Validators.required,
-        Validators.pattern(/^([A-Za-z0-9+\-*/?<>%\s])+$/)
-      ])],
-      questionContent_2: [undefined, Validators.compose([
-        Validators.required,
-        Validators.pattern(/^([A-Za-z0-9+\-*/?<>%\s])+$/)
-      ])],
-      answerContent_1_1: [undefined, Validators.compose([
-        Validators.required,
-        Validators.pattern(/^([A-Za-z0-9+\-*/?<>%\s])+$/)
-      ])],
-      answerContent_1_2: [undefined, Validators.compose([
-        Validators.required,
-        Validators.pattern(/^([A-Za-z0-9+\-*/?<>%\s])+$/)
-      ])],
-      answerContent_2_1: [undefined, Validators.compose([
-        Validators.required,
-        Validators.pattern(/^([A-Za-z0-9+\-*/?<>%\s])+$/)
-      ])],
-      answerContent_2_2: [undefined, Validators.compose([
-        Validators.required,
-        Validators.pattern(/^([A-Za-z0-9+\-*/?<>%\s])+$/)
-      ])],
-      correctAnswer_1: [undefined, Validators.required],
-      correctAnswer_2: [undefined, Validators.required],
     });
   }
 
@@ -159,7 +87,7 @@ export class QuizModalComponent implements OnInit {
 
   public addQuestion(question?: QuestionDto): void {
     const lastQuestion: QuestionInterface = this.questionsList[this.questionsList.length - 1];
-    const newId: number = lastQuestion._questionId ? lastQuestion._questionId + 1 : 1;
+    const newId: number = lastQuestion && lastQuestion._questionId ? lastQuestion._questionId + 1 : 1;
     this.quizForm.addControl('correctAnswer_' + newId, new FormControl(undefined, Validators.required));
     this.quizForm.addControl('questionContent_' + newId, new FormControl(undefined, Validators.compose([
       Validators.required,
