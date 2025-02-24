@@ -28,6 +28,8 @@ import {
 import {QuizzesComponent} from './company-profile/quizzes/quizzes.component';
 import {QuizModalComponent} from './company-profile/quizzes/quiz-modal/quiz-modal.component';
 import {SingleQuizCartComponent} from './company-profile/quizzes/single-quiz-cart/single-quiz-cart.component';
+import { QuizWorkflowComponent } from './quiz-workflow/quiz-workflow.component';
+import { SingleQuestionComponent } from './quiz-workflow/single-question/single-question.component';
 
 
 @NgModule({
@@ -46,7 +48,9 @@ import {SingleQuizCartComponent} from './company-profile/quizzes/single-quiz-car
     CreateInvitationModalComponent,
     QuizzesComponent,
     QuizModalComponent,
-    SingleQuizCartComponent
+    SingleQuizCartComponent,
+    QuizWorkflowComponent,
+    SingleQuestionComponent
   ],
   imports: [
     CommonModule,

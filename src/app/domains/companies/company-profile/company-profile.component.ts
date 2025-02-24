@@ -57,7 +57,6 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.ngDestroy$.next();
     this.ngDestroy$.complete();
-    this.companyService.singleCompanyId.next(undefined);
   }
 
   public editCompanyFormInit(): FormGroup {
@@ -201,18 +200,9 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
     this.selectedFile = null;
   }
 
-  // private updatePaginateQuizzesList(): void {
-  //   if (this.company?.id) {
-  //     this.spinner.show();
-  //     this.quizService.getAllQuizzes(this.company?.id, {
-  //       page: this.paginationMeta.page,
-  //       take: this.paginationMeta.take,
-  //     }).then((paginationDto: PaginationDto<QuizDto>): void => {
-  //       this.store$.dispatch(quizListDataSuccess({quizListData: paginationDto}));
-  //       this.quizService.needReloadQuizListData$.next(false);
-  //     }).finally(() => this.spinner.hide());
-  //   }
-  // }
-
-
+  public back(event: Event): void {
+    event.preventDefault();
+    this.companyService.singleCompanyId.next(undefined);
+    this.router.navigate(['/companies']);
+  }
 }

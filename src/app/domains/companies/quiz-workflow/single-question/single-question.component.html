@@ -1,0 +1,18 @@
+<div class="flex flex-col space-y-4">
+  <p>
+    <span class="font-bold">Question:</span> {{question.content}}
+  </p>
+  <div class="flex flex-row items-start space-x-2">
+    <p class="font-bold">
+      Answers:
+    </p>
+    <div class="flex flex-col">
+      @for (answer of question.answerOptions; track $index) {
+        <div class="grid grid-cols-2 gap-2">
+          <p>{{answer.content}}</p>
+          <input type="checkbox" (change)="answerChange($event, answer.id)">
+        </div>
+      }
+    </div>
+  </div>
+</div>

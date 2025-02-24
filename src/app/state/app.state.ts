@@ -8,6 +8,7 @@ import {CurrentCompanyState} from './current-company';
 import {InvitationListState} from './invitation-list';
 import {RequestListState} from './request-list';
 import {QuizListState} from './quiz-list';
+import {CurrentQuizState} from './current-quiz';
 
 export interface State {
   coreData: CoreState;
@@ -20,4 +21,5 @@ export interface State {
   invitationListData: InvitationListState,
   requestListData: RequestListState,
   quizListData: QuizListState,
+  quiz: CurrentQuizState,
 }
