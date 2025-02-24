@@ -11,6 +11,9 @@ import {PaginationRequestInterface} from '../../interfaces/pagination/pagination
 import {PaginationDto} from '../../interfaces/pagination/pagination.dto';
 import {ResultMessageDto} from '../../interfaces/result-message.dto';
 import {QuizInterface} from '../../interfaces/quiz/quiz.interface';
+import {selectCurrentQuizData} from '../../state/current-quiz';
+import {QuizAttemptDto} from '../../interfaces/quiz/quiz-attempt.dto';
+import {QuizStartResultDto} from '../../interfaces/quiz/quiz-start-result.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +21,12 @@ import {QuizInterface} from '../../interfaces/quiz/quiz.interface';
 export class QuizService extends HttpService {
 
   private readonly URL_QUIZ: string;
+  private readonly URL_QUIZ_ATTEMPT: string;
 
   public storedQuizListData$: Observable<PaginatedListDataInterface<QuizDto> | null>;
   public needReloadQuizListData$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public singleQuizId$: BehaviorSubject<string | undefined> = new BehaviorSubject<string | undefined>(undefined);
+  public storedCurrentQuizData$: Observable<QuizDto | null>;
 
   constructor(
     protected httpClients: HttpClient,
@@ -28,8 +34,9 @@ export class QuizService extends HttpService {
     ) {
     super(httpClients);
     this.URL_QUIZ = environment.apiUrl + '/quizzes';
-
+    this.URL_QUIZ_ATTEMPT = environment.apiUrl + '/quiz-attempt';
     this.storedQuizListData$ = this.store$.pipe(select(selectQuizListData));
+    this.storedCurrentQuizData$ = this.store$.pipe(select(selectCurrentQuizData));
   }
 
   public async getAllQuizzes(companyId:string, paginationRequest: PaginationRequestInterface): Promise<PaginationDto<QuizDto>> {
@@ -53,5 +60,13 @@ export class QuizService extends HttpService {
 
   public async getQuizById(quizId: string): Promise<QuizDto> {
     return lastValueFrom(super.getOne(this.URL_QUIZ + '/' + quizId, QuizDto, {}));
+  }
+
+  public async getQuizByIdForStart(quizId: string): Promise<QuizStartResultDto> {
+    return lastValueFrom(super.getOne(this.URL_QUIZ + '/start/' + quizId, QuizStartResultDto, {}));
+  }
+
+  public async createNewAttempt(newQuizAttempt: QuizAttemptDto): Promise<ResultMessageDto> {
+    return lastValueFrom(super.postForResult(this.URL_QUIZ_ATTEMPT, ResultMessageDto, {}, newQuizAttempt));
   }
 }

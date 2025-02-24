@@ -13,6 +13,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {UniversalModalComponent} from '../../../../widgets/universal-modal/universal-modal.component';
 import {QuizModalComponent} from './quiz-modal/quiz-modal.component';
 import {QuizInterface} from '../../../../interfaces/quiz/quiz.interface';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'quizzes',
@@ -33,6 +34,7 @@ export class QuizzesComponent implements OnInit, OnDestroy {
     private readonly toastrService: ToastrService,
     private store$: Store,
     private quizService: QuizService,
+    private router: Router,
     ) {
   }
 
@@ -117,7 +119,8 @@ export class QuizzesComponent implements OnInit, OnDestroy {
     });
     dialogRef.afterClosed().pipe(takeUntil(this.ngDestroy$)).subscribe(result => {
       if (result) {
-        this.toastrService.info('Starting Quiz ' + quiz.title);
+        this.quizService.singleQuizId$.next(quiz.id);
+        this.router.navigate(['companies/quiz-workflow']);
       }
     });
   }

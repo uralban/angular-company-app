@@ -200,4 +200,10 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
     this.logoPreviewUrl = null;
     this.selectedFile = null;
   }
+
+  public back(event: Event): void {
+    event.preventDefault();
+    this.companyService.singleCompanyId.next(undefined);
+    this.router.navigate(['/companies']);
+  }
 }

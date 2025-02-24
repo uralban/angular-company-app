@@ -8,6 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 import {QuizService} from '../../../../../services/quiz/quiz.service';
 import {QuizModalComponent} from '../quiz-modal/quiz-modal.component';
 import {QuizInterface} from '../../../../../interfaces/quiz/quiz.interface';
+import {Store} from '@ngrx/store';
+import {currentQuizClear} from '../../../../../state/current-quiz';
 
 @Component({
   selector: 'single-quiz-cart',
@@ -25,6 +27,7 @@ export class SingleQuizCartComponent implements OnDestroy {
     private spinner: PowerSpinnerService,
     private readonly toastrService: ToastrService,
     private quizService: QuizService,
+    private store$: Store,
   ) {
   }
 
@@ -64,6 +67,7 @@ export class SingleQuizCartComponent implements OnDestroy {
       this.spinner.show();
       this.quizService.updateQuiz(this.quiz.id, editedQuiz).then(result => {
         this.toastrService.success(result.message);
+        this.store$.dispatch(currentQuizClear());
         this.quizService.needReloadQuizListData$.next(true);
       }).finally(() => this.spinner.hide());
     }
