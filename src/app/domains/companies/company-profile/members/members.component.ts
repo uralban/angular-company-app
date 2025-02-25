@@ -12,6 +12,8 @@ import {Store} from '@ngrx/store';
 import {RoleDto} from '../../../../interfaces/role/role.dto';
 import {rolesListSuccess} from '../../../../state/roles-list';
 import {ResultMessageDto} from '../../../../interfaces/result-message.dto';
+import {UsersLastAttemptListDto} from '../../../../interfaces/user/users-last-attempt-list.dto';
+import {format} from 'date-fns';
 
 @Component({
   selector: 'members',
@@ -20,15 +22,18 @@ import {ResultMessageDto} from '../../../../interfaces/result-message.dto';
 })
 export class MembersComponent implements OnInit, OnDestroy {
   @Input() members!: MemberDto[];
+  @Input() lastAttemptList!: UsersLastAttemptListDto[];
   @Input() storedUser!: UserDto | null;
   @Input() companyId!: string | undefined;
   @Input() isAdmin!: boolean;
+  @Input() memberScore!: string | null;
 
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
   private readonly dialog: MatDialog = inject(MatDialog);
-  public userIsNotMember: boolean = true;
   public adminRoleId: string | undefined;
   public memberRoleId: string | undefined;
+
+  protected readonly Number = Number;
 
   constructor(
     private readonly toastrService: ToastrService,
@@ -39,7 +44,6 @@ export class MembersComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.checkUserIsNotMember();
     this.getRolesListStoreSubscribe();
   }
 
@@ -90,5 +94,13 @@ export class MembersComponent implements OnInit, OnDestroy {
         }).finally(() => this.spinner.hide());
       }
     });
+  }
+
+  public getLastAttempt(member: MemberDto): string | null {
+      const date: Date | undefined =  this.lastAttemptList.find(lastAttempt => lastAttempt.userId === member.user?.id)?.attemptDate;
+      if (date) {
+        return format(date, 'dd.MM.yy HH:mm');
+      }
+      return null;
   }
 }

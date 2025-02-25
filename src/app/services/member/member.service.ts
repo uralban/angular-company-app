@@ -15,6 +15,8 @@ import {RequestDto} from '../../interfaces/member/request.dto';
 import {selectRequestListData} from '../../state/request-list/request-list.selector';
 import {CreateInvitationInterface} from '../../interfaces/member/create-invitation.interface';
 import {ResultMessageDto} from '../../interfaces/result-message.dto';
+import {UsersLastAttemptListDto} from '../../interfaces/user/users-last-attempt-list.dto';
+import {selectUsersLastAttemptListData} from '../../state/users-last-attempt-list';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +29,10 @@ export class MemberService extends HttpService {
 
   public storedInvitationsListData$: Observable<PaginatedListDataInterface<InvitationDto> | null>;
   public storedRequestsListData$: Observable<PaginatedListDataInterface<RequestDto> | null>;
+  public storedUsersLastAttemptListData$: Observable<UsersLastAttemptListDto[] | null>;
   public needReloadInvitationsListData$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   public needReloadRequestsListData$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public needReloadUsersLastAttemptListData$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(
     protected httpClients: HttpClient,
@@ -41,6 +45,7 @@ export class MemberService extends HttpService {
 
     this.storedInvitationsListData$ = this.store$.pipe(select(selectInvitationListData));
     this.storedRequestsListData$ = this.store$.pipe(select(selectRequestListData));
+    this.storedUsersLastAttemptListData$ = this.store$.pipe(select(selectUsersLastAttemptListData));
   }
 
   public async createRequest(request: CreateRequestInterface): Promise<ResultMessageDto> {

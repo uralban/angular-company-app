@@ -10,6 +10,8 @@ import {Store} from '@ngrx/store';
 import {authUserDataClear} from '../../state/core';
 import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.service';
 import {environment} from '../../../environments/environment';
+import {UserService} from '../../services/user/user.service';
+import {currentUserClear} from '../../state/current-user';
 
 @Component({
   selector: 'app-header',
@@ -24,6 +26,7 @@ import {environment} from '../../../environments/environment';
 export class HeaderComponent implements OnInit, OnDestroy {
 
   public userName: string | undefined;
+  public userId: string | undefined;
   public avatarUrl: string = '';
 
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
@@ -31,6 +34,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     public auth0: Auth0Service,
+    private userService: UserService,
     private store$: Store,
     private spinner: PowerSpinnerService,
     private router: Router
@@ -51,6 +55,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authService.user$.pipe(takeUntil(this.ngDestroy$)).subscribe((user: UserDto | null) => {
       if (user) {
         this.userName = this.setUserName(user);
+        this.userId = user.id;
         this.avatarUrl = user.avatarUrl || environment.defaultUserAvatar;
       }
     });
@@ -97,4 +102,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
+  public redirectToUserProfile(): void {
+    if (this.userId) {
+      this.store$.dispatch(currentUserClear());
+      this.userService.singleUserId$.next(this.userId);
+      this.router.navigate(['users/user-profile']);
+    }
+  }
 }

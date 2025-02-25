@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {UserDto} from '../../../interfaces/user/user.dto';
 import {PowerSpinnerService} from '../../../widgets/power-spinner/power-spinner.service';
 import {UserService} from '../../../services/user/user.service';
@@ -14,13 +14,14 @@ import {environment} from '../../../../environments/environment';
   standalone: false,
   templateUrl: './single-user-cart.component.html'
 })
-export class SingleUserCartComponent implements OnInit, OnDestroy {
+export class SingleUserCartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() user!: UserDto;
 
   private readonly dialog: MatDialog = inject(MatDialog);
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
   public deleteIsDisabled: boolean = false;
   public avatarUrl: string = '';
+  private currentAuthUser: UserDto | null = null;
 
   constructor(
     private userService: UserService,
@@ -32,16 +33,26 @@ export class SingleUserCartComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.avatarUrl = this.user.avatarUrl ? this.user.avatarUrl : environment.defaultUserAvatar;
-    this.authService.user$.pipe(takeUntil(this.ngDestroy$)).subscribe((user: UserDto | null): void => {
-      if (user) {
-        this.deleteIsDisabled = user.id !== this.user.id;
-      }
+    this.authService.user$.pipe(takeUntil(this.ngDestroy$)).subscribe((authUser: UserDto | null) => {
+      this.currentAuthUser = authUser;
+      this.updateDeleteIsDisabled();
     });
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['user']) {
+      this.avatarUrl = this.user.avatarUrl ? this.user.avatarUrl : environment.defaultUserAvatar;
+      this.updateDeleteIsDisabled();
+    }
   }
 
   public ngOnDestroy(): void {
     this.ngDestroy$.next();
     this.ngDestroy$.complete();
+  }
+
+  private updateDeleteIsDisabled(): void {
+    this.deleteIsDisabled = this.currentAuthUser ? this.currentAuthUser.id !== this.user.id : true;
   }
 
   public deleteUserConfirm(event: Event): void {

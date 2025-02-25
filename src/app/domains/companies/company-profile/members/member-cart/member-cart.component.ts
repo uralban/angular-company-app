@@ -19,6 +19,7 @@ import {AuthService} from '../../../../../services/auth/auth.service';
 })
 export class MemberCartComponent implements OnInit, OnDestroy {
   @Input() member!: MemberDto;
+  @Input() lastAttempt?: string | null = null;
   @Input() disableActions!: boolean;
   @Input() adminRoleId!: string | undefined;
   @Input() memberRoleId!: string | undefined;

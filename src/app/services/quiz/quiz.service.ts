@@ -69,4 +69,8 @@ export class QuizService extends HttpService {
   public async createNewAttempt(newQuizAttempt: QuizAttemptDto): Promise<ResultMessageDto> {
     return lastValueFrom(super.postForResult(this.URL_QUIZ_ATTEMPT, ResultMessageDto, {}, newQuizAttempt));
   }
+
+  public async getUserTotalScore(): Promise<ResultMessageDto> {
+    return lastValueFrom(super.getOne(this.URL_QUIZ_ATTEMPT + '/total-score', ResultMessageDto));
+  }
 }

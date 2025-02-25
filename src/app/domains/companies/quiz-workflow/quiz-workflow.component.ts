@@ -12,6 +12,7 @@ import {QuizAttemptDto} from '../../../interfaces/quiz/quiz-attempt.dto';
 import {ToastrService} from 'ngx-toastr';
 import {ResultMessageDto} from '../../../interfaces/result-message.dto';
 import {QuestionAttemptAnswerDto} from '../../../interfaces/quiz/question-attempt-answer.dto';
+import {MemberService} from '../../../services/member/member.service';
 
 @Component({
   selector: 'app-quiz-workflow',
@@ -28,6 +29,7 @@ export class QuizWorkflowComponent implements OnInit, OnDestroy {
 
   constructor(
     private quizService: QuizService,
+    private memberService: MemberService,
     private router: Router,
     private spinner: PowerSpinnerService,
     private store$: Store,
@@ -118,6 +120,7 @@ export class QuizWorkflowComponent implements OnInit, OnDestroy {
           this.toastrService.success(response.message);
           this.quizService.singleQuizId$.next(undefined);
           this.quizAttemptComplete = true;
+          this.memberService.needReloadUsersLastAttemptListData$.next(true);
           this.router.navigate(['/companies/company-profile']);
         }).finally(() => this.spinner.hide());
       }

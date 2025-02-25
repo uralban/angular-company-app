@@ -25,7 +25,7 @@ export class CompanyService extends HttpService {
   public storedCompanyListData$: Observable<PaginatedListDataInterface<CompanyDto> | null>;
   public storedCurrentCompanyData$: Observable<CompanyDto | null>;
   public needReloadCompanyListData$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  public needReloadCurrentCompanyData$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public needReloadCurrentCompanyData$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public storedVisibilityListData$: Observable<string[] | null>;
 
   constructor(

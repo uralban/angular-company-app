@@ -13,6 +13,10 @@ import {visibilityListSuccess} from '../../../state/visibility-list';
 import {Company} from '../../../interfaces/company/company.interface';
 import {currentCompanySuccess} from '../../../state/current-company';
 import {QuizService} from '../../../services/quiz/quiz.service';
+import {MemberService} from '../../../services/member/member.service';
+import {AnalyticService} from '../../../services/analytic/analytic.service';
+import {UsersLastAttemptListDto} from '../../../interfaces/user/users-last-attempt-list.dto';
+import {usersLastAttemptListDataSuccess} from '../../../state/users-last-attempt-list';
 
 @Component({
   selector: 'app-company-profile',
@@ -27,16 +31,20 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
   protected storedUser: UserDto | null = null;
   public editCompanyForm: FormGroup;
   public visibilityList: string[] = [];
+  public lastAttemptList: UsersLastAttemptListDto[] = [];
   public selectedFile: File | null = null;
   public logoPreviewUrl: string | ArrayBuffer | null = null;
   public editDisabled: boolean = true;
   public isAdmin: boolean = false;
   public isMember: boolean = false;
   public currentCompanyId: string = '';
+  public memberScore: string | null = null;
 
   constructor(
     private router: Router,
     private companyService: CompanyService,
+    private memberService: MemberService,
+    private analyticService: AnalyticService,
     private formBuilder: FormBuilder,
     private spinner: PowerSpinnerService,
     private readonly toastrService: ToastrService,
@@ -57,7 +65,6 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.ngDestroy$.next();
     this.ngDestroy$.complete();
-    this.companyService.singleCompanyId.next(undefined);
   }
 
   public editCompanyFormInit(): FormGroup {
@@ -128,12 +135,39 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
         if (currentUserRole) {
           this.isAdmin = currentUserRole === 'owner' || currentUserRole === 'admin';
           this.isMember = true;
+          if (this.isAdmin) {
+            this.checkMemberLastAttempt();
+            this.needReloadUsersLastAttemptListSubscribe();
+          }
+          this.spinner.show();
+          this.analyticService.getUserQuizCompanyScore(id).then(userScore => {
+            this.memberScore = userScore.score || null;
+          }).finally(() => this.spinner.hide());
         }
         this.setDefaultValues();
       } else {
         this.getCompanyById(id);
+        this.memberService.needReloadUsersLastAttemptListData$.next(true);
       }
     });
+  }
+
+  private checkMemberLastAttempt(): void {
+    this.memberService.storedUsersLastAttemptListData$.pipe(takeUntil(this.ngDestroy$)).subscribe(lastAttemptList => {
+      if (lastAttemptList) {
+        this.lastAttemptList = lastAttemptList;
+      }
+    });
+  }
+
+  private getUsersLastAttemptListAndSaveToStore(): void {
+    if (this.company?.id) {
+      this.spinner.show();
+      this.analyticService.getUsersLastAttemptList(this.company.id).then((usersLastAttemptList: UsersLastAttemptListDto[]) => {
+        this.store$.dispatch(usersLastAttemptListDataSuccess({usersLastAttemptListData: usersLastAttemptList}));
+        this.memberService.needReloadUsersLastAttemptListData$.next(false);
+      }).finally(() => this.spinner.hide());
+    }
   }
 
   private getCompanyById(id: string): void {
@@ -159,6 +193,14 @@ export class CompanyProfileComponent implements OnInit, OnDestroy {
       if (flag) {
         this.quizService.needReloadQuizListData$.next(true);
         this.getCompanyById(this.currentCompanyId);
+      }
+    });
+  }
+
+  private needReloadUsersLastAttemptListSubscribe(): void {
+    this.memberService.needReloadUsersLastAttemptListData$.pipe(takeUntil(this.ngDestroy$)).subscribe((flag: boolean): void => {
+      if (flag) {
+        this.getUsersLastAttemptListAndSaveToStore();
       }
     });
   }

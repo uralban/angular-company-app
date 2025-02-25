@@ -14,6 +14,7 @@ import {UniversalModalComponent} from '../../../../widgets/universal-modal/unive
 import {QuizModalComponent} from './quiz-modal/quiz-modal.component';
 import {QuizInterface} from '../../../../interfaces/quiz/quiz.interface';
 import {Router} from '@angular/router';
+import {QuizzesAnalyticModalComponent} from './quizzes-analytic-modal/quizzes-analytic-modal.component';
 
 @Component({
   selector: 'quizzes',
@@ -59,6 +60,21 @@ export class QuizzesComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().pipe(takeUntil(this.ngDestroy$)).subscribe(newQuiz => {
       if (newQuiz) {
         this.saveQuiz(newQuiz);
+      }
+    });
+  }
+
+  public showAnalytic(): void {
+    const dialogRef = this.dialog.open(QuizzesAnalyticModalComponent, {
+      data: {
+        title: 'Quizzes Analytic',
+      },
+      width: '1000px',
+      maxHeight: '700px',
+    });
+    dialogRef.afterClosed().pipe(takeUntil(this.ngDestroy$)).subscribe(result => {
+      if (result) {
+
       }
     });
   }

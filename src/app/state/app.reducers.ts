@@ -2,6 +2,7 @@ import {ActionReducerMap, MetaReducer} from '@ngrx/store';
 import {State} from './app.state';
 import * as CoreReducer from "./core/core.reducer";
 import * as UsersListDataReducer from "./users-list/users-list.reducer";
+import * as UsersLastAttemptListDataReducer from "./users-last-attempt-list/users-last-attempt-list.reducer";
 import * as CurrentUserReducer from "./current-user/current-user.reducer";
 import * as RolesListReducer from "./roles-list/roles-list.reducer";
 import * as VisibilityReducer from "./visibility-list/visibility-list.reducer";
@@ -15,6 +16,7 @@ import * as CurrentQuizReducer from "./current-quiz/current-quiz.reducer";
 export const reducers: ActionReducerMap<State> = {
   coreData: CoreReducer.coreReducerFn,
   usersListData: UsersListDataReducer.usersListReducerFn,
+  usersLastAttemptListData: UsersLastAttemptListDataReducer.usersLastAttemptListReducerFn,
   user: CurrentUserReducer.currentUserReducerFn,
   rolesList: RolesListReducer.rolesListReducerFn,
   visibilityList: VisibilityReducer.visibilityReducerFn,
