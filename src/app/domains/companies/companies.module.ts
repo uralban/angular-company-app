@@ -6,7 +6,7 @@ import {SingleCompanyCartComponent} from './single-company-cart/single-company-c
 import {MatPaginator} from '@angular/material/paginator';
 import {CompanyProfileComponent} from './company-profile/company-profile.component';
 import {NgIconsModule} from '@ng-icons/core';
-import {matClear, matEdit, matPlus, matRestoreFromTrash, matStar} from '@ng-icons/material-icons/baseline';
+import {matClear, matDownload, matEdit, matPlus, matRestoreFromTrash, matStar} from '@ng-icons/material-icons/baseline';
 import {NgSelectComponent} from '@ng-select/ng-select';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CreateCompanyModalComponent} from './create-company-modal/create-company-modal.component';
@@ -61,7 +61,7 @@ import {StarRatingComponent} from "../../widgets/star-rating/star-rating.compone
     CommonModule,
     CompaniesRoutesModule,
     MatPaginator,
-    NgIconsModule.withIcons({matStar, matClear, matEdit, matPlus, matRestoreFromTrash}),
+    NgIconsModule.withIcons({matStar, matClear, matEdit, matPlus, matRestoreFromTrash, matDownload}),
     NgSelectComponent,
     ReactiveFormsModule,
     MatDialogActions,

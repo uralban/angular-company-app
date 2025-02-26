@@ -10,6 +10,7 @@ import {QuizModalComponent} from '../quiz-modal/quiz-modal.component';
 import {QuizInterface} from '../../../../../interfaces/quiz/quiz.interface';
 import {Store} from '@ngrx/store';
 import {currentQuizClear} from '../../../../../state/current-quiz';
+import {FormatEnum} from '../../../../../consts/format.enum';
 
 @Component({
   selector: 'single-quiz-cart',
@@ -88,5 +89,30 @@ export class SingleQuizCartComponent implements OnDestroy {
         this.updateQuiz(editedQuiz);
       }
     });
+  }
+
+  public getCompanyQuizReport(event: Event): void {
+    event.stopPropagation();
+    if (this.quiz.company?.id) {
+      this.spinner.show();
+      this.quizService
+        .getCompanyReport(FormatEnum.CSV, {
+          companyId: this.quiz.company.id,
+          quizId: this.quiz.id,
+        })
+        .subscribe({
+          next: (response: { blob: Blob; filename: string }) => {
+            const blobUrl: string = URL.createObjectURL(response.blob);
+            const a: HTMLAnchorElement = document.createElement('a');
+            a.href = blobUrl;
+            a.download = response.filename || 'company_quiz_report.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(blobUrl);
+          },
+          complete: () => this.spinner.hide()
+        });
+    }
   }
 }

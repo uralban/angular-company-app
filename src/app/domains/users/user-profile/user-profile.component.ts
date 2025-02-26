@@ -23,6 +23,7 @@ import {MemberService} from '../../../services/member/member.service';
 import {MatDialog} from '@angular/material/dialog';
 import {UniversalModalComponent} from '../../../widgets/universal-modal/universal-modal.component';
 import {ResultMessageDto} from '../../../interfaces/result-message.dto';
+import {FormatEnum} from '../../../consts/format.enum';
 
 @Component({
   selector: 'app-user-profile',
@@ -297,5 +298,24 @@ export class UserProfileComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
     }
+  }
+
+  public createNewRequest(): void {
+    this.spinner.show();
+    this.quizService
+      .getUserReport(FormatEnum.CSV)
+      .subscribe({
+        next: (response: { blob: Blob; filename: string }) => {
+          const blobUrl: string = URL.createObjectURL(response.blob);
+          const a: HTMLAnchorElement = document.createElement('a');
+          a.href = blobUrl;
+          a.download = response.filename || 'user_quiz_attempts.csv';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(blobUrl);
+        },
+        complete: () => this.spinner.hide()
+      });
   }
 }

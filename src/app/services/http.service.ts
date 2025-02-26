@@ -1,4 +1,4 @@
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {DTO} from '../interfaces/dto.interface';
 import {map, Observable} from 'rxjs';
 
@@ -161,6 +161,14 @@ export class HttpService {
 
     return this.httpClient.get(url, {params: params}).pipe(
       map((data: any) => data)
+    );
+  }
+
+
+  protected getFile(
+    url: string,
+    params?: { [param: string]: string }): Observable<HttpResponse<Blob>> {
+    return this.httpClient.get(url, {params: params, responseType: 'blob', observe: 'response'}
     );
   }
 
