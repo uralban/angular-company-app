@@ -80,6 +80,10 @@ export class MemberService extends HttpService {
     return lastValueFrom(super.deleteForResult(this.URL_MEMBERS + '/' + memberId, ResultMessageDto));
   }
 
+  public async selfRemoveMember(companyId: string): Promise<ResultMessageDto> {
+    return lastValueFrom(super.deleteForResult(this.URL_MEMBERS + '/self/' + companyId, ResultMessageDto));
+  }
+
   public async getAllInvitations(paginationRequest: PaginationRequestInterface): Promise<PaginationDto<InvitationDto>> {
     return lastValueFrom(super.getDataWithPagination(
       this.URL_INVITE,
