@@ -3,7 +3,7 @@ import {RoleDto} from '../../interfaces/role/role.dto';
 
 export const rolesListSuccess = createAction(
   "[Roles List State] Roles list data success",
-  props<{rolesList: RoleDto[]}>()
+  props<{ rolesList: RoleDto[] }>()
 );
 
 export const rolesListClear = createAction(

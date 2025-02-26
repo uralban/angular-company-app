@@ -11,8 +11,9 @@ export class UserDto implements DTO {
     public lastName?: string,
     public avatarUrl?: string,
     public _userName?: string,
-    public companyMemberships	?: MemberDto[],
-  ) {}
+    public companyMemberships  ?: MemberDto[],
+  ) {
+  }
 
   populateFromDTO(dto: any): void {
     ObjectFiller.fillPropsFromDTO(this, dto);

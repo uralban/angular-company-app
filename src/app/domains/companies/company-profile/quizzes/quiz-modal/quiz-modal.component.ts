@@ -46,7 +46,7 @@ export class QuizModalComponent implements OnInit {
         }
       }).finally(() => this.spinner.hide());
     } else {
-      for ( let i: number = 1; i < 3; i++) {
+      for (let i: number = 1; i < 3; i++) {
         this.addQuestion();
       }
     }

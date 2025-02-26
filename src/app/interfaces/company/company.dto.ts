@@ -5,7 +5,7 @@ import {MemberDto} from '../member/member.dto';
 import {RequestDto} from '../member/request.dto';
 import {InvitationDto} from '../member/invitation.dto';
 
-export class CompanyDto implements DTO{
+export class CompanyDto implements DTO {
 
   constructor(
     public id?: string,
@@ -17,7 +17,8 @@ export class CompanyDto implements DTO{
     public members?: MemberDto[],
     public requests?: RequestDto[],
     public invitations?: InvitationDto[],
-  ) {}
+  ) {
+  }
 
   populateFromDTO(dto: any): void {
     ObjectFiller.fillPropsFromDTO(this, dto);

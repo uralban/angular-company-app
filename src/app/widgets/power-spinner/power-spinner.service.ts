@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {IPowerSpinnerEvent} from './power-spinner-event.interface.';
 
-@Injectable({providedIn:"root"})
+@Injectable({providedIn: "root"})
 export class PowerSpinnerService {
 
   public stateChanged: EventEmitter<IPowerSpinnerEvent> = new EventEmitter<IPowerSpinnerEvent>();

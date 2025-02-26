@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ChangeVisibilityForAllCompaniesModalComponent } from './change-visibility-for-all-companies-modal.component';
+import {ChangeVisibilityForAllCompaniesModalComponent} from './change-visibility-for-all-companies-modal.component';
 
 describe('ChangeVisibilityForAllCompaniesModalComponent', () => {
   let component: ChangeVisibilityForAllCompaniesModalComponent;
@@ -10,7 +10,7 @@ describe('ChangeVisibilityForAllCompaniesModalComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ChangeVisibilityForAllCompaniesModalComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ChangeVisibilityForAllCompaniesModalComponent);
     component = fixture.componentInstance;

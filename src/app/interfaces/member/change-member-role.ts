@@ -1,3 +1,3 @@
-export  interface ChangeMemberRole {
+export interface ChangeMemberRole {
   roleId: string;
 }

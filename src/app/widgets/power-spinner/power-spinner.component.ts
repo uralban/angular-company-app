@@ -12,9 +12,10 @@ import {IPowerSpinnerEvent} from './power-spinner-event.interface.';
 })
 export class PowerSpinnerComponent implements OnInit, OnDestroy {
   constructor(
-    private spinnerSrv:PowerSpinnerService,
-    private cdr:ChangeDetectorRef,
-  ) { }
+    private spinnerSrv: PowerSpinnerService,
+    private cdr: ChangeDetectorRef,
+  ) {
+  }
 
   @Input() fullScreen: boolean = false;
   @Input() name: string | null = null;

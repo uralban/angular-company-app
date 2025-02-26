@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpService} from '../http.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
@@ -10,7 +10,7 @@ import {selectRolesListData} from '../../state/roles-list/roles-list.selector';
 @Injectable({
   providedIn: 'root'
 })
-export class RoleService extends HttpService  {
+export class RoleService extends HttpService {
 
   private readonly URL_GET_ROLES: string;
 

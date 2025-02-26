@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {switchMap, catchError, of, from, map, filter, tap} from "rxjs";
+import {catchError, filter, from, map, of, switchMap} from "rxjs";
 import {Actions, createEffect, ofType, ROOT_EFFECTS_INIT} from "@ngrx/effects";
 import {UserDto} from '../../interfaces/user/user.dto';
 import {AuthService} from '../../services/auth/auth.service';

@@ -35,7 +35,8 @@
           </div>
           <div class="flex-grow flex flex-col space-y-4">
             <div class="flex flex-col space-y-2" [class.group]="isEditing">
-              <label for="firstName" class="block text-gray-600 text-sm font-medium group-hover:text-blue-600 transition">
+              <label for="firstName"
+                     class="block text-gray-600 text-sm font-medium group-hover:text-blue-600 transition">
                 First Name
               </label>
               @if (!isEditing) {
@@ -50,7 +51,8 @@
               }
             </div>
             <div class="flex flex-col space-y-2" [class.group]="isEditing">
-              <label for="lastName" class="block text-gray-600 text-sm font-medium1 group-hover:text-blue-600 transition">
+              <label for="lastName"
+                     class="block text-gray-600 text-sm font-medium1 group-hover:text-blue-600 transition">
                 Last Name
               </label>
               @if (!isEditing) {
@@ -115,8 +117,9 @@
             <div class="mt-auto flex justify-between">
               <div class="">
                 @if (!isEditing) {
-                  <a class="px-6 py-2 text-white bg-red-500 rounded-lg text-lg font-semibold hover:bg-red-700 transition"
-                     routerLink="/users">
+                  <a
+                    class="px-6 py-2 text-white bg-red-500 rounded-lg text-lg font-semibold hover:bg-red-700 transition"
+                    routerLink="/users">
                     Back
                   </a>
                 }
@@ -154,12 +157,15 @@
           <div class="p-4 bg-gray-100 rounded-lg shadow-md flex items-start justify-between space-x-2">
             <div class="w-full flex items-start flex-row justify-between space-x-4">
               <div class="text-sm font-bold break-all text-gray-600">
-                <p class="text-gray-800 group-hover:text-blue-600 transition">Company: {{ member.company?.companyName }}</p>
+                <p class="text-gray-800 group-hover:text-blue-600 transition">
+                  Company: {{ member.company?.companyName }}</p>
                 <p class="capitalize">Role: {{ member.role?.roleName }}</p>
               </div>
               @if (member.role?.roleName !== 'owner') {
                 <div class="">
-                  <button mat-button [matMenuTriggerFor]="menu"><ng-icon name="matEdit"/></button>
+                  <button mat-button [matMenuTriggerFor]="menu">
+                    <ng-icon name="matEdit"/>
+                  </button>
                   <mat-menu #menu="matMenu">
                     <button mat-menu-item
                             (click)="getOutFromCompany(member.company?.id)">
@@ -189,7 +195,8 @@
                   <p class="text-gray-800 group-hover:text-blue-600 transition">{{ userQuizWithLastDate.quizTitle }}</p>
                   <p class="capitalize">Company: {{ userQuizWithLastDate.quizCompanyName }}</p>
                   @if (userQuizWithLastDate.attemptDate) {
-                    <p class="capitalize">last completion: {{ getLastCompletionTime(userQuizWithLastDate.attemptDate) }}</p>
+                    <p class="capitalize">last
+                      completion: {{ getLastCompletionTime(userQuizWithLastDate.attemptDate) }}</p>
                   }
                 </div>
               </div>

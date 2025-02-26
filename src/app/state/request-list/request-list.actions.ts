@@ -4,7 +4,7 @@ import {RequestDto} from '../../interfaces/member/request.dto';
 
 export const requestListDataSuccess = createAction(
   "[Request List State] Request list data success",
-  props<{requestListData: PaginatedListDataInterface<RequestDto>}>()
+  props<{ requestListData: PaginatedListDataInterface<RequestDto> }>()
 );
 
 export const requestListDataClear = createAction(

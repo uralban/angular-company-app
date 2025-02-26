@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { QuizzesAnalyticModalComponent } from './quizzes-analytic-modal.component';
+import {QuizzesAnalyticModalComponent} from './quizzes-analytic-modal.component';
 
 describe('QuizzesAnaluticModalComponent', () => {
   let component: QuizzesAnalyticModalComponent;
@@ -10,7 +10,7 @@ describe('QuizzesAnaluticModalComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [QuizzesAnalyticModalComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(QuizzesAnalyticModalComponent);
     component = fixture.componentInstance;

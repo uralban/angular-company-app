@@ -28,7 +28,7 @@ export class SingleCompanyCartComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private spinner: PowerSpinnerService,
     private readonly toastrService: ToastrService,
-    ) {
+  ) {
   }
 
   public ngOnInit(): void {

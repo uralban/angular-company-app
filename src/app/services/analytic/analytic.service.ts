@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpService} from '../http.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
@@ -19,7 +19,7 @@ export class AnalyticService extends HttpService {
 
   constructor(
     protected httpClients: HttpClient,
-    ) {
+  ) {
     super(httpClients);
 
     this.URL_COMPANY_ANALYTIC = environment.apiUrl + '/analytics/company';

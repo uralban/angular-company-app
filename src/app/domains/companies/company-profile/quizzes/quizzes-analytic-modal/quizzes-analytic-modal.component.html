@@ -7,7 +7,7 @@
       <p class="text-xl">Members:</p>
       @for (member of companyMembersList; track $index) {
         <div class="space-y-2">
-          <p class="font-bold">{{member._memberName}}</p>
+          <p class="font-bold">{{ member._memberName }}</p>
           <star-rating [rating]="Number(member._memberScore || 0)"></star-rating>
         </div>
       }

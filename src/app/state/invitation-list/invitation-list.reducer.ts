@@ -1,6 +1,6 @@
 import {Action, createReducer, on} from '@ngrx/store';
 import * as InvitationListDataActions from '../invitation-list/invitation-list.actions';
-import {InvitationListState, initialState} from './invitation-list.state';
+import {initialState, InvitationListState} from './invitation-list.state';
 
 const InvitationListDataReducer = createReducer(
   initialState,

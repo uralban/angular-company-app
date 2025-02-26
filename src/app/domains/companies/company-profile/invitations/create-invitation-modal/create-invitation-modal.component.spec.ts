@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CreateInvitationModalComponent } from './create-invitation-modal.component';
+import {CreateInvitationModalComponent} from './create-invitation-modal.component';
 
 describe('CreateInvitationModalComponent', () => {
   let component: CreateInvitationModalComponent;
@@ -10,7 +10,7 @@ describe('CreateInvitationModalComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [CreateInvitationModalComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(CreateInvitationModalComponent);
     component = fixture.componentInstance;

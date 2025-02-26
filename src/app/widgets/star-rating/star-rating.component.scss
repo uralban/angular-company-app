@@ -2,6 +2,7 @@
   display: flex;
   gap: 4px;
 }
+
 .star {
   position: relative;
   width: 24px;
@@ -9,6 +10,7 @@
   background: #ccc;
   clip-path: polygon(50% 0%, 61% 38%, 100% 38%, 69% 60%, 79% 100%, 50% 75%, 21% 100%, 31% 60%, 0% 38%, 39% 38%);
 }
+
 .fill {
   position: absolute;
   top: 0;

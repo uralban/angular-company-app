@@ -1,6 +1,6 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { routes } from './app.routes';
+import {ApplicationConfig, provideZoneChangeDetection} from '@angular/core';
+import {provideRouter} from '@angular/router';
+import {routes} from './app.routes';
 import {provideAnimations} from '@angular/platform-browser/animations';
 import {provideToastr} from 'ngx-toastr';
 import {provideState, provideStore} from '@ngrx/store';
@@ -40,15 +40,15 @@ import {usersLastAttemptListReducerFn} from './state/users-last-attempt-list/use
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZoneChangeDetection({eventCoalescing: true}),
     provideRouter(routes),
     provideAnimations(),
     provideToastr({
-        timeOut: 4000,
-        positionClass: 'toast-top-right',
-        preventDuplicates: true,
-        closeButton: true,
-        progressBar: true,
+      timeOut: 4000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+      closeButton: true,
+      progressBar: true,
     }),
     provideHttpClient(
       withInterceptorsFromDi()
@@ -75,9 +75,9 @@ export const appConfig: ApplicationConfig = {
     provideEffects(
       CoreEffects
     ),
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorHandlerInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: GetDataInterceptor, multi: true },
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorHandlerInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: GetDataInterceptor, multi: true},
     provideAuth0({
       domain: environment.auth0Domain,
       clientId: environment.clientId,
@@ -89,5 +89,5 @@ export const appConfig: ApplicationConfig = {
       },
       cacheLocation: 'localstorage',
     }),
-]
+  ]
 };

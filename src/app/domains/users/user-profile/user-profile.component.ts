@@ -28,7 +28,10 @@ import {ResultMessageDto} from '../../../interfaces/result-message.dto';
   selector: 'app-user-profile',
   standalone: false,
   templateUrl: './user-profile.component.html',
-  styles: [`canvas { max-width: 100%; height: 400px; }`]
+  styles: [`canvas {
+    max-width: 100%;
+    height: 400px;
+  }`]
 })
 export class UserProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
@@ -214,7 +217,7 @@ export class UserProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public getLastCompletionTime(attemptDate: Date): string {
-      return format(attemptDate, 'dd.MM.yy HH:mm');
+    return format(attemptDate, 'dd.MM.yy HH:mm');
   }
 
   public renderChart(data: QuizWithScoresDto[]): void {
@@ -250,15 +253,15 @@ export class UserProfileComponent implements OnInit, OnDestroy, AfterViewInit {
             type: 'time',
             time: {
               unit: 'hour',
-              displayFormats: { hour: 'dd.MM.yyyy, HH:mm' },
+              displayFormats: {hour: 'dd.MM.yyyy, HH:mm'},
               tooltipFormat: 'dd.MM.yyyy, HH:mm'
             },
-            title: { display: true, text: 'Time' }
+            title: {display: true, text: 'Time'}
           },
           y: {
             beginAtZero: true,
             max: 1,
-            title: { display: true, text: 'Score' }
+            title: {display: true, text: 'Score'}
           }
         }
       }

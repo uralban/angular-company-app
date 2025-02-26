@@ -36,7 +36,7 @@ export class QuizzesComponent implements OnInit, OnDestroy {
     private store$: Store,
     private quizService: QuizService,
     private router: Router,
-    ) {
+  ) {
   }
 
   public ngOnInit(): void {

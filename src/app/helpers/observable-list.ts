@@ -2,13 +2,14 @@ import {BehaviorSubject} from "rxjs";
 
 export class ObservableList<T> {
 
-  private list:T[];
+  private list: T[];
   readonly subject: BehaviorSubject<T[]>;
 
   constructor(list: T[]) {
     this.list = list;
     this.subject = new BehaviorSubject(this.list);
   }
+
   public get() {
     return this.subject;
   }
@@ -25,7 +26,7 @@ export class ObservableList<T> {
   }
 
   public replaceAll(list: T[]) {
-    this.list = [... list];
+    this.list = [...list];
     this.subject.next(this.list);
   }
 }

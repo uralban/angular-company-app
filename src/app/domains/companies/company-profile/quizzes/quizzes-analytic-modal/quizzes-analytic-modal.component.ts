@@ -78,7 +78,7 @@ export class QuizzesAnalyticModalComponent implements OnInit, OnDestroy, AfterVi
   public setTotalScoreList(data: UserWithScoresDto[]): void {
     data.forEach((user: UserWithScoresDto) => {
       const member: Member | undefined = this.companyMembersList.find(member => member._memberName === user.userName);
-      const score: string | undefined = user.quizzesScore?.sort((a,b) => {
+      const score: string | undefined = user.quizzesScore?.sort((a, b) => {
         if (b.attemptDate && a.attemptDate) {
           return new Date(a.attemptDate).getTime() - new Date(b.attemptDate).getTime()
         }
@@ -140,15 +140,15 @@ export class QuizzesAnalyticModalComponent implements OnInit, OnDestroy, AfterVi
             type: 'time',
             time: {
               unit: 'hour',
-              displayFormats: { hour: 'dd.MM.yyyy, HH:mm' },
+              displayFormats: {hour: 'dd.MM.yyyy, HH:mm'},
               tooltipFormat: 'dd.MM.yyyy, HH:mm'
             },
-            title: { display: true, text: 'Time' }
+            title: {display: true, text: 'Time'}
           },
           y: {
             beginAtZero: true,
             max: 1,
-            title: { display: true, text: 'Score' }
+            title: {display: true, text: 'Score'}
           }
         }
       }
