@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {UserService} from '../../../services/user/user.service';
 import {Subject, takeUntil} from 'rxjs';
@@ -11,13 +11,24 @@ import {currentUserSuccess} from '../../../state/current-user';
 import {User} from '../../../interfaces/user/user.interface';
 import {AuthService} from '../../../services/auth/auth.service';
 import {authUserDataSuccess} from '../../../state/core';
+import {AnalyticService} from '../../../services/analytic/analytic.service';
+import {QuizService} from '../../../services/quiz/quiz.service';
+import {QuizWithLastDateDto} from '../../../interfaces/quiz/quiz-with-last-date.dto';
+import {format} from 'date-fns';
+import {QuizWithScoresDto} from '../../../interfaces/quiz/quiz-with-scores.dto';
+import 'chartjs-adapter-date-fns';
+import {UserWithScoresDto} from '../../../interfaces/quiz/user-with-scores.dto';
+import {Chart} from 'chart.js/auto';
+import {Member} from '../../../interfaces/member/member.interface';
 
 @Component({
   selector: 'app-user-profile',
   standalone: false,
-  templateUrl: './user-profile.component.html'
+  templateUrl: './user-profile.component.html',
+  styles: [`canvas { max-width: 100%; height: 400px; }`]
 })
-export class UserProfileComponent implements OnInit, OnDestroy {
+export class UserProfileComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
   public isEditing: boolean = false;
@@ -27,6 +38,12 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   public selectedFile: File | null = null;
   public avatarPreviewUrl: string | ArrayBuffer | null = null;
   public editDisabled: boolean = true;
+  public userTotalScore: string | undefined;
+  public userQuizWithLastDateList: QuizWithLastDateDto[] = [];
+  private chartInstance: any;
+  public chartData$: Subject<UserWithScoresDto[]> = new Subject();
+
+  protected readonly Number = Number;
 
   constructor(
     private router: Router,
@@ -36,6 +53,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     private store$: Store,
     private readonly toastrService: ToastrService,
     private authService: AuthService,
+    private analyticService: AnalyticService,
+    private quizService: QuizService,
   ) {
     this.editUserForm = this.editUserFormInit();
   }
@@ -45,7 +64,16 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.checkUserIdAndUpdateCurrentUserStore();
   }
 
+  public ngAfterViewInit(): void {
+    this.chartData$.pipe(takeUntil(this.ngDestroy$)).subscribe(data => {
+      this.renderChart(data);
+    });
+  }
+
   public ngOnDestroy(): void {
+    if (this.chartInstance) {
+      this.chartInstance.destroy();
+    }
     this.ngDestroy$.next();
     this.ngDestroy$.complete();
     this.userService.singleUserId$.next(undefined);
@@ -62,7 +90,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     if (this.user?.firstName) this.editUserForm.get('firstName')?.setValue(this.user.firstName);
     if (this.user?.lastName) this.editUserForm.get('lastName')?.setValue(this.user.lastName);
     if (this.user?.avatarUrl) this.avatarPreviewUrl = this.user.avatarUrl;
-    this.editDisabled = this.user?.id !== this.storedUser?.id;
   }
 
   private checkUserIdAndUpdateCurrentUserStore(): void {
@@ -82,13 +109,33 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       if (user && user.id === id) {
         this.user = user;
         this.setDefaultValues();
-      } else {
+        this.editDisabled = this.user?.id !== this.storedUser?.id;
+        if (!this.editDisabled) {
+          const promises: Promise<any>[] = [];
+          promises.push(this.quizService.getUserTotalScore());
+          promises.push(this.analyticService.getUsersQuizWithTimeList());
+          promises.push(this.analyticService.getUsersQuizScoreList());
+          this.spinner.show();
+          Promise.all(promises).then(([totalScore, usersQuizWithTimeList, userQuizScoreList]) => {
+            this.userTotalScore = totalScore.message;
+            this.userQuizWithLastDateList = usersQuizWithTimeList;
+            this.chartData$.next(userQuizScoreList || [])
+          }).finally(() => this.spinner.hide())
+        }
+      } else if (!this.user || this.user.id !== id) {
         this.getUserById(id);
       }
     });
   }
 
   private getUserById(id: string): void {
+    this.spinner.show();
+    this.userService.getUserById(id).then(user => {
+      this.store$.dispatch(currentUserSuccess({user: user}));
+    }).finally(() => this.spinner.hide());
+  }
+
+  private getTotalQuizScore(id: string): void {
     this.spinner.show();
     this.userService.getUserById(id).then(user => {
       this.store$.dispatch(currentUserSuccess({user: user}));
@@ -162,5 +209,64 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   public deleteAvatar(): void {
     this.avatarPreviewUrl = null;
     this.selectedFile = null;
+  }
+
+  public getLastCompletionTime(attemptDate: Date): string {
+      return format(attemptDate, 'dd.MM.yy HH:mm');
+  }
+
+  public renderChart(data: QuizWithScoresDto[]): void {
+    const ctx = this.chartCanvas.nativeElement.getContext('2d');
+    if (!ctx) return;
+    if (this.chartInstance) {
+      this.chartInstance.destroy();
+    }
+    const datasets = data.map(quiz => {
+      const chartData = quiz.quizzesScore?.map(item => ({
+        x: item.attemptDate ? new Date(item.attemptDate) : null,
+        y: item.score ? parseFloat(item.score) : null
+      })).filter(item => item.x && item.y !== null) || [];
+
+      return {
+        label: quiz.quizTitle,
+        data: chartData,
+        borderColor: this.getRandomColor(),
+        fill: false,
+        tension: 0.4
+      };
+    });
+    this.chartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        datasets: datasets
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'hour',
+              displayFormats: { hour: 'dd.MM.yyyy, HH:mm' },
+              tooltipFormat: 'dd.MM.yyyy, HH:mm'
+            },
+            title: { display: true, text: 'Time' }
+          },
+          y: {
+            beginAtZero: true,
+            max: 1,
+            title: { display: true, text: 'Score' }
+          }
+        }
+      }
+    });
+  }
+
+  public getRandomColor(): string {
+    const r: number = Math.floor(Math.random() * 256);
+    const g: number = Math.floor(Math.random() * 256);
+    const b: number = Math.floor(Math.random() * 256);
+    return `rgb(${r}, ${g}, ${b})`;
   }
 }

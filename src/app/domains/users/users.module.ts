@@ -8,6 +8,7 @@ import {UserProfileComponent} from './user-profile/user-profile.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {NgIconsModule} from '@ng-icons/core';
 import {matClear, matStar} from '@ng-icons/material-icons/baseline';
+import {StarRatingComponent} from "../../widgets/star-rating/star-rating.component";
 
 
 @NgModule({
@@ -16,13 +17,14 @@ import {matClear, matStar} from '@ng-icons/material-icons/baseline';
     SingleUserCartComponent,
     UserProfileComponent
   ],
-  imports: [
-    CommonModule,
-    UsersRoutesModule,
-    MatPaginatorModule,
-    ReactiveFormsModule,
-    NgIconsModule.withIcons({matStar, matClear}),
-  ]
+    imports: [
+        CommonModule,
+        UsersRoutesModule,
+        MatPaginatorModule,
+        ReactiveFormsModule,
+        NgIconsModule.withIcons({matStar, matClear}),
+        StarRatingComponent,
+    ]
 })
 export class UsersModule {
 }

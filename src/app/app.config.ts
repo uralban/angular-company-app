@@ -35,6 +35,8 @@ import {quizListReducerFn} from './state/quiz-list';
 import {quizListFeatureKey} from './state/quiz-list/quiz-list.selector';
 import {currentQuizFeatureKey} from './state/current-quiz';
 import {currentQuizReducerFn} from './state/current-quiz/current-quiz.reducer';
+import {usersLastAttemptListDataFeatureKey} from './state/users-last-attempt-list';
+import {usersLastAttemptListReducerFn} from './state/users-last-attempt-list/users-last-attempt-list.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -60,6 +62,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideState(coreDataFeatureKey, coreReducerFn),
     provideState(usersListDataFeatureKey, usersListReducerFn),
+    provideState(usersLastAttemptListDataFeatureKey, usersLastAttemptListReducerFn),
     provideState(currentUserFeatureKey, currentUserReducerFn),
     provideState(rolesListFeatureKey, rolesListReducerFn),
     provideState(visibilityListFeatureKey, visibilityReducerFn),
