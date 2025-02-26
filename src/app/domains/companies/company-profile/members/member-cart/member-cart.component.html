@@ -35,7 +35,7 @@
         }
         <button mat-menu-item
                 (click)="getCompanyMemberReport()">
-          Download CSV
+          Download Report
         </button>
         @if (member.role?.roleName !== 'owner' && storedUser?.id !== member.user?.id) {
           <button mat-menu-item

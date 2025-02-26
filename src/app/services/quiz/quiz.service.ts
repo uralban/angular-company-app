@@ -81,7 +81,7 @@ export class QuizService extends HttpService {
       map(response => {
         const contentDisposition: string = response.headers.get('Content-Disposition') || '';
         const matches = /filename="([^"]+)"/.exec(contentDisposition);
-        const filename: string = matches && matches[1] ? matches[1] : 'user_quiz_attempts.csv';
+        const filename: string = matches && matches[1] ? matches[1] : 'user_quiz_attempts.' + format;
         return {blob: response.body as Blob, filename};
       })
     );
@@ -95,7 +95,7 @@ export class QuizService extends HttpService {
       map(response => {
         const contentDisposition: string = response.headers.get('Content-Disposition') || '';
         const matches = /filename="([^"]+)"/.exec(contentDisposition);
-        const filename: string = matches && matches[1] ? matches[1] : 'company_report.csv';
+        const filename: string = matches && matches[1] ? matches[1] : 'company_report.' + format;
         return {blob: response.body as Blob, filename};
       })
     );
