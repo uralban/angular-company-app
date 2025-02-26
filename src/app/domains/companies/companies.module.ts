@@ -28,9 +28,11 @@ import {
 import {QuizzesComponent} from './company-profile/quizzes/quizzes.component';
 import {QuizModalComponent} from './company-profile/quizzes/quiz-modal/quiz-modal.component';
 import {SingleQuizCartComponent} from './company-profile/quizzes/single-quiz-cart/single-quiz-cart.component';
-import { QuizWorkflowComponent } from './quiz-workflow/quiz-workflow.component';
-import { SingleQuestionComponent } from './quiz-workflow/single-question/single-question.component';
-import { QuizzesAnalyticModalComponent } from './company-profile/quizzes/quizzes-analytic-modal/quizzes-analytic-modal.component';
+import {QuizWorkflowComponent} from './quiz-workflow/quiz-workflow.component';
+import {SingleQuestionComponent} from './quiz-workflow/single-question/single-question.component';
+import {
+  QuizzesAnalyticModalComponent
+} from './company-profile/quizzes/quizzes-analytic-modal/quizzes-analytic-modal.component';
 import {StarRatingComponent} from "../../widgets/star-rating/star-rating.component";
 
 
@@ -55,22 +57,22 @@ import {StarRatingComponent} from "../../widgets/star-rating/star-rating.compone
     SingleQuestionComponent,
     QuizzesAnalyticModalComponent
   ],
-    imports: [
-        CommonModule,
-        CompaniesRoutesModule,
-        MatPaginator,
-        NgIconsModule.withIcons({matStar, matClear, matEdit, matPlus, matRestoreFromTrash}),
-        NgSelectComponent,
-        ReactiveFormsModule,
-        MatDialogActions,
-        MatDialogClose,
-        MatDialogContent,
-        MatDialogModule,
-        FormsModule,
-        MatButtonModule,
-        MatMenuModule,
-        StarRatingComponent
-    ]
+  imports: [
+    CommonModule,
+    CompaniesRoutesModule,
+    MatPaginator,
+    NgIconsModule.withIcons({matStar, matClear, matEdit, matPlus, matRestoreFromTrash}),
+    NgSelectComponent,
+    ReactiveFormsModule,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogModule,
+    FormsModule,
+    MatButtonModule,
+    MatMenuModule,
+    StarRatingComponent
+  ]
 })
 export class CompaniesModule {
 }

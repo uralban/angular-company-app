@@ -128,7 +128,7 @@ export class QuizWorkflowComponent implements OnInit, OnDestroy {
   }
 
   public back(): void {
-      this.quizService.singleQuizId$.next(undefined);
-      this.router.navigate(['/companies/company-profile']);
+    this.quizService.singleQuizId$.next(undefined);
+    this.router.navigate(['/companies/company-profile']);
   }
 }

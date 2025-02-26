@@ -5,7 +5,8 @@ import {catchError, mergeMap, Observable, take} from 'rxjs';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService) {
+  }
 
   intercept(
     request: HttpRequest<any>,
@@ -22,10 +23,10 @@ export class AuthInterceptor implements HttpInterceptor {
         }
         return this.auth.getAccessTokenSilently().pipe(
           mergeMap((accessToken: string): Observable<HttpEvent<any>> => {
-            const headers: Record<string, string> = {
-              Authorization: `Bearer ${accessToken}`,
-            };
-            return next.handle(request.clone({ setHeaders: headers }));
+              const headers: Record<string, string> = {
+                Authorization: `Bearer ${accessToken}`,
+              };
+              return next.handle(request.clone({setHeaders: headers}));
             }
           ),
           catchError((): Observable<HttpEvent<any>> => next.handle(request))

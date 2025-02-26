@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpService} from '../http.service';
 import {BehaviorSubject, lastValueFrom, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
@@ -31,7 +31,7 @@ export class QuizService extends HttpService {
   constructor(
     protected httpClients: HttpClient,
     private readonly store$: Store,
-    ) {
+  ) {
     super(httpClients);
     this.URL_QUIZ = environment.apiUrl + '/quizzes';
     this.URL_QUIZ_ATTEMPT = environment.apiUrl + '/quiz-attempt';
@@ -39,7 +39,7 @@ export class QuizService extends HttpService {
     this.storedCurrentQuizData$ = this.store$.pipe(select(selectCurrentQuizData));
   }
 
-  public async getAllQuizzes(companyId:string, paginationRequest: PaginationRequestInterface): Promise<PaginationDto<QuizDto>> {
+  public async getAllQuizzes(companyId: string, paginationRequest: PaginationRequestInterface): Promise<PaginationDto<QuizDto>> {
     return lastValueFrom(super.getDataWithPagination(
       this.URL_QUIZ + '/company/' + companyId,
       (data) => new PaginationDto<QuizDto>(QuizDto, data),

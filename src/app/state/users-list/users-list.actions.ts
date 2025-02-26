@@ -4,7 +4,7 @@ import {UserDto} from '../../interfaces/user/user.dto';
 
 export const usersListDataSuccess = createAction(
   "[Users List State] Users list data success",
-  props<{usersListData: PaginatedListDataInterface<UserDto>}>()
+  props<{ usersListData: PaginatedListDataInterface<UserDto> }>()
 );
 
 export const usersListDataClear = createAction(

@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
-import { Location } from '@angular/common';
-import { AppComponent } from './app.component';
+import {TestBed} from '@angular/core/testing';
+import {Location} from '@angular/common';
+import {AppComponent} from './app.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {Router} from '@angular/router';
 import {first} from 'rxjs';
@@ -15,7 +15,7 @@ describe('AppComponent', () => {
       imports: [
         AppComponent,
         RouterTestingModule.withRoutes([
-          { path: 'auth', component: AuthComponent},
+          {path: 'auth', component: AuthComponent},
         ])
       ],
       declarations: [AuthComponent]

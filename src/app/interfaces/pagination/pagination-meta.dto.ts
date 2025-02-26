@@ -1,7 +1,7 @@
 import {DTO} from '../dto.interface';
 import {ObjectFiller} from '../../helpers/object-filter';
 
-export class PaginationMetaDto implements DTO{
+export class PaginationMetaDto implements DTO {
 
   constructor(
     public page: number,
@@ -10,7 +10,8 @@ export class PaginationMetaDto implements DTO{
     public pageCount?: number,
     public hasPreviousPage?: boolean,
     public hasNextPage?: boolean
-  ) {}
+  ) {
+  }
 
   populateFromDTO(dto: any): void {
     ObjectFiller.fillPropsFromDTO(this, dto);

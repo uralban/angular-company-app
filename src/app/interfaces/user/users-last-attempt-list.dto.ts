@@ -8,7 +8,8 @@ export class UsersLastAttemptListDto implements DTO {
     public userEmail?: string,
     public attemptId?: string,
     public attemptDate?: Date,
-  ) {}
+  ) {
+  }
 
   populateFromDTO(dto: any): void {
     ObjectFiller.fillPropsFromDTO(this, dto);

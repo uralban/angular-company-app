@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {UserService} from '../../../services/user/user.service';
 import {Subject, takeUntil} from 'rxjs';
@@ -19,13 +19,19 @@ import {QuizWithScoresDto} from '../../../interfaces/quiz/quiz-with-scores.dto';
 import 'chartjs-adapter-date-fns';
 import {UserWithScoresDto} from '../../../interfaces/quiz/user-with-scores.dto';
 import {Chart} from 'chart.js/auto';
-import {Member} from '../../../interfaces/member/member.interface';
+import {MemberService} from '../../../services/member/member.service';
+import {MatDialog} from '@angular/material/dialog';
+import {UniversalModalComponent} from '../../../widgets/universal-modal/universal-modal.component';
+import {ResultMessageDto} from '../../../interfaces/result-message.dto';
 
 @Component({
   selector: 'app-user-profile',
   standalone: false,
   templateUrl: './user-profile.component.html',
-  styles: [`canvas { max-width: 100%; height: 400px; }`]
+  styles: [`canvas {
+    max-width: 100%;
+    height: 400px;
+  }`]
 })
 export class UserProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
@@ -42,6 +48,7 @@ export class UserProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   public userQuizWithLastDateList: QuizWithLastDateDto[] = [];
   private chartInstance: any;
   public chartData$: Subject<UserWithScoresDto[]> = new Subject();
+  private readonly dialog: MatDialog = inject(MatDialog);
 
   protected readonly Number = Number;
 
@@ -55,6 +62,7 @@ export class UserProfileComponent implements OnInit, OnDestroy, AfterViewInit {
     private authService: AuthService,
     private analyticService: AnalyticService,
     private quizService: QuizService,
+    private memberService: MemberService,
   ) {
     this.editUserForm = this.editUserFormInit();
   }
@@ -123,20 +131,17 @@ export class UserProfileComponent implements OnInit, OnDestroy, AfterViewInit {
           }).finally(() => this.spinner.hide())
         }
       } else if (!this.user || this.user.id !== id) {
-        this.getUserById(id);
+        this.getUserById(id, this.storedUser?.id === id);
       }
     });
   }
 
-  private getUserById(id: string): void {
+  private getUserById(id: string, selfFlag: boolean): void {
     this.spinner.show();
-    this.userService.getUserById(id).then(user => {
-      this.store$.dispatch(currentUserSuccess({user: user}));
-    }).finally(() => this.spinner.hide());
-  }
-
-  private getTotalQuizScore(id: string): void {
-    this.spinner.show();
+    if (selfFlag && this.storedUser) {
+      this.store$.dispatch(currentUserSuccess({user: this.storedUser}));
+      return;
+    }
     this.userService.getUserById(id).then(user => {
       this.store$.dispatch(currentUserSuccess({user: user}));
     }).finally(() => this.spinner.hide());
@@ -212,7 +217,7 @@ export class UserProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public getLastCompletionTime(attemptDate: Date): string {
-      return format(attemptDate, 'dd.MM.yy HH:mm');
+    return format(attemptDate, 'dd.MM.yy HH:mm');
   }
 
   public renderChart(data: QuizWithScoresDto[]): void {
@@ -248,15 +253,15 @@ export class UserProfileComponent implements OnInit, OnDestroy, AfterViewInit {
             type: 'time',
             time: {
               unit: 'hour',
-              displayFormats: { hour: 'dd.MM.yyyy, HH:mm' },
+              displayFormats: {hour: 'dd.MM.yyyy, HH:mm'},
               tooltipFormat: 'dd.MM.yyyy, HH:mm'
             },
-            title: { display: true, text: 'Time' }
+            title: {display: true, text: 'Time'}
           },
           y: {
             beginAtZero: true,
             max: 1,
-            title: { display: true, text: 'Score' }
+            title: {display: true, text: 'Score'}
           }
         }
       }
@@ -268,5 +273,29 @@ export class UserProfileComponent implements OnInit, OnDestroy, AfterViewInit {
     const g: number = Math.floor(Math.random() * 256);
     const b: number = Math.floor(Math.random() * 256);
     return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  public getOutFromCompany(companyId: string | undefined): void {
+    if (companyId) {
+      const dialogRef = this.dialog.open(UniversalModalComponent, {
+        data: {
+          title: 'Get out from company',
+          message: 'Are you sure you want to get out?',
+        },
+        width: '400px'
+      });
+      dialogRef.afterClosed().pipe(takeUntil(this.ngDestroy$)).subscribe(result => {
+        if (result) {
+          this.spinner.show();
+          this.memberService.selfRemoveMember(companyId).then((response: ResultMessageDto) => {
+            this.toastrService.success(response.message);
+            return this.authService.getMeData();
+          }).then(newUserData => {
+            this.store$.dispatch(authUserDataSuccess({authUserData: newUserData}));
+            this.store$.dispatch(currentUserSuccess({user: newUserData}));
+          }).finally(() => this.spinner.hide());
+        }
+      });
+    }
   }
 }

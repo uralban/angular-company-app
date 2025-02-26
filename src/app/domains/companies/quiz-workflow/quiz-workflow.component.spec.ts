@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { QuizWorkflowComponent } from './quiz-workflow.component';
+import {QuizWorkflowComponent} from './quiz-workflow.component';
 
 describe('QuizWorkflowComponent', () => {
   let component: QuizWorkflowComponent;
@@ -10,7 +10,7 @@ describe('QuizWorkflowComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [QuizWorkflowComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(QuizWorkflowComponent);
     component = fixture.componentInstance;

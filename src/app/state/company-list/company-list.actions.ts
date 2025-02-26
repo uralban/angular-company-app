@@ -4,7 +4,7 @@ import {CompanyDto} from '../../interfaces/company/company.dto';
 
 export const companyListDataSuccess = createAction(
   "[Company List State] Company list data success",
-  props<{companyListData: PaginatedListDataInterface<CompanyDto>}>()
+  props<{ companyListData: PaginatedListDataInterface<CompanyDto> }>()
 );
 
 export const companyListDataClear = createAction(

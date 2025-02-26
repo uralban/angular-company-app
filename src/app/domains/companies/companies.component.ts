@@ -23,7 +23,7 @@ import {
 })
 export class CompaniesComponent implements OnInit, OnDestroy {
 
-  public paginationMeta: PaginationMetaDto = new PaginationMetaDto(1,3);
+  public paginationMeta: PaginationMetaDto = new PaginationMetaDto(1, 3);
   public paginatedCompanyList: CompanyDto[] = [];
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
   private readonly dialog: MatDialog = inject(MatDialog);

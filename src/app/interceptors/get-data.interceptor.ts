@@ -14,9 +14,9 @@ export class GetDataInterceptor implements HttpInterceptor {
     }
     return next.handle(request).pipe(
       map((event: HttpEvent<any>) => {
-        if(localStorage.getItem('login')) localStorage.setItem('login', new Date().getTime().toString());
+        if (localStorage.getItem('login')) localStorage.setItem('login', new Date().getTime().toString());
         if (event instanceof HttpResponse) {
-          return event.clone({ body: event.body.detail });
+          return event.clone({body: event.body.detail});
         }
         return event;
       })

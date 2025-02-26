@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import {BehaviorSubject, lastValueFrom, Observable, Subject} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, lastValueFrom, Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {HttpService} from '../http.service';
@@ -68,11 +68,11 @@ export class UserService extends HttpService {
       .filter(user => members.findIndex(member => member.user?.id === user.id) === -1)
       .map(user => {
         if (!user.firstName && !user.lastName) {
-          user._userName =  user.emailLogin || '';
+          user._userName = user.emailLogin || '';
         } else if (user.firstName && user.lastName) {
-          user._userName =  user.firstName + ' ' + user.lastName;
+          user._userName = user.firstName + ' ' + user.lastName;
         } else {
-          user._userName =  user.firstName ? user.firstName : user.lastName || '';
+          user._userName = user.firstName ? user.firstName : user.lastName || '';
         }
         return user;
       }));

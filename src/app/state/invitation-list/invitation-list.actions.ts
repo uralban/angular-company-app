@@ -4,7 +4,7 @@ import {InvitationDto} from '../../interfaces/member/invitation.dto';
 
 export const invitationListDataSuccess = createAction(
   "[Invitation List State] Invitation list data success",
-  props<{invitationListData: PaginatedListDataInterface<InvitationDto>}>()
+  props<{ invitationListData: PaginatedListDataInterface<InvitationDto> }>()
 );
 
 export const invitationListDataClear = createAction(

@@ -8,7 +8,9 @@
     </div>
   </div>
   <div class="">
-    <button mat-button [matMenuTriggerFor]="menu"><ng-icon name="matEdit"/></button>
+    <button mat-button [matMenuTriggerFor]="menu">
+      <ng-icon name="matEdit"/>
+    </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item
               (click)="acceptRequest()">

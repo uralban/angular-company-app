@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {combineLatest, filter, map, Observable, of, take} from 'rxjs';
+import {combineLatest, filter, map, Observable, take} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {selectAuthUser, selectIsAuthLoaded} from '../state/core';
 

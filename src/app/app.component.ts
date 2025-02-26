@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {RouterOutlet} from '@angular/router';
 import {HeaderComponent} from './core/header/header.component';
 import {FooterComponent} from './core/footer/footer.component';
 import {PowerSpinnerModule} from './widgets/power-spinner/power-spinner.module';
@@ -18,5 +18,6 @@ import {PowerSpinnerModule} from './widgets/power-spinner/power-spinner.module';
 export class AppComponent {
   public title: string = 'Angular';
 
-  constructor() {}
+  constructor() {
+  }
 }

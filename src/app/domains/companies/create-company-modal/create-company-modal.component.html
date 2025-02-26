@@ -1,5 +1,5 @@
 <h3 class="flex items-center p-4 text-md font-bold text-gray-800 border-b border-gray-400">
-  {{data.title}}
+  {{ data.title }}
 </h3>
 <mat-dialog-content class="mat-typography">
   <form [formGroup]="createCompanyForm">
@@ -9,7 +9,7 @@
           @if (logoPreviewUrl) {
             <button (click)="deleteLogo()"
                     class="text-red-500 hover:text-red-700 transition absolute top-0 right-0 z-10">
-              <ng-icon name="matClear" />
+              <ng-icon name="matClear"/>
             </button>
           }
           <label for="avatarInput" class="avatar-label">
@@ -18,7 +18,8 @@
                 <img [src]="logoPreviewUrl" alt="Avatar Preview">
               </div>
             } @else {
-              <div class="w-32 h-32 p-2 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-sm text-gray-500">
+              <div
+                class="w-32 h-32 p-2 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-sm text-gray-500">
                 <span class="text-center">Click to upload logo</span>
               </div>
             }
@@ -29,7 +30,9 @@
       <div class="flex-grow flex flex-col space-y-4">
         <div class="flex flex-col space-y-2">
           <label for="companyName" class="block text-gray-600 text-sm font-medium group-hover:text-blue-600 transition">
-            Company Name<sup class="text-red-600"><ng-icon name="matStar" /></sup>
+            Company Name<sup class="text-red-600">
+            <ng-icon name="matStar"/>
+          </sup>
           </label>
           <input type="text"
                  id="companyName"
@@ -40,7 +43,8 @@
                  class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div class="flex flex-col space-y-2">
-          <label for="companyDescription" class="block text-gray-600 text-sm font-medium group-hover:text-blue-600 transition">
+          <label for="companyDescription"
+                 class="block text-gray-600 text-sm font-medium group-hover:text-blue-600 transition">
             Description
           </label>
           <textarea type="text"
@@ -54,19 +58,22 @@
         </div>
         <div class="flex flex-col space-y-2">
           <label for="visibility" class="block text-gray-600 text-sm font-medium group-hover:text-blue-600 transition">
-            Visibility<sup class="text-red-600"><ng-icon name="matStar" /></sup>
+            Visibility<sup class="text-red-600">
+            <ng-icon name="matStar"/>
+          </sup>
           </label>
-          <ng-select class="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-                     formControlName="visibility"
-                     id="visibility"
-                     [items]="visibilityList"
-                     appendTo="body"
-                     [clearable]="false"
-                     [searchable]="false"
-                     [multiple]="false"
-                     [closeOnSelect]="true"
-                     [clearOnBackspace]="false"
-                     [hideSelected]="false"
+          <ng-select
+            class="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+            formControlName="visibility"
+            id="visibility"
+            [items]="visibilityList"
+            appendTo="body"
+            [clearable]="false"
+            [searchable]="false"
+            [multiple]="false"
+            [closeOnSelect]="true"
+            [clearOnBackspace]="false"
+            [hideSelected]="false"
           ></ng-select>
         </div>
       </div>

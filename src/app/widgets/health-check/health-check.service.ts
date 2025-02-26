@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpService} from '../../services/http.service';
 import {HttpClient} from '@angular/common/http';
-import { lastValueFrom } from 'rxjs';
+import {lastValueFrom} from 'rxjs';
 import {HealthCheckDto} from '../../interfaces/health-check.dto';
 import {environment} from '../../../environments/environment';
 

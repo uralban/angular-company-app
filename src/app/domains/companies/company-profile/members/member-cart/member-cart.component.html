@@ -13,7 +13,9 @@
   </div>
   @if (!disableActions && member.role?.roleName !== 'owner' && storedUser?.id !== member.user?.id) {
     <div class="">
-      <button mat-button [matMenuTriggerFor]="menu"><ng-icon name="matEdit"/></button>
+      <button mat-button [matMenuTriggerFor]="menu">
+        <ng-icon name="matEdit"/>
+      </button>
       <mat-menu #menu="matMenu">
         @switch (member.role?.roleName) {
           @case ('member') {

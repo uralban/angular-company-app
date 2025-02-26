@@ -1,12 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {NgIf} from '@angular/common';
 import {HealthCheckService} from './health-check.service';
 
 @Component({
   selector: 'health-check',
-  imports: [
-    NgIf
-  ],
+  imports: [],
   providers: [
     HealthCheckService
   ],
@@ -16,7 +13,7 @@ export class HealthCheckComponent implements OnInit {
 
   public status: number | undefined;
 
-  constructor(private readonly  healthCheckService: HealthCheckService) {
+  constructor(private readonly healthCheckService: HealthCheckService) {
   }
 
   public ngOnInit() {

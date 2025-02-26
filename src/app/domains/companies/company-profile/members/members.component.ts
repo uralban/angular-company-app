@@ -41,7 +41,8 @@ export class MembersComponent implements OnInit, OnDestroy {
     private spinner: PowerSpinnerService,
     private roleService: RoleService,
     private store$: Store,
-  ) {}
+  ) {
+  }
 
   public ngOnInit(): void {
     this.getRolesListStoreSubscribe();
@@ -97,10 +98,10 @@ export class MembersComponent implements OnInit, OnDestroy {
   }
 
   public getLastAttempt(member: MemberDto): string | null {
-      const date: Date | undefined =  this.lastAttemptList.find(lastAttempt => lastAttempt.userId === member.user?.id)?.attemptDate;
-      if (date) {
-        return format(date, 'dd.MM.yy HH:mm');
-      }
-      return null;
+    const date: Date | undefined = this.lastAttemptList.find(lastAttempt => lastAttempt.userId === member.user?.id)?.attemptDate;
+    if (date) {
+      return format(date, 'dd.MM.yy HH:mm');
+    }
+    return null;
   }
 }

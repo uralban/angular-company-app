@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CreateCompanyModalComponent } from './create-company-modal.component';
+import {CreateCompanyModalComponent} from './create-company-modal.component';
 
 describe('CreateCompanyModalComponent', () => {
   let component: CreateCompanyModalComponent;
@@ -10,7 +10,7 @@ describe('CreateCompanyModalComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [CreateCompanyModalComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(CreateCompanyModalComponent);
     component = fixture.componentInstance;

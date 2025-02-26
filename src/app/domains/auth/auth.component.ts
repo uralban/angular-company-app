@@ -1,18 +1,14 @@
-import {Component, inject, OnDestroy} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {UniversalModalComponent} from '../../widgets/universal-modal/universal-modal.component';
+import {Component, OnDestroy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import {debounceTime, distinctUntilChanged, Subject, takeUntil} from 'rxjs';
 import {AuthService as Auth0Service} from '@auth0/auth0-angular';
 import {AuthService} from '../../services/auth/auth.service';
-import {LoginLogoutData} from '../../interfaces/login.interface';
 import {Store} from '@ngrx/store';
 import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.service';
 import {UserDto} from '../../interfaces/user/user.dto';
 import {authUserDataSuccess} from '../../state/core';
 import {Router} from '@angular/router';
-import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-auth',
@@ -69,7 +65,7 @@ export class AuthComponent implements OnDestroy {
       this.emailInputInvalidFlag = false;
       return;
     }
-      this.inputEmailSubject.next((event.target as HTMLInputElement).value);
+    this.inputEmailSubject.next((event.target as HTMLInputElement).value);
   }
 
   public loginByEmail(): void {

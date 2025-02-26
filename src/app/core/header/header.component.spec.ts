@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { HeaderComponent } from './header.component';
+import {HeaderComponent} from './header.component';
 import {RouterTestingModule} from '@angular/router/testing';
 
 describe('HeaderComponent', () => {
@@ -14,7 +14,7 @@ describe('HeaderComponent', () => {
         RouterTestingModule
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;

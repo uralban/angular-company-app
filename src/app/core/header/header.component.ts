@@ -4,7 +4,6 @@ import {UserDto} from '../../interfaces/user/user.dto';
 import {Subject, takeUntil} from 'rxjs';
 import {AuthService} from '../../services/auth/auth.service';
 import {HealthCheckComponent} from '../../widgets/health-check/health-check.component';
-import {NgIf} from '@angular/common';
 import {AuthService as Auth0Service} from '@auth0/auth0-angular';
 import {Store} from '@ngrx/store';
 import {authUserDataClear} from '../../state/core';
@@ -17,8 +16,7 @@ import {currentUserClear} from '../../state/current-user';
   selector: 'app-header',
   imports: [
     RouterLink,
-    HealthCheckComponent,
-    NgIf
+    HealthCheckComponent
   ],
   templateUrl: './header.component.html'
 })
@@ -38,7 +36,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private store$: Store,
     private spinner: PowerSpinnerService,
     private router: Router
-  ) {}
+  ) {
+  }
 
 
   public ngOnInit(): void {

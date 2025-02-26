@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, lastValueFrom, Observable} from 'rxjs';
 import {PaginatedListDataInterface} from '../../interfaces/pagination/paginated-list-data.interface';
 import {CompanyDto} from '../../interfaces/company/company.dto';
@@ -31,7 +31,7 @@ export class CompanyService extends HttpService {
   constructor(
     protected httpClients: HttpClient,
     private readonly store$: Store,
-    ) {
+  ) {
     super(httpClients);
     this.URL_COMPANY = environment.apiUrl + '/company';
     this.URL_VISIBILITY = environment.apiUrl + '/company/visibility-statuses';

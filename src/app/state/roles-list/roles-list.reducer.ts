@@ -1,5 +1,5 @@
 import {Action, createReducer, on} from '@ngrx/store';
-import {RolesListState, initialState} from './roles-list.state';
+import {initialState, RolesListState} from './roles-list.state';
 import * as RolesListActions from './roles-list.actions';
 
 const RolesListReducer = createReducer(

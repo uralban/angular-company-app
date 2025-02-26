@@ -3,7 +3,7 @@ import {CompanyDto} from '../../interfaces/company/company.dto';
 
 export const currentCompanySuccess = createAction(
   "[Current Company State] Current company data success",
-  props<{company: CompanyDto}>()
+  props<{ company: CompanyDto }>()
 );
 
 export const currentCompanyClear = createAction(

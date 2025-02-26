@@ -1,5 +1,5 @@
 import {Action, createReducer, on} from '@ngrx/store';
-import {UsersListState, initialState} from './users-list.state';
+import {initialState, UsersListState} from './users-list.state';
 import * as UsersListDataActions from './users-list.actions';
 
 const UsersListDataReducer = createReducer(

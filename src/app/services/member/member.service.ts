@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpService} from '../http.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
@@ -78,6 +78,10 @@ export class MemberService extends HttpService {
 
   public async removeMember(memberId: string): Promise<ResultMessageDto> {
     return lastValueFrom(super.deleteForResult(this.URL_MEMBERS + '/' + memberId, ResultMessageDto));
+  }
+
+  public async selfRemoveMember(companyId: string): Promise<ResultMessageDto> {
+    return lastValueFrom(super.deleteForResult(this.URL_MEMBERS + '/self/' + companyId, ResultMessageDto));
   }
 
   public async getAllInvitations(paginationRequest: PaginationRequestInterface): Promise<PaginationDto<InvitationDto>> {

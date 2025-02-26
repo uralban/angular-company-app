@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { SingleQuizCartComponent } from './single-quiz-cart.component';
+import {SingleQuizCartComponent} from './single-quiz-cart.component';
 
 describe('SingleQuizCartComponent', () => {
   let component: SingleQuizCartComponent;
@@ -10,7 +10,7 @@ describe('SingleQuizCartComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [SingleQuizCartComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(SingleQuizCartComponent);
     component = fixture.componentInstance;
