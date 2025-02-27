@@ -10,6 +10,7 @@ import {RequestListState} from './request-list';
 import {QuizListState} from './quiz-list';
 import {CurrentQuizState} from './current-quiz';
 import {UsersLastAttemptListState} from './users-last-attempt-list';
+import {NotificationsState} from './notifications';
 
 export interface State {
   coreData: CoreState;
@@ -24,4 +25,5 @@ export interface State {
   requestListData: RequestListState,
   quizListData: QuizListState,
   quiz: CurrentQuizState,
+  notifications: NotificationsState,
 }

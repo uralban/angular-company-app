@@ -6,5 +6,6 @@ export const environment = {
   audience: import.meta.env.NG_APP_AUTH0_AUDIENCE,
   defaultUserAvatar: import.meta.env.NG_APP_DEFAULT_USER_AVATAR,
   defaultCompanyLogo: import.meta.env.NG_APP_DEFAULT_COMPANY_LOGO,
+  socketUrl: import.meta.env.NG_APP_SOCKET_URL,
 };
 

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {UserDto} from '../../interfaces/user/user.dto';
 import {Subject, takeUntil} from 'rxjs';
@@ -11,14 +11,26 @@ import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.ser
 import {environment} from '../../../environments/environment';
 import {UserService} from '../../services/user/user.service';
 import {currentUserClear} from '../../state/current-user';
+import {NgIcon, provideIcons} from '@ng-icons/core';
+import {matModeComment} from '@ng-icons/material-icons/baseline';
+import {NotificationService} from '../../services/notification/notification.service';
+import {NotificationDto} from '../../interfaces/notifications/notification.dto';
+import {NotificationStatus} from '../../consts/notification-status.enum';
+import {NotificationsModalComponent} from './notifications-modal/notifications-modal.component';
+import {MatDialog} from '@angular/material/dialog';
+import {WebsocketService} from '../../services/websocket/websocket.service';
+import {ToastrService} from 'ngx-toastr';
+import {notificationsSuccess} from '../../state/notifications';
 
 @Component({
   selector: 'app-header',
   imports: [
     RouterLink,
-    HealthCheckComponent
+    HealthCheckComponent,
+    NgIcon
   ],
-  templateUrl: './header.component.html'
+  templateUrl: './header.component.html',
+  viewProviders: [provideIcons({matModeComment})]
 })
 
 export class HeaderComponent implements OnInit, OnDestroy {
@@ -26,28 +38,44 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public userName: string | undefined;
   public userId: string | undefined;
   public avatarUrl: string = '';
-
+  public notifications: NotificationDto[] = [];
+  public notReadNotificationsCount: number = 0;
+  private readonly dialog: MatDialog = inject(MatDialog);
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private authService: AuthService,
     public auth0: Auth0Service,
     private userService: UserService,
+    private notificationService: NotificationService,
     private store$: Store,
     private spinner: PowerSpinnerService,
-    private router: Router
+    private router: Router,
+    private readonly toastrService: ToastrService,
+    private webSocketService: WebsocketService
   ) {
   }
-
 
   public ngOnInit(): void {
     this.userSubscribe();
     this.needLogoutSubscribe();
+    this.notificationSubscribe();
   }
 
   public ngOnDestroy(): void {
     this.ngDestroy$.next();
     this.ngDestroy$.complete();
+    this.webSocketService.disconnect();
+  }
+
+  private websocketSubscribe(): void {
+    if (this.userId) {
+      this.webSocketService.connect(this.userId);
+      this.webSocketService.listenForNotifications().pipe(takeUntil(this.ngDestroy$)).subscribe((notification: NotificationDto) => {
+        const newNotificationList: NotificationDto[] = this.notifications.concat(notification);
+        this.store$.dispatch(notificationsSuccess({notifications: newNotificationList}));
+      });
+    }
   }
 
   private userSubscribe(): void {
@@ -56,6 +84,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.userName = this.setUserName(user);
         this.userId = user.id;
         this.avatarUrl = user.avatarUrl || environment.defaultUserAvatar;
+        this.websocketSubscribe();
+      }
+    });
+  }
+
+  private notificationSubscribe(): void {
+    this.notificationService.notifications$.pipe(takeUntil(this.ngDestroy$)).subscribe((notifications: NotificationDto[] | null) => {
+      if (notifications) {
+        this.notifications = notifications;
+        this.notReadNotificationsCount = notifications.filter(notification => notification.status === NotificationStatus.UNREAD).length;
+      } else {
+        this.notifications = [];
+        this.notReadNotificationsCount = 0;
       }
     });
   }
@@ -107,5 +148,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.userService.singleUserId$.next(this.userId);
       this.router.navigate(['users/user-profile']);
     }
+  }
+
+  public showNotifications(): void {
+    const dialogRef = this.dialog.open(NotificationsModalComponent, {
+      data: {
+        title: 'Change Visibility',
+        notifications: this.notifications
+      },
+      width: '1000px',
+      maxHeight: '700px',
+    });
+    dialogRef.afterClosed().pipe(takeUntil(this.ngDestroy$)).subscribe(result => {
+      if (result) {
+      }
+    });
   }
 }
