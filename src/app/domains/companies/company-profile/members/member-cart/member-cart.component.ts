@@ -11,6 +11,8 @@ import {PowerSpinnerService} from '../../../../../widgets/power-spinner/power-sp
 import {CompanyService} from '../../../../../services/company/company.service';
 import {ResultMessageDto} from '../../../../../interfaces/result-message.dto';
 import {AuthService} from '../../../../../services/auth/auth.service';
+import {QuizService} from '../../../../../services/quiz/quiz.service';
+import {SelectFormatModalComponent} from '../../../../../widgets/select-format-modal/select-format-modal.component';
 
 @Component({
   selector: 'member-cart',
@@ -23,6 +25,7 @@ export class MemberCartComponent implements OnInit, OnDestroy {
   @Input() disableActions!: boolean;
   @Input() adminRoleId!: string | undefined;
   @Input() memberRoleId!: string | undefined;
+  @Input() companyId!: string | undefined;
 
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
   private readonly dialog: MatDialog = inject(MatDialog);
@@ -35,6 +38,7 @@ export class MemberCartComponent implements OnInit, OnDestroy {
     private spinner: PowerSpinnerService,
     private companyService: CompanyService,
     private authService: AuthService,
+    private quizService: QuizService,
   ) {
   }
 
@@ -116,6 +120,40 @@ export class MemberCartComponent implements OnInit, OnDestroy {
           this.toastrService.success(response.message);
           this.companyService.needReloadCurrentCompanyData$.next(true);
         }).finally(() => this.spinner.hide());
+      }
+    });
+  }
+
+  public getCompanyMemberReport(): void {
+    const dialogRef = this.dialog.open(SelectFormatModalComponent, {
+      data: {
+        title: 'Format select',
+      },
+      width: '400px'
+    });
+    dialogRef.afterClosed().pipe(takeUntil(this.ngDestroy$)).subscribe(format => {
+      if (format) {
+        if (this.companyId && this.member.user?.id) {
+          this.spinner.show();
+          this.quizService
+            .getCompanyReport(format, {
+              companyId: this.companyId,
+              userId: this.member.user.id,
+            })
+            .subscribe({
+              next: (response: { blob: Blob; filename: string }) => {
+                const blobUrl: string = URL.createObjectURL(response.blob);
+                const a: HTMLAnchorElement = document.createElement('a');
+                a.href = blobUrl;
+                a.download = response.filename || 'company_member_report.' + format;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(blobUrl);
+              },
+              complete: () => this.spinner.hide()
+            });
+        }
       }
     });
   }

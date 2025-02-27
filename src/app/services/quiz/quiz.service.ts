@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpService} from '../http.service';
-import {BehaviorSubject, lastValueFrom, Observable} from 'rxjs';
+import {BehaviorSubject, lastValueFrom, map, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {select, Store} from '@ngrx/store';
 import {environment} from '../../../environments/environment';
@@ -14,6 +14,8 @@ import {QuizInterface} from '../../interfaces/quiz/quiz.interface';
 import {selectCurrentQuizData} from '../../state/current-quiz';
 import {QuizAttemptDto} from '../../interfaces/quiz/quiz-attempt.dto';
 import {QuizStartResultDto} from '../../interfaces/quiz/quiz-start-result.dto';
+import {FormatEnum} from '../../consts/format.enum';
+import {ExportAttemptOptions} from '../../interfaces/quiz/export-attempt-options.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -72,5 +74,30 @@ export class QuizService extends HttpService {
 
   public async getUserTotalScore(): Promise<ResultMessageDto> {
     return lastValueFrom(super.getOne(this.URL_QUIZ_ATTEMPT + '/total-score', ResultMessageDto));
+  }
+
+  public getUserReport(format: FormatEnum): Observable<{ blob: Blob; filename: string }> {
+    return super.getFile(this.URL_QUIZ_ATTEMPT + '/export/user/' + format).pipe(
+      map(response => {
+        const contentDisposition: string = response.headers.get('Content-Disposition') || '';
+        const matches = /filename="([^"]+)"/.exec(contentDisposition);
+        const filename: string = matches && matches[1] ? matches[1] : 'user_quiz_attempts.' + format;
+        return {blob: response.body as Blob, filename};
+      })
+    );
+  }
+
+  public getCompanyReport(format: FormatEnum, exportAttemptOptions: ExportAttemptOptions): Observable<{
+    blob: Blob;
+    filename: string
+  }> {
+    return super.getFile(this.URL_QUIZ_ATTEMPT + '/export/company/' + format, {...exportAttemptOptions}).pipe(
+      map(response => {
+        const contentDisposition: string = response.headers.get('Content-Disposition') || '';
+        const matches = /filename="([^"]+)"/.exec(contentDisposition);
+        const filename: string = matches && matches[1] ? matches[1] : 'company_report.' + format;
+        return {blob: response.body as Blob, filename};
+      })
+    );
   }
 }

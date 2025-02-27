@@ -7,6 +7,10 @@
   </div>
   @if (isAdmin) {
     <div class="">
+      <button (click)="getCompanyQuizReport($event)"
+              class="text-orange-500 hover:text-orange-700 transition text-2xl disabled:text-gray-300">
+        <ng-icon name="matDownload"/>
+      </button>
       <button (click)="editQuiz($event)"
               class="text-green-500 hover:text-green-700 transition text-2xl disabled:text-gray-300">
         <ng-icon name="matEdit"/>

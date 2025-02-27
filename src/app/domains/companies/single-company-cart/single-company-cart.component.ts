@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {CompanyDto} from '../../../interfaces/company/company.dto';
 import {environment} from '../../../../environments/environment';
 import {Subject, takeUntil} from 'rxjs';
@@ -15,13 +15,14 @@ import {UniversalModalComponent} from '../../../widgets/universal-modal/universa
   standalone: false,
   templateUrl: './single-company-cart.component.html'
 })
-export class SingleCompanyCartComponent implements OnInit, OnDestroy {
+export class SingleCompanyCartComponent implements OnInit, OnDestroy, OnChanges {
   @Input() company!: CompanyDto;
 
   private readonly dialog: MatDialog = inject(MatDialog);
   private readonly ngDestroy$: Subject<void> = new Subject<void>();
   public deleteIsDisabled: boolean = false;
   public logoUrl: string = '';
+  private currentAuthUser: UserDto | null = null;
 
   constructor(
     private companyService: CompanyService,
@@ -34,10 +35,20 @@ export class SingleCompanyCartComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.logoUrl = this.company.logoUrl ? this.company.logoUrl : environment.defaultCompanyLogo;
     this.authService.user$.pipe(takeUntil(this.ngDestroy$)).subscribe((user: UserDto | null): void => {
-      if (user) {
-        this.deleteIsDisabled = this.company.owner?.emailLogin !== user.emailLogin;
-      }
+      this.currentAuthUser = user;
+      this.updateDeleteIsDisabled();
     });
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['company']) {
+      this.logoUrl = this.company.logoUrl ? this.company.logoUrl : environment.defaultCompanyLogo;
+      this.updateDeleteIsDisabled();
+    }
+  }
+
+  private updateDeleteIsDisabled(): void {
+    this.deleteIsDisabled = this.company.owner?.emailLogin !== this.currentAuthUser?.emailLogin;
   }
 
   public ngOnDestroy(): void {
