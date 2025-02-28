@@ -19,7 +19,6 @@ import {NotificationStatus} from '../../consts/notification-status.enum';
 import {NotificationsModalComponent} from './notifications-modal/notifications-modal.component';
 import {MatDialog} from '@angular/material/dialog';
 import {WebsocketService} from '../../services/websocket/websocket.service';
-import {ToastrService} from 'ngx-toastr';
 import {notificationsSuccess} from '../../state/notifications';
 
 @Component({
@@ -51,7 +50,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private store$: Store,
     private spinner: PowerSpinnerService,
     private router: Router,
-    private readonly toastrService: ToastrService,
     private webSocketService: WebsocketService
   ) {
   }

@@ -18,12 +18,16 @@ export class WebsocketService {
     if (!this.socket || !this.socket.connected) {
       if (auth0Token) {
         this.socket = io(environment.socketUrl, {
+          path: '/socket.io/',
+          transports: ['websocket'],
           auth: {token: `Bearer ${auth0Token}` || ''},
           query: {userId},
           withCredentials: true,
         });
       } else {
         this.socket = io(environment.socketUrl, {
+          path: '/socket.io/',
+          transports: ['websocket'],
           query: {userId},
           withCredentials: true,
         });
