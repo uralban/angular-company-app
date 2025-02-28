@@ -10,15 +10,24 @@ import {NotificationDto} from '../../interfaces/notifications/notification.dto';
 export class WebsocketService {
   private socket: any;
 
+
   constructor() {
   }
 
-  public connect(userId: string): void {
+  public connect(userId: string, auth0Token?: string): void {
     if (!this.socket || !this.socket.connected) {
-      this.socket = io(environment.socketUrl, {
-        query: {userId},
-        transports: ['websocket'],
-      });
+      if (auth0Token) {
+        this.socket = io(environment.socketUrl, {
+          auth: {token: `Bearer ${auth0Token}` || ''},
+          query: {userId},
+          withCredentials: true,
+        });
+      } else {
+        this.socket = io(environment.socketUrl, {
+          query: {userId},
+          withCredentials: true,
+        });
+      }
 
       this.socket.on('connect', () => {
         this.subscribeToNotifications(userId);

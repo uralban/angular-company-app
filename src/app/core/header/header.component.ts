@@ -1,7 +1,7 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {UserDto} from '../../interfaces/user/user.dto';
-import {Subject, takeUntil} from 'rxjs';
+import {firstValueFrom, lastValueFrom, Subject, takeUntil} from 'rxjs';
 import {AuthService} from '../../services/auth/auth.service';
 import {HealthCheckComponent} from '../../widgets/health-check/health-check.component';
 import {AuthService as Auth0Service} from '@auth0/auth0-angular';
@@ -68,9 +68,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.webSocketService.disconnect();
   }
 
-  private websocketSubscribe(): void {
+  private websocketSubscribe(auth0Token?: string): void {
     if (this.userId) {
-      this.webSocketService.connect(this.userId);
+      auth0Token ? this.webSocketService.connect(this.userId, auth0Token) : this.webSocketService.connect(this.userId);
       this.webSocketService.listenForNotifications().pipe(takeUntil(this.ngDestroy$)).subscribe((notification: NotificationDto) => {
         const newNotificationList: NotificationDto[] = this.notifications.concat(notification);
         this.store$.dispatch(notificationsSuccess({notifications: newNotificationList}));
@@ -78,13 +78,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  private userSubscribe(): void {
+  private userSubscribe() {
     this.authService.user$.pipe(takeUntil(this.ngDestroy$)).subscribe((user: UserDto | null) => {
       if (user) {
         this.userName = this.setUserName(user);
         this.userId = user.id;
         this.avatarUrl = user.avatarUrl || environment.defaultUserAvatar;
-        this.websocketSubscribe();
+        firstValueFrom(this.auth0.isAuthenticated$).then(isAuth0 => {
+          if (isAuth0) {
+            lastValueFrom(this.auth0.getAccessTokenSilently()).then(auth0Token => {
+              this.websocketSubscribe(auth0Token);
+            });
+          } else {
+            this.websocketSubscribe();
+          }
+        })
       }
     });
   }
