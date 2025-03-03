@@ -9,6 +9,9 @@ import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.ser
 import {UserDto} from '../../interfaces/user/user.dto';
 import {authUserDataSuccess} from '../../state/core';
 import {Router} from '@angular/router';
+import {NotificationService} from '../../services/notification/notification.service';
+import {NotificationDto} from '../../interfaces/notifications/notification.dto';
+import {notificationsSuccess} from '../../state/notifications';
 
 @Component({
   selector: 'app-auth',
@@ -27,6 +30,7 @@ export class AuthComponent implements OnDestroy {
     private readonly toastrService: ToastrService,
     public auth0: Auth0Service,
     private authService: AuthService,
+    private notificationService: NotificationService,
     private store$: Store,
     private spinner: PowerSpinnerService,
     private router: Router
@@ -70,10 +74,14 @@ export class AuthComponent implements OnDestroy {
 
   public loginByEmail(): void {
     this.spinner.show();
-    this.authService.loginByEmail(this.loginForm.value).then((): Promise<UserDto> => {
-      return this.authService.getMeData();
-    }).then((userMe: UserDto): void => {
+    this.authService.loginByEmail(this.loginForm.value).then(() => {
+      return Promise.all([
+        this.authService.getMeData(),
+        this.notificationService.getAllNotifications()
+      ]);
+    }).then(([userMe, notifications]: [UserDto, NotificationDto[]]): void => {
       this.store$.dispatch(authUserDataSuccess({authUserData: userMe}));
+      this.store$.dispatch(notificationsSuccess({notifications}));
       localStorage.setItem('login', new Date().getTime().toString());
       this.loginForm.reset();
       this.router.navigateByUrl('/welcome')

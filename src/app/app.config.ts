@@ -37,6 +37,8 @@ import {currentQuizFeatureKey} from './state/current-quiz';
 import {currentQuizReducerFn} from './state/current-quiz/current-quiz.reducer';
 import {usersLastAttemptListDataFeatureKey} from './state/users-last-attempt-list';
 import {usersLastAttemptListReducerFn} from './state/users-last-attempt-list/users-last-attempt-list.reducer';
+import {notificationsFeatureKey} from './state/notifications/notifications.selector';
+import {notificationsReducerFn} from './state/notifications';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -72,6 +74,7 @@ export const appConfig: ApplicationConfig = {
     provideState(requestListFeatureKey, requestListReducerFn),
     provideState(quizListFeatureKey, quizListReducerFn),
     provideState(currentQuizFeatureKey, currentQuizReducerFn),
+    provideState(notificationsFeatureKey, notificationsReducerFn),
     provideEffects(
       CoreEffects
     ),

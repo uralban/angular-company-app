@@ -12,6 +12,7 @@ import * as InvitationReducer from "./invitation-list/invitation-list.reducer";
 import * as RequestReducer from "./request-list/request-list.reducer";
 import * as QuizReducer from "./quiz-list/quiz-list.reducer";
 import * as CurrentQuizReducer from "./current-quiz/current-quiz.reducer";
+import * as NotificationsReducer from "./notifications/notifications.reducer";
 
 export const reducers: ActionReducerMap<State> = {
   coreData: CoreReducer.coreReducerFn,
@@ -26,6 +27,7 @@ export const reducers: ActionReducerMap<State> = {
   requestListData: RequestReducer.requestListReducerFn,
   quizListData: QuizReducer.quizListReducerFn,
   quiz: CurrentQuizReducer.currentQuizReducerFn,
+  notifications: NotificationsReducer.notificationsReducerFn,
 };
 
 export const metaReducers: MetaReducer<State>[] = [];

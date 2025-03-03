@@ -6,6 +6,9 @@ import {authUserDataSuccess} from '../../state/core';
 import {UserDto} from '../../interfaces/user/user.dto';
 import {Subject, takeUntil} from 'rxjs';
 import {PowerSpinnerService} from '../../widgets/power-spinner/power-spinner.service';
+import {NotificationService} from '../../services/notification/notification.service';
+import {NotificationDto} from '../../interfaces/notifications/notification.dto';
+import {notificationsSuccess} from '../../state/notifications';
 
 @Component({
   selector: 'app-welcome',
@@ -23,6 +26,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     private store$: Store,
     public auth0: Auth0Service,
     private spinner: PowerSpinnerService,
+    private notificationService: NotificationService,
   ) {
 
   }
@@ -36,8 +40,12 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     this.auth0.isAuthenticated$.pipe(takeUntil(this.ngDestroy$)).subscribe((isAuthenticated: boolean): void => {
       if (isAuthenticated && !this.userName) {
         this.spinner.show();
-        this.authService.getMeData().then((userMe: UserDto): void => {
+        Promise.all([
+          this.authService.getMeData(),
+          this.notificationService.getAllNotifications()
+        ]).then(([userMe, notifications]: [UserDto, NotificationDto[]]): void => {
           this.store$.dispatch(authUserDataSuccess({authUserData: userMe}));
+          this.store$.dispatch(notificationsSuccess({notifications}));
           localStorage.setItem('login', new Date().getTime().toString());
         }).finally(() => {
           this.spinner.hide();
