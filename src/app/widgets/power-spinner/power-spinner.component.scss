@@ -1,0 +1,34 @@
+.power-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.power-spinner-background {
+  background-color: rgb(51 51 51 / 38%);
+
+  border-radius: inherit;
+  border: inherit;
+  z-index: 9999;
+
+  transition: all .3s;
+  backdrop-filter: blur(3px);
+}
+
+
+.power-spinner-overlay {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+.power-spinner-block-scoped {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+

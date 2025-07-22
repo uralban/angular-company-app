@@ -1,0 +1,39 @@
+<div class="flex items-center justify-center p-4">
+  <div class="text-center p-8 bg-white shadow-lg rounded-lg max-w-lg w-2/6 relative space-y-3">
+    <form class="flex flex-col space-y-4 pt-4" [formGroup]="loginForm" (ngSubmit)="loginByEmail()">
+      <input type="text"
+             (input)="onInputChangeEmail($event)"
+             [class.border-invalid]="emailInputInvalidFlag"
+             formControlName="email"
+             class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+             placeholder="Email"
+      >
+      <input type="password"
+             formControlName="password"
+             class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+             placeholder="Password"
+      >
+      <div class="mt-6 space-x-4">
+        <button
+          type="submit"
+          [disabled]="loginForm.invalid"
+          class="px-6 py-2 text-white bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition"
+        >Login
+        </button>
+        <a routerLink="/registration"
+           class="px-6 py-2 text-blue-600 bg-gray-100 rounded-lg text-lg font-semibold hover:bg-gray-200 transition">
+          Sign Up
+        </a>
+      </div>
+    </form>
+    <p>or</p>
+    <div class="flex flex-row justify-center items-center">
+      @if ((auth0.isAuthenticated$ | async) === false) {
+        <button (click)="auth0Login()"
+                class="px-6 py-2 text-white bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
+        >Login with Auth0
+        </button>
+      }
+    </div>
+  </div>
+</div>

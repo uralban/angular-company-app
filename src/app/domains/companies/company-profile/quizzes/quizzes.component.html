@@ -1,0 +1,35 @@
+<div class="flex flex-col space-y-4">
+  @if (isAdmin) {
+    <div class="p-8 w-full bg-white shadow-lg rounded-lg max-w-7xl mx-auto space-x-4">
+      <button (click)="createNewQuiz()"
+              class="px-3 py-1 text-white bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
+        Create New Quiz
+      </button>
+      <button (click)="showAnalytic()"
+              class="px-3 py-1 text-white bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
+        Show analytics
+      </button>
+    </div>
+  }
+  <div class="p-8 w-full bg-white shadow-lg rounded-lg max-w-7xl mx-auto">
+    <div class="grid grid-cols-3 gap-4">
+      @for (quiz of paginatedQuizzesList; track $index) {
+        <div class="" (click)="startQuiz(quiz)">
+          <single-quiz-cart [quiz]="quiz" [isAdmin]="isAdmin"></single-quiz-cart>
+        </div>
+      }
+      @if (!paginatedQuizzesList.length) {
+        <p>No quizzes</p>
+      }
+    </div>
+    <div class="pt-8">
+      <mat-paginator [length]="paginationMeta?.itemCount"
+                     [pageSize]="paginationMeta?.take"
+                     [pageIndex]="paginationMeta.page - 1"
+                     [pageSizeOptions]="[3, 6, 9]"
+                     (page)="onPageChange($event)"
+                     aria-label="Select page">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

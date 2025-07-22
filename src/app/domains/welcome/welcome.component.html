@@ -1,0 +1,21 @@
+<div class="flex items-center justify-center p-4">
+  <div class="text-center p-8 bg-white shadow-lg rounded-lg max-w-lg relative w-2/6">
+    <h1 class="text-4xl font-bold text-gray-800">Welcome to us!</h1>
+    <p class="text-lg text-gray-500 mt-4">
+      This is a great opportunity to work with users and companies in our internship app!
+    </p>
+    <p class="text-red-400 pt-4 font-bold text-xl">
+      For registered users only.
+    </p>
+    <div class="flex flex-row items-center pt-6 space-x-4 justify-center">
+      @if (!userName) {
+        <a routerLink="/auth"
+           class="px-6 py-2 text-white bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
+          Login
+        </a>
+      } @else {
+        <p class="text-lg text-gray-500">We glad to see you, {{ userName }}</p>
+      }
+    </div>
+  </div>
+</div>

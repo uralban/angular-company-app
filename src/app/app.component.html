@@ -1,0 +1,12 @@
+<div class="flex flex-col min-h-screen">
+  <app-header/>
+  <main class="flex-grow pt-20 pb-14 main-bg">
+    <router-outlet/>
+  </main>
+  <footer class="fixed bottom-0 left-0 right-0 mih-h-8 bg-gray-800 text-white flex items-center justify-center z-10">
+    <app-footer/>
+  </footer>
+</div>
+<power-spinner [fullScreen]="true">
+  <div class="spinner spinner-1"></div>
+</power-spinner>

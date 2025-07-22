@@ -1,0 +1,14 @@
+dist
+tmp
+.out
+.angular
+
+.vscode
+.idea
+
+.git
+.gitignore
+
+.env
+node_modules
+/.env.production

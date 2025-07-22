@@ -1,0 +1,10 @@
+<div class="rating">
+  @for (star of stars; track $index) {
+    <div class="star">
+      <div
+        class="fill"
+        [ngStyle]="{ width: getFillPercentage($index) + '%' }"
+      ></div>
+    </div>
+  }
+</div>
